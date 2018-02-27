@@ -1,0 +1,1 @@
+New PRIDE Solr Cores
