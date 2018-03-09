@@ -5,6 +5,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.model;
 import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
@@ -23,146 +24,148 @@ import java.util.*;
  * @author @author
  * @version $Id$
  */
+
+@SolrDocument(solrCoreName = "prideprojects")
 public class SolrProject implements ProjectProvider {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
     @Indexed(boost = 1.0f, stored = true, searchable = true)
-    @Field
+    @Field("accession")
     private String accession;
 
     /** Experiment Title **/
-    @Field
+    @Field("project_title")
     @Indexed(boost = 0.8f, stored = true, searchable = true)
     private String title;
 
     /** Additional Attributes Identifiers **/
-    @Field
+    @Field("additional_attributes_ids")
     @Indexed(boost = 0.4f, stored = true, searchable = true)
     private List<String> additionalAttributesIds;
 
     /** Additional Attributes Names **/
-    @Field
+    @Field("additional_attributes_names")
     @Indexed(boost = 0.4f, stored = true, searchable = true)
     private List<String> additionalAttributesNames;
 
     /** Project Description **/
-    @Field
+    @Field("project_description")
     @Indexed(boost = 0.7f, stored = true, searchable = true)
     private String projectDescription;
 
     /** Sample Protocol **/
-    @Field
+    @Field("project_sample_protocol")
     @Indexed(boost = 0.6f, stored = true, searchable = true)
     private String sampleProcessingProtocol;
 
     /** Data Processing Protocol **/
-    @Field
+    @Field("project_data_protocol")
     @Indexed(boost = 0.6f, stored = true, searchable = true)
     private String dataProcessingProtocol;
 
     /** Project Tags **/
-    @Field
+    @Field("project_tags")
     @Indexed(boost = 0.2f, stored = true, searchable = true)
     private List<String> projectTags;
 
     /** Keywords **/
-    @Field
+    @Field("project_keywords")
     @Indexed(boost = 0.2f, stored = true, searchable = true)
     private List<String> keywords;
 
     /** Original Doi of the dataset. The actual Doi is not needed in the Dataaset **/
-    @Field
+    @Field("project_doi")
     @Indexed(boost = 0.2f, searchable = true)
     private String doi;
 
     /** otherOmicsLinks **/
-    @Field
+    @Field("project_other_omics")
     @Indexed(boost = 0.2f, searchable = true)
     private List<String> otherOmicsLinks;
 
     /** Submission Type **/
-    @Field
+    @Field("project_submission_type")
     @Indexed(boost = 0.2f, searchable = true, stored = true)
     private String submissionType;
 
     /** Submission Date **/
-    @Field
+    @Field("submission_date")
     @Indexed(boost = 0.2f, searchable = true, stored = true)
     private Date submissionDate;
 
     /** Publication Date **/
-    @Field
+    @Field("publication_date")
     @Indexed(boost = 0.2f, searchable = true, stored = true)
     private Date publicationDate;
 
     /** Updated Date **/
-    @Field
+    @Field("updated_date")
     @Indexed(boost = 0.2f, searchable = true)
     private Date updatedDate;
 
     /** Submitter FirstName **/
-    @Field
+    @Field("submitter_first_name")
     @Indexed(boost = 0.2f, searchable = true, stored = true )
     private String submitterFirstName;
 
     /** Submitter Last Name **/
-    @Field
+    @Field("submitter_last_name")
     @Indexed(boost = 0.2f, searchable = true, stored = true )
     private String submitterLastName;
 
     /** Submitter Affiliation **/
-    @Field
+    @Field("submitter_affiliation")
     @Indexed(boost = 0.2f, searchable = true, stored = true )
     private String submitterAffiliation;
 
     /** List of Lab Head Names **/
-    @Field
+    @Field("lab_head_names")
     @Indexed(boost = 0.2f, searchable = true, stored = true )
     private List<String> labHeadNames;
 
     /** List of Head LastName **/
-    @Field
+    @Field("lab_head_last_names")
     @Indexed(boost = 0.2f, searchable = true, stored = true )
     private List<String> labHeadLastNames;
 
-    /** Country */
-    @Field
+    /** Lab Head Affiliation  */
+    @Field("lab_head_affiliation")
     @Indexed(boost = 0.2f, searchable = true, stored = true )
     private List<String> labHeadAffiliations;
 
     /** List of instruments Ids*/
-    @Field
+    @Field("instrument_ids")
     @Indexed(boost = 0.1f, searchable = true, stored = true)
     private List<String> instrumentIds;
 
     /** List of instrument Names **/
-    @Field
+    @Field("instrument_names")
     @Indexed(boost = 0.4f, searchable = true, stored = true)
     private List<String> instrumentNames;
 
-    /** This field sotre all the countries associated with the experiment **/
-    @Field
+    /** This field store all the countries associated with the experiment **/
+    @Field("project_countries")
     @Indexed(boost = 0.4f, searchable = true, stored = true)
     private List<String> allCountries;
 
     /** All affiliations **/
-    @Field
+    @Field("project_affiliations")
     @Indexed(boost = 0.4f, searchable = true, stored = true)
     private List<String> allAffiliations;
 
     /** Experimental Factor Names **/
-    @Field
+    @Field("experimental_factor_names")
     @Indexed(boost = 0.5f, searchable = true, stored = true)
     private List<String> experimentalFactors;
 
     /** References related with the project **/
-    @Field
+    @Field("project_references")
     @Indexed(boost = 0.7f, searchable = true)
     private List<String> references;
 
     /** Public project or private   **/
-    @Field
+    @Field("project_public")
     private boolean publicProject;
 
     public void setAccession(String accession) {
@@ -420,8 +423,6 @@ public class SolrProject implements ProjectProvider {
     public Collection<? extends String> getExperimentalFactorNamesAsString(){
         return experimentalFactors;
     }
-
-
 
     /**
      * Each Reference is Converted into an String and is added to a List
