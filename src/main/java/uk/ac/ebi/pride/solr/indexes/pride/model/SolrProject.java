@@ -16,7 +16,7 @@ import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import java.util.*;
 
 /**
- * The {@link SolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite data types such as {@link CvParamProvider} the data structure should be partitioned in Arrays values:
+ * The {@link SolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
  *  - Accession Array
  *  - Name Array
  *  In some cases is relevant to add the parent Terms for the original terms into the search. For example in the Taxonomy or Instrument, it isi important to add to the Project the parent term.

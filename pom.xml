@@ -124,7 +124,7 @@
     </profiles>
 
     <dependencies>
-        <!-- PRIDE Archive data provider API -->
+        <!-- PRIDE Archtestdatadata provider API -->
         <dependency>
             <groupId>uk.ac.ebi.pride.archive</groupId>
             <artifactId>data-provider-api</artifactId>

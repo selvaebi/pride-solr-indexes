@@ -21,6 +21,7 @@ import java.util.Collection;
  */
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
 public class SolrProjectRepositoryTest {
 
     @Autowired
