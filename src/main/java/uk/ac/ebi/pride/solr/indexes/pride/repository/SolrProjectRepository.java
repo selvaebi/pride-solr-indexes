@@ -1,7 +1,11 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
+import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.data.solr.repository.SolrCrudRepository;
+import org.springframework.stereotype.Repository;
 import uk.ac.ebi.pride.solr.indexes.pride.model.SolrProject;
 
 import java.util.stream.Stream;
@@ -13,6 +17,8 @@ import java.util.stream.Stream;
  * @author Yasset Perez-Riverol
  * @version $Id$
  */
+
+@Repository
 public interface SolrProjectRepository extends SolrCrudRepository<SolrProject, String>{
 
     /**
@@ -24,5 +30,9 @@ public interface SolrProjectRepository extends SolrCrudRepository<SolrProject, S
 
     @Query("select p from SolrProject p")
     public Stream<SolrProject> findAllByCustomQueryAndStream();
+
+
+    @Highlight(snipplets = 3)
+    FacetAndHighlightPage<SolrProject> findByDescriptionStartingWith(String description, Pageable page);
 
 }
