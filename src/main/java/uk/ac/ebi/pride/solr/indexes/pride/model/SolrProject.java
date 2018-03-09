@@ -168,6 +168,60 @@ public class SolrProject implements ProjectProvider {
     @Field("project_public")
     private boolean publicProject;
 
+
+    /* This field is not store, so when you retrieve the value from solr is always null */
+    @Field("protein_identifications")
+    @Indexed(boost = 0.8f, stored = false, searchable = true)
+    private Set<String> proteinIdentifications;
+
+    /** This field is not store, so when you retrieve the value from solr is always null  **/
+    @Field("peptide_sequences")
+    @Indexed(boost = 0.8f, stored = false, searchable = true)
+    private Set<String> peptideSequences;
+
+    /** Highligths of values that has been found for the Solr Search **/
+    private Map<String, List<String>> highlights;
+
+    /* Default Constructor for the {@link SolrProject} */
+
+    public SolrProject(String accession, String title, List<String> additionalAttributesIds,
+                       List<String> additionalAttributesNames, String projectDescription, String sampleProcessingProtocol,
+                       String dataProcessingProtocol, List<String> projectTags, List<String> keywords, String doi,
+                       List<String> otherOmicsLinks, String submissionType, Date submissionDate, Date publicationDate,
+                       Date updatedDate, String submitterFirstName, String submitterLastName, String submitterAffiliation,
+                       List<String> labHeadNames, List<String> labHeadLastNames, List<String> labHeadAffiliations,
+                       List<String> instrumentIds, List<String> instrumentNames, List<String> allCountries,
+                       List<String> allAffiliations, List<String> experimentalFactors, List<String> references, boolean publicProject) {
+        this.accession = accession;
+        this.title = title;
+        this.additionalAttributesIds = additionalAttributesIds;
+        this.additionalAttributesNames = additionalAttributesNames;
+        this.projectDescription = projectDescription;
+        this.sampleProcessingProtocol = sampleProcessingProtocol;
+        this.dataProcessingProtocol = dataProcessingProtocol;
+        this.projectTags = projectTags;
+        this.keywords = keywords;
+        this.doi = doi;
+        this.otherOmicsLinks = otherOmicsLinks;
+        this.submissionType = submissionType;
+        this.submissionDate = submissionDate;
+        this.publicationDate = publicationDate;
+        this.updatedDate = updatedDate;
+        this.submitterFirstName = submitterFirstName;
+        this.submitterLastName = submitterLastName;
+        this.submitterAffiliation = submitterAffiliation;
+        this.labHeadNames = labHeadNames;
+        this.labHeadLastNames = labHeadLastNames;
+        this.labHeadAffiliations = labHeadAffiliations;
+        this.instrumentIds = instrumentIds;
+        this.instrumentNames = instrumentNames;
+        this.allCountries = allCountries;
+        this.allAffiliations = allAffiliations;
+        this.experimentalFactors = experimentalFactors;
+        this.references = references;
+        this.publicProject = publicProject;
+    }
+
     public void setAccession(String accession) {
         this.accession = accession;
     }
@@ -466,4 +520,45 @@ public class SolrProject implements ProjectProvider {
     public Collection<? extends ContactProvider> getHeadLab() {
         return Collections.emptyList();
     }
+
+    public Set<String> getProteinIdentifications() {
+        return proteinIdentifications;
+    }
+
+    public void setProteinIdentifications(Set<String> proteinIdentifications) {
+        this.proteinIdentifications = proteinIdentifications;
+    }
+
+    public Set<String> getPeptideSequences() {
+        return peptideSequences;
+    }
+
+    public void setPeptideSequences(Set<String> peptideSequences) {
+        this.peptideSequences = peptideSequences;
+    }
+
+    public Map<String, List<String>> getHighlights() {
+        return highlights;
+    }
+
+    public void setHighlights(Map<String, List<String>> highlights) {
+        this.highlights = highlights;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SolrProject that = (SolrProject) o;
+
+        return accession != null ? accession.equals(that.accession) : that.accession == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return accession != null ? accession.hashCode() : 0;
+    }
+
+
 }

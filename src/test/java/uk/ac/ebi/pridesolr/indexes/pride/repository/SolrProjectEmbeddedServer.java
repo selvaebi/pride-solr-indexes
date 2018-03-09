@@ -22,7 +22,7 @@ import java.util.Collection;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class SolrProjectRepositoryTest {
+public class SolrProjectEmbeddedServer {
 
     @Autowired
     SolrProjectRepository projectRepository;
