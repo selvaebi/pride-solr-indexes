@@ -14,11 +14,9 @@ import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Query;
 import org.springframework.data.solr.core.query.SolrDataQuery;
 import org.springframework.data.solr.repository.support.SimpleSolrRepository;
-import uk.ac.ebi.pride.solr.indexes.pride.model.SolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.util.Arrays;
-
-import static org.junit.Assert.*;
 
 /**
  * @author Yasset Perez-Riverol
@@ -26,35 +24,35 @@ import static org.junit.Assert.*;
  */
 
 @RunWith(MockitoJUnitRunner.class)
-public class SolrProjectRepositoryTest {
+public class PrideSolrProjectRepositoryTest {
 
 
-    private SimpleSolrRepository<SolrProject, String> repository;
+    private SimpleSolrRepository<PrideSolrProject, String> repository;
 
     @Mock
     private SolrOperations solrOperationsMock;
 
     @Before
     public void setUp() {
-        repository = new SimpleSolrRepository<>(solrOperationsMock, SolrProject.class);
+        repository = new SimpleSolrRepository<>(solrOperationsMock, PrideSolrProject.class);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInitRepositoryWithNullSolrOperations() {
-        new SimpleSolrRepository<SolrProject, String>(null, (Class) null);
+        new SimpleSolrRepository<PrideSolrProject, String>(null, (Class) null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testInitRepositoryWithNullEntityClass() {
-        new SimpleSolrRepository<SolrProject, String>(
+        new SimpleSolrRepository<PrideSolrProject, String>(
                 new SolrTemplate(new HttpSolrClient("http://localhost:8080/solr"), null), (Class) null);
     }
 
     @Test
     public void testInitRepository() {
         repository = new SimpleSolrRepository<>(new SolrTemplate(new HttpSolrClient("http://localhost:8080/solr"), null),
-                SolrProject.class);
-        Assert.assertEquals(SolrProject.class, repository.getEntityClass());
+                PrideSolrProject.class);
+        Assert.assertEquals(PrideSolrProject.class, repository.getEntityClass());
     }
 
     @Test
@@ -66,7 +64,7 @@ public class SolrProjectRepositoryTest {
 
         Mockito.verify(solrOperationsMock, Mockito.times(1)).count(captor.capture());
         Mockito.verify(solrOperationsMock, Mockito.times(1)).queryForPage(captor.capture(),
-                Mockito.eq(SolrProject.class));
+                Mockito.eq(PrideSolrProject.class));
 
         Assert.assertNull(captor.getAllValues().get(0).getPageRequest());
         Assert.assertEquals(12345, captor.getAllValues().get(1).getPageRequest().getPageSize());

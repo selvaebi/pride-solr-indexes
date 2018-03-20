@@ -2,6 +2,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.services.project.PrideProjectReaderService;
 import uk.ac.ebi.pride.archive.services.project.PrideProjectWriterService;
@@ -16,25 +17,29 @@ import java.util.stream.Stream;
  * @author Yasset Perez-Riverol
  * @version $Id$
  */
-@Component
-public class ProjectIndexService implements PrideProjectReaderService, PrideProjectWriterService{
+
+@Service
+public class PrideSolrProjectService implements PrideProjectReaderService, PrideProjectWriterService{
+
+    final SolrProjectRepository repository;
 
     @Autowired
-    SolrProjectRepository projectRepository;
-
-
-    @Override
-    public ProjectProvider read(String accession) {
-        return projectRepository.findOne(accession);
+    public PrideSolrProjectService(SolrProjectRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public Stream<ProjectProvider> readAll(int pageStart, int size) {
+    public ProjectProvider read(String accession) {
         return null;
     }
 
     @Override
     public ProjectProvider save(ProjectProvider projectProvider) {
+        return null;
+    }
+
+    @Override
+    public Stream<ProjectProvider> readAll(int pageStart, int size) {
         return null;
     }
 
@@ -46,5 +51,10 @@ public class ProjectIndexService implements PrideProjectReaderService, PrideProj
     @Override
     public ProjectProvider delete(String accession) {
         return null;
+    }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
     }
 }

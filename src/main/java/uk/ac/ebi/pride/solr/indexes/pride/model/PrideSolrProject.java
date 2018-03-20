@@ -16,17 +16,17 @@ import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import java.util.*;
 
 /**
- * The {@link SolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
+ * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
  *  - Accession Array
  *  - Name Array
  *  In some cases is relevant to add the parent Terms for the original terms into the search. For example in the Taxonomy or Instrument, it isi important to add to the Project the parent term.
  *  values: Accession
- * @author @author
+ * @author ypriverol
  * @version $Id$
  */
 
-@SolrDocument(solrCoreName = "prideprojects")
-public class SolrProject implements ProjectProvider {
+@SolrDocument(solrCoreName = "projects")
+public class PrideSolrProject implements ProjectProvider {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
@@ -182,16 +182,16 @@ public class SolrProject implements ProjectProvider {
     /** Highligths of values that has been found for the Solr Search **/
     private Map<String, List<String>> highlights;
 
-    /* Default Constructor for the {@link SolrProject} */
+    /* Default Constructor for the {@link PrideSolrProject} */
 
-    public SolrProject(String accession, String title, List<String> additionalAttributesIds,
-                       List<String> additionalAttributesNames, String projectDescription, String sampleProcessingProtocol,
-                       String dataProcessingProtocol, List<String> projectTags, List<String> keywords, String doi,
-                       List<String> otherOmicsLinks, String submissionType, Date submissionDate, Date publicationDate,
-                       Date updatedDate, String submitterFirstName, String submitterLastName, String submitterAffiliation,
-                       List<String> labHeadNames, List<String> labHeadLastNames, List<String> labHeadAffiliations,
-                       List<String> instrumentIds, List<String> instrumentNames, List<String> allCountries,
-                       List<String> allAffiliations, List<String> experimentalFactors, List<String> references, boolean publicProject) {
+    public PrideSolrProject(String accession, String title, List<String> additionalAttributesIds,
+                            List<String> additionalAttributesNames, String projectDescription, String sampleProcessingProtocol,
+                            String dataProcessingProtocol, List<String> projectTags, List<String> keywords, String doi,
+                            List<String> otherOmicsLinks, String submissionType, Date submissionDate, Date publicationDate,
+                            Date updatedDate, String submitterFirstName, String submitterLastName, String submitterAffiliation,
+                            List<String> labHeadNames, List<String> labHeadLastNames, List<String> labHeadAffiliations,
+                            List<String> instrumentIds, List<String> instrumentNames, List<String> allCountries,
+                            List<String> allAffiliations, List<String> experimentalFactors, List<String> references, boolean publicProject) {
         this.accession = accession;
         this.title = title;
         this.additionalAttributesIds = additionalAttributesIds;
@@ -550,7 +550,7 @@ public class SolrProject implements ProjectProvider {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SolrProject that = (SolrProject) o;
+        PrideSolrProject that = (PrideSolrProject) o;
 
         return accession != null ? accession.equals(that.accession) : that.accession == null;
     }
