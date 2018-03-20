@@ -24,7 +24,6 @@
     <properties>
         <archive.data.provider.api.version>1.0.0-SNAPSHOT</archive.data.provider.api.version>
         <uk.ac.ebi.pride.architectural-pride-tdd.version>1.0.3</uk.ac.ebi.pride.architectural-pride-tdd.version>
-        <uk.ac.ebi.pride.architectural-pride-logging.version>1.0.0</uk.ac.ebi.pride.architectural-pride-logging.version>
         <uk.ac.ebi.pride.architectural-pride-spring.version>1.0.0-SNAPSHOT</uk.ac.ebi.pride.architectural-pride-spring.version>
         <solr.version>7.1.0</solr.version>
     </properties>
@@ -132,20 +131,6 @@
             <version>${archive.data.provider.api.version}</version>
         </dependency>
 
-        <!-- Logging -->
-        <dependency>
-            <groupId>uk.ac.ebi.pride.architectural</groupId>
-            <artifactId>pride-logging</artifactId>
-            <version>${uk.ac.ebi.pride.architectural-pride-logging.version}</version>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- TDD -->
         <dependency>
             <groupId>uk.ac.ebi.pride.architectural</groupId>
@@ -162,6 +147,14 @@
             <version>${uk.ac.ebi.pride.architectural-pride-spring.version}</version>
             <type>pom</type>
         </dependency>
+
+        <!--&lt;!&ndash; Solr Test Framework &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.solr</groupId>-->
+            <!--<artifactId>solr-test-framework</artifactId>-->
+            <!--<version>7.2.1</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
 
         <!--&lt;!&ndash; Solr Dependencies  &ndash;&gt;-->
         <!--<dependency>-->

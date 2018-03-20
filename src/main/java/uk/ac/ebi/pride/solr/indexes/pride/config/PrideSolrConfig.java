@@ -19,15 +19,13 @@ import java.net.MalformedURLException;
  */
 
 @Configuration
-@EnableSolrRepositories(basePackages = {"uk.ac.ebi.pride.solr.indexes.pride.repository"})
+@EnableSolrRepositories(basePackages = {"uk.ac.ebi.pride.solr.indexes.pride.repository"}, multicoreSupport = true)
 public class PrideSolrConfig {
 
-    private @Resource
-
-    Environment env;
-
     @Bean
-    public SolrClient solrClient() throws MalformedURLException, IllegalStateException {
-        return new HttpSolrClient(env.getRequiredProperty("solr.host"));
+    public SolrClient solrClient(@Value("${solr.host}") String host) throws MalformedURLException, IllegalStateException {
+        return new HttpSolrClient(host);
     }
+
+
 }

@@ -21,12 +21,8 @@ import java.util.stream.Stream;
 @Service
 public class PrideSolrProjectService implements PrideProjectReaderService, PrideProjectWriterService{
 
-    final SolrProjectRepository repository;
-
     @Autowired
-    public PrideSolrProjectService(SolrProjectRepository repository) {
-        this.repository = repository;
-    }
+    SolrProjectRepository repository;
 
     @Override
     public ProjectProvider read(String accession) {
