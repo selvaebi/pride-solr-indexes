@@ -1,9 +1,7 @@
 package uk.ac.ebi.pride.solr.indexes.pride.model;
 
 
-
 import org.apache.solr.client.solrj.beans.Field;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Dynamic;
 import org.springframework.data.solr.core.mapping.Indexed;
