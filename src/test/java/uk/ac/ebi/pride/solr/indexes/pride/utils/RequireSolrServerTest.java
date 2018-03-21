@@ -38,7 +38,6 @@ public class RequireSolrServerTest implements TestRule{
             public void evaluate() throws Throwable {
 
                 checkServerRunning();
-git add *
                 base.evaluate();
             }
         };

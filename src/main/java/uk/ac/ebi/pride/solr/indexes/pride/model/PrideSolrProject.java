@@ -3,7 +3,9 @@ package uk.ac.ebi.pride.solr.indexes.pride.model;
 
 
 import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.Dynamic;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
@@ -17,8 +19,8 @@ import java.util.*;
 
 /**
  * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
- *  - Accession Array
- *  - Name Array
+ *   - Accession Array
+ *   - Name Array
  *  In some cases is relevant to add the parent Terms for the original terms into the search. For example in the Taxonomy or Instrument, it isi important to add to the Project the parent term.
  *  values: Accession
  * @author ypriverol
@@ -26,201 +28,142 @@ import java.util.*;
  */
 
 @SolrDocument(solrCoreName = "projects")
-public class PrideSolrProject implements ProjectProvider {
+public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
+    @Field(value = ACCESSION)
     @Indexed(boost = 1.0f, stored = true, searchable = true)
-    @Field("accession")
     private String accession;
 
     /** Experiment Title **/
-    @Field("project_title")
+    @Field(PROJECT_TILE)
     @Indexed(boost = 0.8f, stored = true, searchable = true)
     private String title;
 
     /** Additional Attributes Identifiers **/
-    @Field("additional_attributes_ids")
+    @Field(ADDITIONAL_ATTRIBUTES)
+    @Dynamic
     @Indexed(boost = 0.4f, stored = true, searchable = true)
-    private List<String> additionalAttributesIds;
-
-    /** Additional Attributes Names **/
-    @Field("additional_attributes_names")
-    @Indexed(boost = 0.4f, stored = true, searchable = true)
-    private List<String> additionalAttributesNames;
+    private Map<String, String> additionalAttributes;
 
     /** Project Description **/
-    @Field("project_description")
+    @Field(PROJECT_DESCRIPTION)
     @Indexed(boost = 0.7f, stored = true, searchable = true)
     private String projectDescription;
 
     /** Sample Protocol **/
-    @Field("project_sample_protocol")
+    @Field(PROJECT_SAMPLE_PROTOCOL)
     @Indexed(boost = 0.6f, stored = true, searchable = true)
     private String sampleProcessingProtocol;
 
     /** Data Processing Protocol **/
-    @Field("project_data_protocol")
+    @Field(PROJECT_DATA_PROTOCOL)
     @Indexed(boost = 0.6f, stored = true, searchable = true)
     private String dataProcessingProtocol;
 
     /** Project Tags **/
-    @Field("project_tags")
+    @Field(PROJECT_TAGS)
     @Indexed(boost = 0.2f, stored = true, searchable = true)
     private List<String> projectTags;
 
     /** Keywords **/
-    @Field("project_keywords")
+    @Field(PROJECT_KEYWORDS)
     @Indexed(boost = 0.2f, stored = true, searchable = true)
     private List<String> keywords;
 
     /** Original Doi of the dataset. The actual Doi is not needed in the Dataaset **/
-    @Field("project_doi")
+    @Field(PROJECT_DOI)
     @Indexed(boost = 0.2f, searchable = true)
     private String doi;
 
     /** otherOmicsLinks **/
-    @Field("project_other_omics")
+    @Field(PROJECT_OMICS_LINKS)
     @Indexed(boost = 0.2f, searchable = true)
     private List<String> otherOmicsLinks;
 
     /** Submission Type **/
-    @Field("project_submission_type")
+    @Field(PROJECT_SUBMISSION_TYPE)
     @Indexed(boost = 0.2f, searchable = true, stored = true)
     private String submissionType;
 
     /** Submission Date **/
-    @Field("submission_date")
+    @Field(PROJECT_SUBMISSION_DATE)
     @Indexed(boost = 0.2f, searchable = true, stored = true)
     private Date submissionDate;
 
     /** Publication Date **/
-    @Field("publication_date")
+    @Field(PROJECT_PUBLICATION_DATE)
     @Indexed(boost = 0.2f, searchable = true, stored = true)
     private Date publicationDate;
 
     /** Updated Date **/
-    @Field("updated_date")
+    @Field(PROJECT_UPDATED_DATE)
     @Indexed(boost = 0.2f, searchable = true)
     private Date updatedDate;
 
     /** Submitter FirstName **/
-    @Field("submitter_first_name")
+    @Field(PROJECT_SUBMITTER)
+    @Dynamic
     @Indexed(boost = 0.2f, searchable = true, stored = true )
-    private String submitterFirstName;
-
-    /** Submitter Last Name **/
-    @Field("submitter_last_name")
-    @Indexed(boost = 0.2f, searchable = true, stored = true )
-    private String submitterLastName;
-
-    /** Submitter Affiliation **/
-    @Field("submitter_affiliation")
-    @Indexed(boost = 0.2f, searchable = true, stored = true )
-    private String submitterAffiliation;
+    private String submitters;
 
     /** List of Lab Head Names **/
-    @Field("lab_head_names")
+    @Field(PROJECT_PI_NAMES)
+    @Dynamic
     @Indexed(boost = 0.2f, searchable = true, stored = true )
-    private List<String> labHeadNames;
+    private Map<String, String> labPIs;
 
-    /** List of Head LastName **/
-    @Field("lab_head_last_names")
+    /** Affiliations  */
+    @Field(AFFILIATIONS)
     @Indexed(boost = 0.2f, searchable = true, stored = true )
-    private List<String> labHeadLastNames;
-
-    /** Lab Head Affiliation  */
-    @Field("lab_head_affiliation")
-    @Indexed(boost = 0.2f, searchable = true, stored = true )
-    private List<String> labHeadAffiliations;
+    private List<String> affiliations;
 
     /** List of instruments Ids*/
-    @Field("instrument_ids")
+    @Field(INSTRUMENTS)
+    @Dynamic
     @Indexed(boost = 0.1f, searchable = true, stored = true)
-    private List<String> instrumentIds;
-
-    /** List of instrument Names **/
-    @Field("instrument_names")
-    @Indexed(boost = 0.4f, searchable = true, stored = true)
-    private List<String> instrumentNames;
+    private Map<String, String> instruments;
 
     /** This field store all the countries associated with the experiment **/
-    @Field("project_countries")
+    @Field(COUNTRIES)
     @Indexed(boost = 0.4f, searchable = true, stored = true)
     private List<String> allCountries;
 
-    /** All affiliations **/
-    @Field("project_affiliations")
-    @Indexed(boost = 0.4f, searchable = true, stored = true)
-    private List<String> allAffiliations;
-
     /** Experimental Factor Names **/
-    @Field("experimental_factor_names")
+    @Field(EXPERIMENTAL_FACTORS_NAMES)
+    @Dynamic
     @Indexed(boost = 0.5f, searchable = true, stored = true)
-    private List<String> experimentalFactors;
+    private Map<String, String> experimentalFactors;
 
     /** References related with the project **/
-    @Field("project_references")
+    @Field(PROJECT_REFERENCES)
     @Indexed(boost = 0.7f, searchable = true)
     private List<String> references;
 
     /** Public project or private   **/
-    @Field("project_public")
+    @Field(PROJECT_PUBLIC)
+    @Indexed(boost = 0.7f, searchable = true)
     private boolean publicProject;
 
-
     /* This field is not store, so when you retrieve the value from solr is always null */
-    @Field("protein_identifications")
-    @Indexed(boost = 0.8f, stored = false, searchable = true)
+    @Field(PROTEIN_IDENTIFICATIONS)
+    @Indexed(boost = 0.6f, stored = false, searchable = true)
     private Set<String> proteinIdentifications;
 
     /** This field is not store, so when you retrieve the value from solr is always null  **/
-    @Field("peptide_sequences")
-    @Indexed(boost = 0.8f, stored = false, searchable = true)
+    @Field(PEPTIDE_SEQUENCES)
+    @Indexed(boost = 0.6f, stored = false, searchable = true)
     private Set<String> peptideSequences;
 
     /** Highligths of values that has been found for the Solr Search **/
+
+    @Field(PROJECT_IDENTIFIED_PTM)
+    @Indexed(boost = 0.6f, stored = true, searchable = true )
+    @Dynamic
+    private Map<String, String> identifiedPTMs;
+
     private Map<String, List<String>> highlights;
-
-    /* Default Constructor for the {@link PrideSolrProject} */
-
-    public PrideSolrProject(String accession, String title, List<String> additionalAttributesIds,
-                            List<String> additionalAttributesNames, String projectDescription, String sampleProcessingProtocol,
-                            String dataProcessingProtocol, List<String> projectTags, List<String> keywords, String doi,
-                            List<String> otherOmicsLinks, String submissionType, Date submissionDate, Date publicationDate,
-                            Date updatedDate, String submitterFirstName, String submitterLastName, String submitterAffiliation,
-                            List<String> labHeadNames, List<String> labHeadLastNames, List<String> labHeadAffiliations,
-                            List<String> instrumentIds, List<String> instrumentNames, List<String> allCountries,
-                            List<String> allAffiliations, List<String> experimentalFactors, List<String> references, boolean publicProject) {
-        this.accession = accession;
-        this.title = title;
-        this.additionalAttributesIds = additionalAttributesIds;
-        this.additionalAttributesNames = additionalAttributesNames;
-        this.projectDescription = projectDescription;
-        this.sampleProcessingProtocol = sampleProcessingProtocol;
-        this.dataProcessingProtocol = dataProcessingProtocol;
-        this.projectTags = projectTags;
-        this.keywords = keywords;
-        this.doi = doi;
-        this.otherOmicsLinks = otherOmicsLinks;
-        this.submissionType = submissionType;
-        this.submissionDate = submissionDate;
-        this.publicationDate = publicationDate;
-        this.updatedDate = updatedDate;
-        this.submitterFirstName = submitterFirstName;
-        this.submitterLastName = submitterLastName;
-        this.submitterAffiliation = submitterAffiliation;
-        this.labHeadNames = labHeadNames;
-        this.labHeadLastNames = labHeadLastNames;
-        this.labHeadAffiliations = labHeadAffiliations;
-        this.instrumentIds = instrumentIds;
-        this.instrumentNames = instrumentNames;
-        this.allCountries = allCountries;
-        this.allAffiliations = allAffiliations;
-        this.experimentalFactors = experimentalFactors;
-        this.references = references;
-        this.publicProject = publicProject;
-    }
 
     public void setAccession(String accession) {
         this.accession = accession;
@@ -228,14 +171,6 @@ public class PrideSolrProject implements ProjectProvider {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setAdditionalAttributesIds(List<String> additionalAttributesIds) {
-        this.additionalAttributesIds = additionalAttributesIds;
-    }
-
-    public void setAdditionalAttributesNames(List<String> additionalAttributesNames) {
-        this.additionalAttributesNames = additionalAttributesNames;
     }
 
     public void setProjectDescription(String projectDescription) {
@@ -282,52 +217,72 @@ public class PrideSolrProject implements ProjectProvider {
         this.updatedDate = updatedDate;
     }
 
-    public void setSubmitterFirstName(String submitterFirstName) {
-        this.submitterFirstName = submitterFirstName;
-    }
-
-    public void setSubmitterLastName(String submitterLastName) {
-        this.submitterLastName = submitterLastName;
-    }
-
-    public void setSubmitterAffiliation(String submitterAffiliation) {
-        this.submitterAffiliation = submitterAffiliation;
-    }
-
-    public void setLabHeadNames(List<String> labHeadNames) {
-        this.labHeadNames = labHeadNames;
-    }
-
-    public void setLabHeadLastNames(List<String> labHeadLastNames) {
-        this.labHeadLastNames = labHeadLastNames;
-    }
-
-    public void setLabHeadAffiliations(List<String> labHeadAffiliations) {
-        this.labHeadAffiliations = labHeadAffiliations;
-    }
-
-    public void setInstrumentIds(List<String> instrumentIds) {
-        this.instrumentIds = instrumentIds;
-    }
-
-    public void setInstrumentNames(List<String> instrumentNames) {
-        this.instrumentNames = instrumentNames;
-    }
-
-    public void setAllCountries(List<String> allCountries) {
-        this.allCountries = allCountries;
-    }
-
-    public void setExperimentalFactors(List<String> experimentalFactors) {
-        this.experimentalFactors = experimentalFactors;
-    }
-
     public void setReferences(List<String> references) {
         this.references = references;
     }
 
     public void setPublicProject(boolean publicProject) {
         this.publicProject = publicProject;
+    }
+
+    public void setAdditionalAttributes(Map<String, String> additionalAttributes) {
+        this.additionalAttributes = additionalAttributes;
+    }
+
+    public List<String> getOtherOmicsLinks() {
+        return otherOmicsLinks;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public String getSubmitters() {
+        return submitters;
+    }
+
+    public void setSubmitters(String submitters) {
+        this.submitters = submitters;
+    }
+
+    public Map<String, String> getLabPIs() {
+        return labPIs;
+    }
+
+    public void setLabPIs(Map<String, String> labPIs) {
+        this.labPIs = labPIs;
+    }
+
+    public List<String> getAffiliations() {
+        return affiliations;
+    }
+
+    public void setAffiliations(List<String> affiliations) {
+        this.affiliations = affiliations;
+    }
+
+    public void setInstruments(Map<String, String> instruments) {
+        this.instruments = instruments;
+    }
+
+    public List<String> getAllCountries() {
+        return allCountries;
+    }
+
+    public void setAllCountries(List<String> allCountries) {
+        this.allCountries = allCountries;
+    }
+
+    public void setExperimentalFactors(Map<String, String> experimentalFactors) {
+        this.experimentalFactors = experimentalFactors;
+    }
+
+    public Map<String, String> getIdentifiedPTMs() {
+        return identifiedPTMs;
+    }
+
+    public void setIdentifiedPTMs(Map<String, String> identifiedPTMs) {
+        this.identifiedPTMs = identifiedPTMs;
     }
 
     /** Return the accession for the Project **/
@@ -355,11 +310,8 @@ public class PrideSolrProject implements ProjectProvider {
     @Override
     public Collection<? extends ParamProvider> getAdditionalAttributes() {
         List<CvParamProvider> additionalCvParams = new ArrayList<CvParamProvider>();
-        if (additionalAttributesIds!=null && additionalAttributesNames!= null && additionalAttributesIds.size() == additionalAttributesNames.size()) {
-            for (int i = 0; i < additionalAttributesIds.size(); i++) {
-                CvParamProvider cvParam = new DefaultCvParam(additionalAttributesIds.get(i), additionalAttributesNames.get(i));
-                additionalCvParams.add(cvParam);
-            }
+        if (additionalAttributes != null) {
+            additionalAttributes.forEach((key, value) -> additionalCvParams.add(new DefaultCvParam(key, value)));
         }
         return additionalCvParams;
     }
@@ -420,11 +372,8 @@ public class PrideSolrProject implements ProjectProvider {
     @Override
     public Collection<? extends CvParamProvider> getInstruments() {
         List<CvParamProvider> instruments = new ArrayList<CvParamProvider>();
-        if (instrumentIds !=null && instrumentNames != null && instrumentIds.size() == instrumentNames.size()) {
-            for (int i = 0; i < instrumentIds.size(); i++) {
-                CvParamProvider cvParam = new DefaultCvParam(instrumentIds.get(i), instrumentNames.get(i));
-                instruments.add(cvParam);
-            }
+        if (this.instruments != null ) {
+           this.instruments.forEach((x, y) -> instruments.add(new DefaultCvParam(x, y)));
         }
         return instruments;
     }
@@ -475,7 +424,7 @@ public class PrideSolrProject implements ProjectProvider {
      */
     @Override
     public Collection<? extends String> getExperimentalFactorNamesAsString(){
-        return experimentalFactors;
+        return experimentalFactors.values();
     }
 
     /**
@@ -561,4 +510,8 @@ public class PrideSolrProject implements ProjectProvider {
     }
 
 
+    @Override
+    public String getName() {
+        return null;
+    }
 }
