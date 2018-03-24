@@ -1,4 +1,4 @@
-package uk.ac.ebi.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride;
 
 
 import org.apache.commons.io.FileUtils;

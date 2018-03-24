@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.ebi.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride;
 
 
 import javax.annotation.PostConstruct;
@@ -28,8 +28,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 
 /**
- * @author Christoph Strobl
- * @author Oliver Gierke
+ * @author ypriverol
  */
 @SpringBootApplication
 @EnableSolrRepositories(schemaCreationSupport = true)

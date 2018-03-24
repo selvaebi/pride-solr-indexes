@@ -1,8 +1,5 @@
-package uk.ac.ebi.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride;
 
-import example.springdata.solr.product.ProductRepository;
-import example.springdata.solr.test.util.RequiresSolrServer;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
