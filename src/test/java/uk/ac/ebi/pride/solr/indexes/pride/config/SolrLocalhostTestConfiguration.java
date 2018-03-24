@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.ebi.pride.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
+import uk.ac.ebi.pride.solr.indexes.pride.config.AbstractSolrConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 
 /**
  * @author ypriverol
  */
 @SpringBootApplication
-@EnableSolrRepositories(schemaCreationSupport = true)
-public class SolrTestConfiguration extends AbstractSolrConfiguration{
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = true)
+public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired
 	SolrProjectRepository repo;
@@ -58,6 +60,5 @@ public class SolrTestConfiguration extends AbstractSolrConfiguration{
 		repo.deleteAll(); // This needs to be added here to avoid
 		doInitTestData(repo);
 	}
-
 
 }

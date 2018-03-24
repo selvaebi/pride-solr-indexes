@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 
 import org.apache.commons.io.FileUtils;
@@ -32,7 +32,7 @@ import java.nio.file.Path;
 @SpringBootApplication
 @EnableSolrRepositories(schemaCreationSupport = true)
 @TestPropertySource(locations = "classpath:application.properties")
-public class SolrEmbeddedConfiguration extends AbstractSolrConfiguration{
+public class SolrEmbeddedTestConfiguration extends AbstractSolrConfiguration {
 
     @Value("${solr.Home}")
     private String solrConfDir;
@@ -43,7 +43,7 @@ public class SolrEmbeddedConfiguration extends AbstractSolrConfiguration{
     @Bean
     public EmbeddedSolrServer solrServerEmbedded() throws IOException, SAXException, ParserConfigurationException, URISyntaxException {
         Path solrTempDirectory = Files.createTempDirectory("");
-        String testURL = new File(SolrEmbeddedConfiguration.class.getClassLoader().getResource(solrConfDir).toURI()).getAbsolutePath();
+        String testURL = new File(SolrEmbeddedTestConfiguration.class.getClassLoader().getResource(solrConfDir).toURI()).getAbsolutePath();
         FileUtils.copyDirectory(new File(testURL), solrTempDirectory.toFile());
         final EmbeddedSolrServerFactory embeddedSolrServerFactory = new EmbeddedSolrServerFactory(solrTempDirectory.toString());
         return embeddedSolrServerFactory.getSolrClient();

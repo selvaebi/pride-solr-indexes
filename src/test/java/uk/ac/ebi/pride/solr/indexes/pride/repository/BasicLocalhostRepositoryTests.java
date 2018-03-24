@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 
 import org.junit.ClassRule;
@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
@@ -14,8 +15,8 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
  * @author Christoph Strobl
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SolrTestConfiguration.class)
-public class BasicSolrRepositoryTests {
+@SpringBootTest(classes = SolrLocalhostTestConfiguration.class)
+public class BasicLocalhostRepositoryTests {
 
 	public static @ClassRule
 	RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
@@ -36,6 +37,6 @@ public class BasicSolrRepositoryTests {
 	 */
 	@Test
 	public void findAllUsingDeepPagination() {
-		repository.findAllUsingCursor().forEachRemaining(System.out::println);
+		//repository.findAllUsingCursor().forEachRemaining(System.out::println);
 	}
 }

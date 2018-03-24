@@ -4,9 +4,7 @@ package uk.ac.ebi.pride.solr.indexes.pride;
 import static org.springframework.data.solr.core.query.Criteria.*;
 import static org.springframework.data.solr.core.query.ExistsFunction.*;
 
-import java.time.Duration;
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.query.Function;
 import org.springframework.data.solr.core.query.Query;
@@ -22,6 +19,7 @@ import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Boost;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
@@ -37,7 +35,7 @@ public class AdvancedSolrRepositoryTests {
 	RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
 
 	@Configuration
-	static class Config extends SolrTestConfiguration {
+	static class Config extends SolrLocalhostTestConfiguration {
 
 		@Override
 		protected void doInitTestData(SolrProjectRepository repository) {

@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 
 import org.springframework.data.repository.CrudRepository;
@@ -16,6 +16,11 @@ import java.util.stream.IntStream;
  */
 public class AbstractSolrConfiguration {
 
+    /**
+     * Insert dummy data into the collection.
+     *
+     * @param repository to insert the data
+     */
     protected void doInitTestData(SolrProjectRepository repository) {
 
         IntStream.range(0, 100)

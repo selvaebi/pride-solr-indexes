@@ -1,10 +1,11 @@
-package uk.ac.ebi.pride.solr.indexes.pride;
+package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.solr.indexes.pride.config.SolrEmbeddedTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 
 /**
@@ -21,8 +22,8 @@ import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
  * Created by ypriverol (ypriverol@gmail.com) on 23/03/2018.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SolrEmbeddedConfiguration.class)
-public class BasicSolrEmbeddedTests {
+@SpringBootTest(classes = SolrEmbeddedTestConfiguration.class)
+public class BasicSolrEmbeddedRepositoryTests {
 
     @Autowired
     SolrProjectRepository repository;
@@ -40,6 +41,6 @@ public class BasicSolrEmbeddedTests {
      */
     @Test
     public void findAllUsingDeepPagination() {
-        repository.findAllUsingCursor().forEachRemaining(System.out::println);
+        //repository.findAllUsingCursor().forEachRemaining(System.out::println);
     }
 }
