@@ -64,7 +64,6 @@
 
     </dependencies>
 
-
     <build>
         <resources>
             <!-- Maven should filter properties files -->
