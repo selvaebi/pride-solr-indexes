@@ -12,19 +12,19 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 @Configuration
 @EnableSolrRepositories("uk.ac.ebi.pride.solr.indexes.pride.repository")
-@Profile("production")
-public class HttpSolrContext {
+@Profile("solr-prod")
+public class HttpSolrContext extends SolrContext{
 
-    @Value("${solr.prod.url}")
-    private String solrURL;
-
-    @Bean
-    public SolrClient embeddedSolrServer() throws Exception {
-        return new HttpSolrClient(solrURL);
-    }
-
-    @Bean
-    public SolrTemplate solrTemplate() throws Exception {
-        return new SolrTemplate(embeddedSolrServer());
-    }
+//    @Value("${solr.url}")
+//    private String solrURL;
+//
+//    @Bean
+//    public SolrClient embeddedSolrServer() throws Exception {
+//        return new HttpSolrClient(solrURL);
+//    }
+//
+//    @Bean
+//    public SolrTemplate solrTemplate() throws Exception {
+//        return new SolrTemplate(embeddedSolrServer());
+//    }
 }

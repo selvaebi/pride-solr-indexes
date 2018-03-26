@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package example.springdata.solr.test.util;
-
-import java.io.IOException;
+package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.hamcrest.core.Is;
-import org.junit.Assume;
-import org.junit.AssumptionViolatedException;
-import org.junit.rules.TestRule;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
+
+import java.io.IOException;
 
 /**
- * {@link TestRule} implementation using {@link CloseableHttpClient} to check if Solr is running by sending
- * {@literal GET} request to {@literal /admin/info/system}.
- *
- * @author Christoph Strobl
+ * @author ypriverol
  */
-public class RequiresSolrServer implements TestRule {
+public class RequiresSolrServer {
 
 	private static final String PING_PATH = "/admin/info/system";
 
@@ -44,32 +35,37 @@ public class RequiresSolrServer implements TestRule {
 		this.baseUrl = baseUrl;
 	}
 
-	public static RequiresSolrServer onLocalhost() {
-		return new RequiresSolrServer("http://localhost:8983/solr");
+	/**
+	 * Returns a Solr Server in localhost with, the process create the Solr Service and
+	 * checks that the server is running properly.
+	 *
+	 * @return RequiresSolrServer
+	 */
+	public static RequiresSolrServer onLocalhost(){
+		RequiresSolrServer solrServer = new RequiresSolrServer("http://localhost:8983/solr");
+		try {
+			solrServer.checkServerRunning();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return solrServer;
 	}
 
-	@Override
-	public Statement apply(Statement base, Description description) {
-		return new Statement() {
 
-			@Override
-			public void evaluate() throws Throwable {
-
-				checkServerRunning();
-				base.evaluate();
-			}
-		};
-	}
-
-	private void checkServerRunning() {
+	/**
+	 * Checking the Solr Server in localhost and check that the status of returns in 200.
+	 *
+	 * @throws IOException
+	 */
+	private void checkServerRunning() throws IOException {
 
 		try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
 			CloseableHttpResponse response = client.execute(new HttpGet(baseUrl + PING_PATH));
-			if (response != null && response.getStatusLine() != null) {
-				Assume.assumeThat(response.getStatusLine().getStatusCode(), Is.is(200));
+			if (response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() != 200) {
+				throw new IOException("The SolrServer in localhost does not seem to be running");
 			}
 		} catch (IOException e) {
-			throw new AssumptionViolatedException("SolrServer does not seem to be running", e);
+			throw new IOException("The SolrServer in localhost does not seem to be running", e);
 		}
 	}
 

@@ -31,7 +31,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 @SpringBootTest
 public class AdvancedSolrRepositoryTests {
 
-	public static @ClassRule
+	public static
 	RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
 
 	@Configuration

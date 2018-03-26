@@ -9,7 +9,7 @@ import org.springframework.data.solr.core.query.Field;
  * @version $Id$
  *
  */
-public interface PrideProjectField extends Field {
+public interface PrideProjectField {
 
     /** Project Accession **/
     public String ACCESSION = "accession";

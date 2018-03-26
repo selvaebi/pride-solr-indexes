@@ -18,8 +18,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 @SpringBootTest(classes = SolrLocalhostTestConfiguration.class)
 public class BasicLocalhostRepositoryTests {
 
-	public static @ClassRule
-	RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
+	public static RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
 
 	@Autowired
 	SolrProjectRepository repository;
