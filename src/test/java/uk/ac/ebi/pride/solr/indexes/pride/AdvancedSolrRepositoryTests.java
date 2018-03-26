@@ -38,7 +38,7 @@ public class AdvancedSolrRepositoryTests {
 	static class Config extends SolrLocalhostTestConfiguration {
 
 		@Override
-		protected void doInitTestData(SolrProjectRepository repository) {
+		protected void doInitTestData(SolrProjectRepository repository, String ... files) {
 
 			PrideSolrProject project1 = new PrideSolrProject();
 			project1.setAccession("id-1");

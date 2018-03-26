@@ -1,13 +1,20 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.data.exception.SubmissionFileException;
+import uk.ac.ebi.pride.data.io.SubmissionFileParser;
+import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}.
+ * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}. This class is using the
+ * PX Core library to read PX Submission Files.
  *
  * @author ypriverol
  * @version $Id$
@@ -25,22 +32,15 @@ public class PrideProjectReader {
     public static PrideSolrProject read(File pxSubmissionFile){
 
         PrideSolrProject project = new PrideSolrProject();
-        try{
-            BufferedReader bReader = new BufferedReader(new FileReader(pxSubmissionFile));
-            String line;
-
-            while ((line = bReader.readLine()) != null) {
-                String datavalue[] = line.split("\t");
-                String value1 = datavalue[0];
-                String value2 = datavalue[1];
-                int value3 = Integer.parseInt(datavalue[2]);
-                double value4 = Double.parseDouble(datavalue[3]);
-
-            }
-            bReader.close();
-        }catch (IOException e){
-            LOGGER.error("The File provided by the function don't exits -- " + pxSubmissionFile, e);
+        try {
+            Submission pxSubmission = SubmissionFileParser.parse(pxSubmissionFile);
+            project.setAccession(pxSubmission.getProjectMetaData().getResubmissionPxAccession());
+        } catch (SubmissionFileException e) {
+            LOGGER.error("Error in the file provided -- " + pxSubmissionFile, e);
         }
+
         return project;
     }
+
+
 }
