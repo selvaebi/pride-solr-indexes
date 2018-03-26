@@ -7,12 +7,14 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import java.io.*;
 
 /**
+ * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}.
+ *
  * @author ypriverol
  * @version $Id$
  */
-public class ReadPrideProjectFactory {
+public class PrideProjectReader {
 
-    static Logger LOGGER = LoggerFactory.getLogger(ReadPrideProjectFactory.class);
+    static Logger LOGGER = LoggerFactory.getLogger(PrideProjectReader.class);
 
     /**
      * Read a Pride Project from file using Tab delimited system. This function is a helper for testing
@@ -20,7 +22,7 @@ public class ReadPrideProjectFactory {
      * @param pxSubmissionFile Pride Submission File in PX
      * @return Pride Project
      */
-    public static PrideSolrProject readPXSubmissionFile(File pxSubmissionFile){
+    public static PrideSolrProject read(File pxSubmissionFile){
 
         PrideSolrProject project = new PrideSolrProject();
         try{

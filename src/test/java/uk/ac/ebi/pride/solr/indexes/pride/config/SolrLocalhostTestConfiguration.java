@@ -29,6 +29,10 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import uk.ac.ebi.pride.solr.indexes.pride.config.AbstractSolrConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 /**
  * @author ypriverol
  */
@@ -58,7 +62,14 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 	@PostConstruct
 	public void initWithTestData() {
 		repo.deleteAll(); // This needs to be added here to avoid
-		doInitTestData(repo);
+
+		try{
+			String filePathOne = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-one.px").toURI()).getAbsolutePath();
+			doInitTestData(repo);
+		}catch (URISyntaxException e){
+
+		}
+
 	}
 
 }

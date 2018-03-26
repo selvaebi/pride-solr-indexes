@@ -19,6 +19,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -27,10 +29,19 @@ import java.io.IOException;
  */
 public class RequiresSolrServer {
 
+	/** DEfault entry point to test in Solr **/
 	private static final String PING_PATH = "/admin/info/system";
 
+	/** Localhost URL **/
 	private final String baseUrl;
 
+	/** LOGGER to trace all the error and meessages **/
+	static Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
+
+	/**
+	 * Private Constructor
+	 * @param baseUrl baseURL
+	 */
 	private RequiresSolrServer(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
@@ -46,7 +57,7 @@ public class RequiresSolrServer {
 		try {
 			solrServer.checkServerRunning();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getMessage(), e);
 		}
 		return solrServer;
 	}
