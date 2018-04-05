@@ -129,25 +129,11 @@
      in a compatible way. Any analysis applied to the <uniqueKey> should _not_ produce multiple
      tokens
    -->   
-   <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
+   <field name="accession" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
-   <field name="pre" type="preanalyzed" indexed="true" stored="true"/>
-   <field name="sku" type="text_en_splitting_tight" indexed="true" stored="true" omitNorms="true"/>
-   <field name="name" type="text_general" indexed="true" stored="true"/>
-   <field name="manu" type="text_general" indexed="true" stored="true" omitNorms="true"/>
-   <field name="cat" type="string" indexed="true" stored="true" multiValued="true"/>
-   <field name="features" type="text_general" indexed="true" stored="true" multiValued="true"/>
-   <field name="includes" type="text_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true" />
 
-   <field name="weight" type="pfloat" indexed="true" stored="true"/>
-   <field name="price"  type="pfloat" indexed="true" stored="true"/>
-   <field name="popularity" type="pint" indexed="true" stored="true" />
-   <field name="inStock" type="boolean" indexed="true" stored="true" />
 
-   <field name="store" type="location" indexed="true" stored="true"/>
-
-   <!-- Common metadata fields, named specifically to match up with
-     SolrCell metadata when parsing rich documents such as Word, PDF.
+   <!-- Common metadata fields, named specifically to match up with SolrCell metadata when parsing rich documents such as Word, PDF.
      Some fields are multiValued only because Tika currently may return
      multiple values for them. Some metadata is parsed from the documents,
      but there are some which come from the client context:
@@ -233,7 +219,7 @@
  <!-- Field to use to determine and enforce document uniqueness. 
       Unless this field is marked with required="false", it will be a required field
    -->
- <uniqueKey>id</uniqueKey>
+ <uniqueKey>accession</uniqueKey>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,

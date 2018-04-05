@@ -30,7 +30,7 @@ import java.nio.file.Path;
  * @version $Id$
  */
 @SpringBootApplication
-@EnableSolrRepositories(schemaCreationSupport = true)
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
 @TestPropertySource(locations = "classpath:application.properties")
 public class SolrEmbeddedTestConfiguration extends AbstractSolrConfiguration {
 

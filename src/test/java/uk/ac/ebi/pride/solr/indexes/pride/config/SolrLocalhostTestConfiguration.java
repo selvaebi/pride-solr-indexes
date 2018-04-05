@@ -36,13 +36,13 @@ import java.net.URISyntaxException;
  * @author ypriverol
  */
 @SpringBootApplication
-@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = true)
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired
 	SolrProjectRepository repo;
 
-	/** LOGGER to trace all the error and meessages **/
+	/** LOGGER to trace all the error and messages **/
 	static Logger LOGGER = LoggerFactory.getLogger(SolrLocalhostTestConfiguration.class);
 
 	@Bean

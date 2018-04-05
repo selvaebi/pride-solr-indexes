@@ -12,7 +12,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 @EnableSolrRepositories("uk.ac.ebi.pride.solr.indexes.pride.repository")
 @Profile("solr-test")
 @ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.service")
-public class EmbeddedSolrContext extends SolrContext{
+public class EmbeddedSolrContext{
 
 	@Value("${solr.embedded.url}")
 	private String embeddedSolrUrl;

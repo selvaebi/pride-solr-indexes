@@ -13,7 +13,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 @Configuration
 @EnableSolrRepositories("uk.ac.ebi.pride.solr.indexes.pride.repository")
 @Profile("solr-prod")
-public class HttpSolrContext extends SolrContext{
+public class HttpSolrContext {
 
 //    @Value("${solr.url}")
 //    private String solrURL;

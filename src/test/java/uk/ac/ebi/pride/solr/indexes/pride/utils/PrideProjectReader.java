@@ -9,8 +9,6 @@ import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}. This class is using the

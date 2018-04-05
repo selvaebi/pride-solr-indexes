@@ -11,7 +11,8 @@ import java.io.File;
 import java.util.stream.IntStream;
 
 /**
- * Some abstract classes to reuse in the configuration files.
+ * Some abstract classes to reuse in the configuration files. It can be used to read examples from px files and
+ * submit them into the Solr index.
  *
  * @author ypriverol
  * @version $Id$
@@ -26,9 +27,7 @@ public class AbstractSolrConfiguration {
      * @param repository to insert the data
      */
     protected void doInitTestData(SolrProjectRepository repository, String ... filePaths) {
-        Lists.newArrayList(filePaths).stream().forEach(x -> {
-            PrideSolrProject p = PrideProjectReader.read(new File(x));
-            repository.save(p);
+        Lists.newArrayList(filePaths).stream().forEach(x -> { repository.save(PrideProjectReader.read(new File(x)));
         });
     }
 
