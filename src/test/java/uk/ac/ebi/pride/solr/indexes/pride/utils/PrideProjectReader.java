@@ -5,10 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
+import uk.ac.ebi.pride.data.model.Contact;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}. This class is using the
@@ -32,12 +34,45 @@ public class PrideProjectReader {
         PrideSolrProject project = new PrideSolrProject();
         try {
             Submission pxSubmission = SubmissionFileParser.parse(pxSubmissionFile);
-            project.setAccession(pxSubmission.getProjectMetaData().getResubmissionPxAccession());
+            project = convertSubmissionToProject(pxSubmission);
         } catch (SubmissionFileException e) {
             LOGGER.error("Error in the file provided -- " + pxSubmissionFile, e);
         }
 
         return project;
+    }
+
+    /**
+     * Conversion of PX Submission file into a Pride Solr Project.
+     * @param submission PX submission file
+     * @return Pride Solr  Project
+     */
+    static PrideSolrProject convertSubmissionToProject(Submission submission){
+        PrideSolrProject project = new PrideSolrProject();
+
+        //Get accession, title, keywords, Data and Sample protocols
+        project.setAccession(submission.getProjectMetaData().getResubmissionPxAccession());
+        project.setTitle(submission.getProjectMetaData().getProjectTitle());
+        project.setKeywords(Arrays.asList(submission.getProjectMetaData().getKeywords().split(",")));
+        project.setDataProcessingProtocol(submission.getProjectMetaData().getDataProcessingProtocol());
+        project.setSampleProcessingProtocol(submission.getProjectMetaData().getSampleProcessingProtocol());
+        project.setProjectDescription(submission.getProjectMetaData().getProjectDescription());
+
+        //Get project Tags
+        project.setProjectTags(new ArrayList<>(submission.getProjectMetaData().getProjectTags()));
+
+        //Get the researchers
+        List<String> contacts = new ArrayList<>();
+        contacts.add(submission.getProjectMetaData().getLabHeadContact().getName());
+        project.setLabPIs(contacts);
+
+        List<String> submistters = new ArrayList<>();
+        submistters.add(submission.getProjectMetaData().getSubmitterContact().getName());
+        project.setSubmitters(submistters);
+
+
+        return project;
+
     }
 
 

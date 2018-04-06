@@ -12,7 +12,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 /**
- * @author Christoph Strobl
+ * @author ypriverol
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = SolrLocalhostTestConfiguration.class)
@@ -28,7 +28,8 @@ public class BasicLocalhostRepositoryTests {
 	 */
 	@Test
 	public void findAll() {
-		repository.findAll().forEach(System.out::println);
+		repository.findAll().forEach(x -> {
+			System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());});
 	}
 
 	/**

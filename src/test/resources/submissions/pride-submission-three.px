@@ -26,6 +26,7 @@ MTD	modification	[UNIMOD, UNIMOD:7, Deamidated, ]
 MTD	modification	[UNIMOD, UNIMOD:35, Oxidation, ]
 MTD	modification	[UNIMOD, UNIMOD:4, Carbamidomethyl, ]
 MTD	modification	[UNIMOD, UNIMOD:28, Gln->pyro-Glu, ]
+MTD	resubmission_px	PXD000003
 
 FMH	file_id	file_type	file_path	file_mapping	pride_accession
 FME	1350	RAW	/nfs/production3/pride/prod/archive/2015/07/PXD002083/submitted/TCGA-AA-A00J-01A-12_W_VU_20120804_A0218_1F_R_FR01.raw

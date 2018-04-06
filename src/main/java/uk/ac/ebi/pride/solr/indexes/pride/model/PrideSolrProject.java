@@ -90,12 +90,12 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Submitter FirstName **/
     @Dynamic
     @Indexed(name = PROJECT_SUBMITTER, boost = 0.2f, searchable = true, stored = true )
-    private Map<String, String> submitters;
+    private List<String> submitters;
 
     /** List of Lab Head Names **/
     @Dynamic
     @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f, searchable = true, stored = true )
-    private Map<String, String> labPIs;
+    private List<String> labPIs;
 
     /** Affiliations  */
     @Indexed(name = AFFILIATIONS, boost = 0.2f, searchable = true, stored = true )
