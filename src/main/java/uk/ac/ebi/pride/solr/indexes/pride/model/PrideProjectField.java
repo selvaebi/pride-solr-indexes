@@ -54,10 +54,10 @@ public interface PrideProjectField {
     public String PROJECT_UPDATED_DATE = "updated_date";
 
     /** Submitter FirstName **/
-    public String PROJECT_SUBMITTER = "submitters_*";
+    public String PROJECT_SUBMITTER = "submitters";
 
     /** List of Lab Head Names **/
-    public String PROJECT_PI_NAMES = "lab_head_*";
+    public String PROJECT_PI_NAMES = "lab_heads";
 
     /** Lab Head Affiliation  */
     public String AFFILIATIONS = "affiliations";

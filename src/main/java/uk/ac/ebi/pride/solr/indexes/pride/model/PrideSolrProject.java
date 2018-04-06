@@ -30,6 +30,8 @@ import java.util.*;
 public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
+
+
     @Id
     @Indexed(name = ACCESSION, boost = 1.0f, stored = true, searchable = true)
     private String accession;
@@ -88,12 +90,10 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private Date updatedDate;
 
     /** Submitter FirstName **/
-    @Dynamic
     @Indexed(name = PROJECT_SUBMITTER, boost = 0.2f, searchable = true, stored = true )
     private List<String> submitters;
 
     /** List of Lab Head Names **/
-    @Dynamic
     @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f, searchable = true, stored = true )
     private List<String> labPIs;
 

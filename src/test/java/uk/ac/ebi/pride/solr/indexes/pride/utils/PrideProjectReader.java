@@ -66,9 +66,16 @@ public class PrideProjectReader {
         contacts.add(submission.getProjectMetaData().getLabHeadContact().getName());
         project.setLabPIs(contacts);
 
-        List<String> submistters = new ArrayList<>();
-        submistters.add(submission.getProjectMetaData().getSubmitterContact().getName());
-        project.setSubmitters(submistters);
+        //Get the submitters information
+        List<String> submitters = new ArrayList<>();
+        submitters.add(submission.getProjectMetaData().getSubmitterContact().getName());
+        project.setSubmitters(submitters);
+
+        //Get the affiliations
+        List<String> affiliations = new ArrayList<>();
+        affiliations.add(submission.getProjectMetaData().getSubmitterContact().getAffiliation());
+        affiliations.add(submission.getProjectMetaData().getLabHeadContact().getAffiliation());
+        project.setAffiliations(affiliations);
 
 
         return project;
