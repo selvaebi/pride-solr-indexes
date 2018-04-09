@@ -14,6 +14,7 @@ import uk.ac.ebi.pride.archive.dataprovider.reference.ReferenceProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
@@ -112,8 +113,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Experimental Factor Names **/
     @Dynamic
-    @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f, searchable = true, stored = true)
-    private Map<String, String> experimentalFactors;
+    @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f, searchable = true, stored = true, type = "string")
+    private Map<String, List<String>> experimentalFactors;
 
     /** References related with the project **/
     @Indexed(name = PROJECT_REFERENCES, boost = 0.7f, searchable = true)
@@ -272,7 +273,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     @Override
     public Collection<? extends String> getExperimentalFactorNamesAsString(){
-        return experimentalFactors.values();
+        return experimentalFactors.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
     /**

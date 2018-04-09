@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
 import uk.ac.ebi.pride.data.model.Contact;
+import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
@@ -77,9 +78,27 @@ public class PrideProjectReader {
         affiliations.add(submission.getProjectMetaData().getLabHeadContact().getAffiliation());
         project.setAffiliations(affiliations);
 
+        //Read Experimental Factors
+
+        // First Species
+        Map<String, List<String>> factors = new HashMap<>();
+        submission.getProjectMetaData().getSpecies().stream().forEach(x ->   addValue("organism", factors, x));
+        submission.getProjectMetaData().getCellTypes().stream().forEach(x -> addValue("cell type", factors, x));
+        submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue("disease", factors, x));
+        submission.getProjectMetaData().getTissues().stream().forEach(x ->   addValue("organism part", factors, x));
+        project.setExperimentalFactors(factors);
 
         return project;
 
+    }
+
+    private static Map<String, List<String>> addValue(String key, Map<String, List<String>> factors, CvParam cvParam){
+        List<String> values = new ArrayList<>();
+        if (factors.containsKey(key))
+            values = factors.get(key);
+        values.add(cvParam.getName());
+        factors.put(key, values);
+        return factors;
     }
 
 
