@@ -99,7 +99,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private List<String> labPIs;
 
     /** Affiliations  */
-    @Indexed(name = AFFILIATIONS, boost = 0.2f, searchable = true, stored = true )
+    @Indexed(name = AFFILIATIONS, boost = 0.2f, searchable = true, stored = true)
     private List<String> affiliations;
 
     /** List of instruments Ids*/
@@ -113,7 +113,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Experimental Factor Names **/
     @Dynamic
-    @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f, searchable = true, stored = true, type = "string")
+    @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f, searchable = true, stored = true)
     private Map<String, List<String>> experimentalFactors;
 
     /** References related with the project **/
@@ -134,8 +134,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Highlights of values that has been found for the Solr Search **/
     @Indexed(name = PROJECT_IDENTIFIED_PTM, boost = 0.6f, stored = true, searchable = true )
-    @Dynamic
-    private Map<String, String> identifiedPTMs;
+    private List<String> identifiedPTMs;
 
     /** highlights f the search **/
     private Map<String, List<String>> highlights;

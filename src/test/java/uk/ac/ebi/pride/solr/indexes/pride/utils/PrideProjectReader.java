@@ -9,9 +9,11 @@ import uk.ac.ebi.pride.data.model.Contact;
 import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}. This class is using the
@@ -54,7 +56,7 @@ public class PrideProjectReader {
         //Get accession, title, keywords, Data and Sample protocols
         project.setAccession(submission.getProjectMetaData().getResubmissionPxAccession());
         project.setTitle(submission.getProjectMetaData().getProjectTitle());
-        project.setKeywords(Arrays.asList(submission.getProjectMetaData().getKeywords().split(",")));
+        project.setKeywords(Arrays.asList(submission.getProjectMetaData().getKeywords().split(",")).stream().map(String::trim).collect(Collectors.toList()));
         project.setDataProcessingProtocol(submission.getProjectMetaData().getDataProcessingProtocol());
         project.setSampleProcessingProtocol(submission.getProjectMetaData().getSampleProcessingProtocol());
         project.setProjectDescription(submission.getProjectMetaData().getProjectDescription());
@@ -82,10 +84,14 @@ public class PrideProjectReader {
 
         // First Species
         Map<String, List<String>> factors = new HashMap<>();
-        submission.getProjectMetaData().getSpecies().stream().forEach(x ->   addValue("organism", factors, x));
-        submission.getProjectMetaData().getCellTypes().stream().forEach(x -> addValue("cell type", factors, x));
-        submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue("disease", factors, x));
-        submission.getProjectMetaData().getTissues().stream().forEach(x ->   addValue("organism part", factors, x));
+        submission.getProjectMetaData().getSpecies().stream().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM.getName(), factors, x));
+
+        // Organism Part
+        submission.getProjectMetaData().getCellTypes().stream().forEach(x -> addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
+        submission.getProjectMetaData().getTissues().stream().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
+
+        // Disease
+        submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue(CvTermReference.EFO_DISEASE.getName(), factors, x));
         project.setExperimentalFactors(factors);
 
         return project;

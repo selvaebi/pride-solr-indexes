@@ -88,7 +88,7 @@ public interface PrideProjectField {
     public String PEPTIDE_SEQUENCES  = "peptide_sequences";
 
     /** Identified PTMs in the Project**/
-    public String PROJECT_IDENTIFIED_PTM = "project_identified_ptm_*";
+    public String PROJECT_IDENTIFIED_PTM = "project_identified_ptms";
 
 
 }
