@@ -1,11 +1,9 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
-import uk.ac.ebi.pride.data.model.Contact;
 import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -94,6 +92,8 @@ public class PrideProjectReader {
         submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue(CvTermReference.EFO_DISEASE.getName(), factors, x));
         project.setExperimentalFactors(factors);
 
+        //PTMs
+        project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toList()));
         return project;
 
     }

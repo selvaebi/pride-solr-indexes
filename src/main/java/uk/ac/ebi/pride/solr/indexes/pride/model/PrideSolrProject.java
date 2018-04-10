@@ -2,7 +2,9 @@ package uk.ac.ebi.pride.solr.indexes.pride.model;
 
 
 import lombok.Data;
+import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.ChildDocument;
 import org.springframework.data.solr.core.mapping.Dynamic;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
@@ -31,8 +33,6 @@ import java.util.stream.Collectors;
 public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
-
-
     @Id
     @Indexed(name = ACCESSION, boost = 1.0f, stored = true, searchable = true)
     private String accession;
@@ -133,8 +133,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private Set<String> peptideSequences;
 
     /** Highlights of values that has been found for the Solr Search **/
-    @Indexed(name = PROJECT_IDENTIFIED_PTM, boost = 0.6f, stored = true, searchable = true )
-    private List<String> identifiedPTMs;
+    @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f, stored = true, searchable = true )
+    private List<String> identifiedPTMStrings;
 
     /** highlights f the search **/
     private Map<String, List<String>> highlights;
