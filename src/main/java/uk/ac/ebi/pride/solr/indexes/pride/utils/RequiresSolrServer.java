@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 public class RequiresSolrServer {
 
-	/** DEfault entry point to test in Solr **/
+	/** Default entry point to test in Solr **/
 	private static final String PING_PATH = "/admin/info/system";
 
 	/** Localhost URL **/

@@ -3,6 +3,8 @@ package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.solr.core.query.result.Cursor;
+import org.springframework.data.solr.repository.Query;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 
@@ -14,13 +16,10 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
  * @version $Id$
  */
 
-public interface SolrProjectRepository extends CrudRepository<PrideSolrProject, String> {
+public interface SolrProjectRepository extends SolrProjectRepositoryCustom, CrudRepository<PrideSolrProject, String> {
 
-    /**
-     * Use a {@link Cursor} to scroll through documents in index. <br />
-     * <strong>NOTE:</strong> Requires at least Solr 4.7.
-     *
-     * @return
-     */
-//    Cursor<PrideSolrProject> findAllUsingCursor();
+    /** Find Projects by Accession **/
+    @Query(PrideProjectField.ACCESSION + ":?0")
+    PrideSolrProject findByAccession(String accession);
+
 }

@@ -10,6 +10,8 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -82,11 +84,11 @@ public class PrideProjectReader {
 
         // First Species
         Map<String, List<String>> factors = new HashMap<>();
-        submission.getProjectMetaData().getSpecies().stream().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM.getName(), factors, x));
+        submission.getProjectMetaData().getSpecies().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM.getName(), factors, x));
 
         // Organism Part
-        submission.getProjectMetaData().getCellTypes().stream().forEach(x -> addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
-        submission.getProjectMetaData().getTissues().stream().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
+        submission.getProjectMetaData().getCellTypes().forEach(x -> addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
+        submission.getProjectMetaData().getTissues().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
 
         // Disease
         submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue(CvTermReference.EFO_DISEASE.getName(), factors, x));
@@ -94,6 +96,16 @@ public class PrideProjectReader {
 
         //PTMs
         project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toList()));
+
+        //Add Dump date
+        try {
+            project.setPublicationDate(new SimpleDateFormat("YY-MM-dd").parse("2013-09-19"));
+            project.setSubmissionDate(new SimpleDateFormat("YY-MM-dd").parse("2012-09-19"));
+            project.setUpdatedDate(new SimpleDateFormat("YY-MM-dd").parse("2014-09-19"));
+        } catch (ParseException e) {
+            LOGGER.error("Error parsing date -- 2013-09-19 " + e.getMessage());
+        }
+
         return project;
 
     }

@@ -4,8 +4,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 /**
@@ -20,20 +25,33 @@ public class BasicLocalhostRepositoryTests {
 	@Autowired
 	SolrProjectRepository repository;
 
-	/**
-	 * Finds all entries using a single request.
-	 */
+	/** Finds all entries using a single request. */
 	@Test
 	public void findAll() {
 		repository.findAll().forEach(x -> {
 			System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());});
+
 	}
 
-	/**
-	 * Pages through all entries using cursor marks. Have a look at the Solr console output to see iteration steps.
-	 */
+	/** Finds all entries using a single request by Cursor */
 	@Test
-	public void findAllUsingDeepPagination() {
-		//repository.findAllUsingCursor().forEachRemaining(System.out::println);
+	public void findCursorAll() {
+		repository.findAllUsingCursor().forEachRemaining(x -> {
+			System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
+		});
 	}
+
+	/** Find the dataset for specific accession **/
+	@Test
+	public void findByAccession(){
+		PrideSolrProject x = repository.findByAccession("PXD000001");
+		System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
+	}
+
+	@Test
+	public void findProjectsByKey(){
+		repository.findByKeyword("*:*", null, PrideProjectField.ACCESSION, new PageRequest(1,10));
+	}
+
+
 }

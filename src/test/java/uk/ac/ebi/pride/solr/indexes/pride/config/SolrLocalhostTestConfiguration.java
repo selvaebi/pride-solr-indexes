@@ -36,7 +36,7 @@ import java.net.URISyntaxException;
  * @author ypriverol
  */
 @SpringBootApplication
-@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = false)
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired
@@ -63,6 +63,7 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 	 */
 	@PostConstruct
 	public void initWithTestData() {
+		deleteExistingConfigSet();
 		repo.deleteAll(); // This needs to be added here to avoid
 		try{
 			String filePathOne = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-one.px").toURI()).getAbsolutePath();

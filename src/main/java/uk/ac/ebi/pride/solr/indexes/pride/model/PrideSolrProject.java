@@ -8,6 +8,7 @@ import org.springframework.data.solr.core.mapping.ChildDocument;
 import org.springframework.data.solr.core.mapping.Dynamic;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.springframework.data.solr.repository.Score;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
@@ -29,12 +30,12 @@ import java.util.stream.Collectors;
  */
 
 @Data
-@SolrDocument(solrCoreName = "pride_projects")
+@SolrDocument(solrCoreName = PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME)
 public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
-    @Indexed(name = ACCESSION, boost = 1.0f, stored = true, searchable = true)
+    @Indexed(name = ACCESSION, boost = 1.0f, stored = true, searchable = true, required = true)
     private String accession;
 
     /** Experiment Title **/
@@ -135,6 +136,10 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Highlights of values that has been found for the Solr Search **/
     @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f, stored = true, searchable = true )
     private List<String> identifiedPTMStrings;
+
+    /** Score for the search results **/
+    @Score
+    private Float score;
 
     /** highlights f the search **/
     private Map<String, List<String>> highlights;

@@ -90,5 +90,7 @@ public interface PrideProjectField {
     /** Identified PTMs in the Project**/
     public String PROJECT_IDENTIFIED_PTM_STRING = "project_identified_ptms";
 
+    public String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
+
 
 }
