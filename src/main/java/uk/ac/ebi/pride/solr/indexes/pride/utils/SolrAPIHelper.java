@@ -89,11 +89,9 @@ public class SolrAPIHelper {
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
-
-
-
-
-
+    /**
+     * Solr Config Class containing the http URL of the Solr Server.
+     */
     @Data
     private class SolrConfig {
         private String hostURL;
