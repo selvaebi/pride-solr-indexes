@@ -1,15 +1,9 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import org.apache.solr.schema.TextField;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  This class will test simple functions to interact with the Solr API.

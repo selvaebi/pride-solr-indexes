@@ -1,30 +1,19 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.Data;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.BasicJsonParser;
-import org.springframework.boot.json.GsonJsonParser;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  This class is a API helper for Solr API to enable delete/create/update delete of Collections. We have decided to not use Res
@@ -35,7 +24,6 @@ import java.util.List;
 
 public class SolrAPIHelper {
 
-    /** RestTemplate to query APIs of Solr **/
     /** config http URL **/
     protected SolrConfig config;
 
@@ -167,8 +155,7 @@ public class SolrAPIHelper {
         CloseableHttpResponse response = client.execute(new HttpGet(hostQuery));
         LOGGER.warn(response.toString());
         if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200){
-            String jsonString = EntityUtils.toString(response.getEntity());
-            return jsonString;
+            return EntityUtils.toString(response.getEntity());
         }
         return null;
     }

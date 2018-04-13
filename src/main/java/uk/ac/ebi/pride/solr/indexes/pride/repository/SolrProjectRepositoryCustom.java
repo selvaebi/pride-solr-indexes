@@ -39,7 +39,7 @@ interface SolrProjectRepositoryCustom {
 	Cursor<PrideSolrProject> findAllUsingCursor();
 
 	@Highlight(fragsize = 20, snipplets = 3)
-	public HighlightPage<PrideSolrProject> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page);
+	HighlightPage<PrideSolrProject> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page);
 
 
 }

@@ -40,10 +40,15 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 
 	/** Solr Template **/
-	@Autowired SolrTemplate solrTemplate;
+	final SolrTemplate solrTemplate;
 
 	/** Logger use to query and filter the data **/
 	static Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
+
+	@Autowired
+	public SolrProjectRepositoryImpl(SolrTemplate solrTemplate) {
+		this.solrTemplate = solrTemplate;
+	}
 
 	@Override
 	public Cursor<PrideSolrProject> findAllUsingCursor() {

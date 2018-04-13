@@ -1,7 +1,5 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import javax.print.DocFlavor;
-
 /**
  * Solr types definition.
  * @author ypriverol

@@ -1,10 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.services.project.PrideProjectReaderService;
@@ -24,8 +20,12 @@ import java.util.stream.Stream;
 @Service
 public class PrideSolrProjectService implements PrideProjectReaderService, PrideProjectWriterService{
 
+    private final SolrProjectRepository solrProjectRepository;
+
     @Autowired
-    private SolrProjectRepository solrProjectRepository;
+    public PrideSolrProjectService(SolrProjectRepository solrProjectRepository) {
+        this.solrProjectRepository = solrProjectRepository;
+    }
 
     @Override
     public ProjectProvider read(String accession) {

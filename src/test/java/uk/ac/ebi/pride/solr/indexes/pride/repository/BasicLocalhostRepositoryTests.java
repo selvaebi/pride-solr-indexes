@@ -6,10 +6,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -30,17 +28,14 @@ public class BasicLocalhostRepositoryTests {
 	/** Finds all entries using a single request. */
 	@Test
 	public void findAll() {
-		repository.findAll().forEach(x -> {
-			System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());});
+		repository.findAll().forEach(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
 
 	}
 
 	/** Finds all entries using a single request by Cursor */
 	@Test
 	public void findCursorAll() {
-		repository.findAllUsingCursor().forEachRemaining(x -> {
-			System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
-		});
+		repository.findAllUsingCursor().forEachRemaining(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
 	}
 
 	/** Find the dataset for specific accession **/

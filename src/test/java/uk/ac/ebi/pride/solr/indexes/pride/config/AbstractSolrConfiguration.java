@@ -2,23 +2,17 @@ package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrRequest;
-import org.apache.solr.client.solrj.SolrResponse;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.GenericSolrRequest;
 import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideProjectReader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.IntStream;
 
 /**
  * Some abstract classes to reuse in the configuration files. It can be used to read examples from px files and
@@ -44,8 +38,7 @@ public class AbstractSolrConfiguration {
      * @param repository to insert the data
      */
     protected void doInitTestData(SolrProjectRepository repository, String ... filePaths) {
-        Lists.newArrayList(filePaths).stream().forEach(x -> { repository.save(PrideProjectReader.read(new File(x)));
-        });
+        Lists.newArrayList(filePaths).stream().forEach(x -> repository.save(PrideProjectReader.read(new File(x))));
     }
 
     /**
@@ -64,9 +57,7 @@ public class AbstractSolrConfiguration {
         try {
             if(solrClient.ping().getStatus() != -1)
                 return true;
-        } catch (SolrServerException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (SolrServerException | IOException e) {
             e.printStackTrace();
         }
         return false;

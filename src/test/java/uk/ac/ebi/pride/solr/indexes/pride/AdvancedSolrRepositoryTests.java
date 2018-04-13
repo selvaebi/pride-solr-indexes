@@ -5,6 +5,7 @@ import static org.springframework.data.solr.core.query.Criteria.*;
 import static org.springframework.data.solr.core.query.ExistsFunction.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +44,7 @@ public class AdvancedSolrRepositoryTests {
 			project1.setAccession("id-1");
 			project1.setTitle("Project 1");
 
-			repository.saveAll(Arrays.asList(project1));
+			repository.saveAll(Collections.singletonList(project1));
 		}
 	}
 
