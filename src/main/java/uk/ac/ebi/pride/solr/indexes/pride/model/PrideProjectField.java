@@ -31,6 +31,7 @@ public interface PrideProjectField {
 
     /** Project Tags **/
     public String PROJECT_TAGS = "project_tags";
+    public String PROJECT_TAGS_FACET = "projects_tags_facet";
 
     /** Keywords **/
     public String PROJECT_KEYWORDS = "project_keywords";
@@ -63,7 +64,10 @@ public interface PrideProjectField {
     public String AFFILIATIONS = "affiliations";
 
     /** List of instruments Ids*/
-    public String INSTRUMENTS = "instruments_*";
+    public String INSTRUMENTS = "instruments_names";
+    public String INSTRUMENTS_FACET = "instruments_facet";
+
+    public String INSTRUMENTS_IDS = "instruments_ids";
 
      /** This field store all the countries associated with the experiment **/
     public String COUNTRIES = "project_countries";

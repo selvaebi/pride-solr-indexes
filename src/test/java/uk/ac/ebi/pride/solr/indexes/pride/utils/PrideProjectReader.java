@@ -106,6 +106,13 @@ public class PrideProjectReader {
             LOGGER.error("Error parsing date -- 2013-09-19 " + e.getMessage());
         }
 
+
+        //Instruments properties
+        List<String> instrumentNames = submission.getProjectMetaData().getInstruments().stream().map(CvParam::getName).collect(Collectors.toList());
+        project.setInstrumentNames(instrumentNames);
+        List<String> instrumentIds = submission.getProjectMetaData().getInstruments().stream().map(CvParam::getAccession).collect(Collectors.toList());
+        project.setInstrumentIds(instrumentIds);
+
         return project;
 
     }

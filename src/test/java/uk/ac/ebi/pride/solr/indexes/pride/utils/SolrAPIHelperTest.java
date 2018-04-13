@@ -1,8 +1,11 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import org.apache.solr.schema.TextField;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.util.List;
 
@@ -52,6 +55,20 @@ public class SolrAPIHelperTest {
         }
     }
 
+    @Test
+    public void updateFieldType() throws Exception {
+        String collection = "pride_projects";
+        if(solrAPIHelper.updateFieldType(collection, PrideProjectField.PROJECT_TAGS_FACET, "string", true)){
+            System.out.println("The field -- " + PrideProjectField.PROJECT_TAGS_FACET + " -- has been changed in the type -- " + "string" + " -- in collection -- " + collection);
+        }
+    }
 
+    @Test
+    public void getSchemaByCollection() throws Exception {
+        String collection = "pride_projects";
+        String schemaString = solrAPIHelper.getSchemaByCollection(collection);
+        System.out.println(schemaString);
+
+    }
 
 }

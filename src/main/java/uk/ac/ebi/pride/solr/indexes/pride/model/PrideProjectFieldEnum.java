@@ -8,37 +8,38 @@ package uk.ac.ebi.pride.solr.indexes.pride.model;
  */
 public enum PrideProjectFieldEnum {
 
-    ACCESSION(PrideProjectField.ACCESSION, false),
-    PROJECT_TILE(PrideProjectField.PROJECT_TILE, false),
-    ADDITIONAL_ATTRIBUTES(PrideProjectField.ADDITIONAL_ATTRIBUTES, false),
-    PROJECT_DESCRIPTION(PrideProjectField.PROJECT_DESCRIPTION, false ),
-    PROJECT_SAMPLE_PROTOCOL(PrideProjectField.PROJECT_SAMPLE_PROTOCOL, false ),
-    PROJECT_DATA_PROTOCOL(PrideProjectField.PROJECT_DATA_PROTOCOL, false),
-    PROJECT_TAGS(PrideProjectField.PROJECT_TAGS, true),
-    PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, true),
-    PROJECT_DOI(PrideProjectField.PROJECT_DOI, false),
-    PROJECT_OMICS_LINKS(PrideProjectField.PROJECT_OMICS_LINKS, false ),
-    PROJECT_SUBMISSION_TYPE(PrideProjectField.PROJECT_SUBMISSION_TYPE, true),
-    PROJECT_SUBMISSION_DATE(PrideProjectField.PROJECT_SUBMISSION_DATE, true ),
-    PROJECT_PUBLICATION_DATE(PrideProjectField.PROJECT_PUBLICATION_DATE, true ),
-    PROJECT_UPDATED_DATE(PrideProjectField.PROJECT_UPDATED_DATE, true),
-    PROJECT_SUBMITTER(PrideProjectField.PROJECT_SUBMITTER, false ),
-    PROJECT_PI_NAMES(PrideProjectField.PROJECT_PI_NAMES, true),
-    AFFILIATIONS(PrideProjectField.AFFILIATIONS, true),
-    INSTRUMENTS(PrideProjectField.INSTRUMENTS, true),
-    COUNTRIES(PrideProjectField.COUNTRIES, true ),
-    EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, true ),
-    SPECIES(PrideProjectField.SPECIES, true ),
-    PROJECT_REFERENCES(PrideProjectField.PROJECT_REFERENCES, false ),
-    PROJECT_PUBLIC(PrideProjectField.PROJECT_PUBLIC, false ),
-    PROTEIN_IDENTIFICATIONS(PrideProjectField.PROTEIN_IDENTIFICATIONS, true),
-    PEPTIDE_SEQUENCES(PrideProjectField.PEPTIDE_SEQUENCES, false ),
-    PROJECT_IDENTIFIED_PTM_STRING(PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING, true );
+    ACCESSION(PrideProjectField.ACCESSION, false, false),
+    PROJECT_TILE(PrideProjectField.PROJECT_TILE, false, false),
+    ADDITIONAL_ATTRIBUTES(PrideProjectField.ADDITIONAL_ATTRIBUTES, false, false),
+    PROJECT_DESCRIPTION(PrideProjectField.PROJECT_DESCRIPTION, false, false ),
+    PROJECT_SAMPLE_PROTOCOL(PrideProjectField.PROJECT_SAMPLE_PROTOCOL, false ,false),
+    PROJECT_DATA_PROTOCOL(PrideProjectField.PROJECT_DATA_PROTOCOL, false, false),
+    PROJECT_TAGS(PrideProjectField.PROJECT_TAGS, true , true),
+    PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, true, false),
+    PROJECT_DOI(PrideProjectField.PROJECT_DOI, false, false ),
+    PROJECT_OMICS_LINKS(PrideProjectField.PROJECT_OMICS_LINKS, false, false ),
+    PROJECT_SUBMISSION_TYPE(PrideProjectField.PROJECT_SUBMISSION_TYPE, true, false),
+    PROJECT_SUBMISSION_DATE(PrideProjectField.PROJECT_SUBMISSION_DATE, true, false ),
+    PROJECT_PUBLICATION_DATE(PrideProjectField.PROJECT_PUBLICATION_DATE, true, false ),
+    PROJECT_UPDATED_DATE(PrideProjectField.PROJECT_UPDATED_DATE, true, false),
+    PROJECT_SUBMITTER(PrideProjectField.PROJECT_SUBMITTER, false, false ),
+    PROJECT_PI_NAMES(PrideProjectField.PROJECT_PI_NAMES, true, false),
+    AFFILIATIONS(PrideProjectField.AFFILIATIONS, true ,false),
+    INSTRUMENTS(PrideProjectField.INSTRUMENTS, true, false ),
+    COUNTRIES(PrideProjectField.COUNTRIES, true, false),
+    EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, true, false ),
+    SPECIES(PrideProjectField.SPECIES, true, false ),
+    PROJECT_REFERENCES(PrideProjectField.PROJECT_REFERENCES, false, false ),
+    PROJECT_PUBLIC(PrideProjectField.PROJECT_PUBLIC, false, false  ),
+    PROTEIN_IDENTIFICATIONS(PrideProjectField.PROTEIN_IDENTIFICATIONS, true, false ),
+    PEPTIDE_SEQUENCES(PrideProjectField.PEPTIDE_SEQUENCES, false, false),
+    PROJECT_IDENTIFIED_PTM_STRING(PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING, true, false );
 
-    private String value;
+    private String  value;
     private Boolean facet;
+    private Boolean multiValue;
 
-    PrideProjectFieldEnum(String value, Boolean facet) {
+    PrideProjectFieldEnum(String value, Boolean facet, Boolean multiValue) {
         this.value = value;
         this.facet = facet;
     }

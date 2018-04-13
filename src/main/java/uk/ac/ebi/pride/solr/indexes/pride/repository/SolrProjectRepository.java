@@ -1,8 +1,10 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.solr.core.query.result.Cursor;
+import org.springframework.data.solr.core.query.result.FacetPage;
+import org.springframework.data.solr.repository.Facet;
 import org.springframework.data.solr.repository.Query;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -21,5 +23,9 @@ public interface SolrProjectRepository extends SolrProjectRepositoryCustom, Crud
     /** Find Projects by Accession **/
     @Query(PrideProjectField.ACCESSION + ":?0")
     PrideSolrProject findByAccession(String accession);
+
+    @Query(value = "*:*")
+    @Facet(fields = {PrideProjectField.PROJECT_PUBLICATION_DATE, PrideProjectField.PROJECT_SUBMISSION_DATE, PrideProjectField.PROJECT_UPDATED_DATE, PrideProjectField.PROJECT_TAGS_FACET})
+    FacetPage<PrideSolrProject> findAllWithFacetIgnoreCase(Pageable pageable);
 
 }

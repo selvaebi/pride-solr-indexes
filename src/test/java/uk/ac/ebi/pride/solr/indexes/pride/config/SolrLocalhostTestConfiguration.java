@@ -63,7 +63,6 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 	 */
 	@PostConstruct
 	public void initWithTestData() {
-		deleteExistingConfigSet();
 		repo.deleteAll(); // This needs to be added here to avoid
 		try{
 			String filePathOne = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-one.px").toURI()).getAbsolutePath();

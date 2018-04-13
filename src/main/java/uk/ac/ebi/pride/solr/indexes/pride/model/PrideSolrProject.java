@@ -1,10 +1,11 @@
 package uk.ac.ebi.pride.solr.indexes.pride.model;
 
 
+import lombok.AccessLevel;
 import lombok.Data;
-import org.apache.solr.client.solrj.beans.Field;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.solr.core.mapping.ChildDocument;
 import org.springframework.data.solr.core.mapping.Dynamic;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
@@ -15,6 +16,7 @@ import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.reference.ReferenceProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,106 +37,118 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
-    @Indexed(name = ACCESSION, boost = 1.0f, stored = true, searchable = true, required = true)
+    @Indexed(name = ACCESSION, boost = 1.0f, required = true)
     private String accession;
 
     /** Experiment Title **/
-    @Indexed(name = PROJECT_TILE, boost = 0.8f, stored = true, searchable = true)
+    @Indexed(name = PROJECT_TILE, boost = 0.8f)
     private String title;
 
     /** Additional Attributes Identifiers **/
     @Dynamic
-    @Indexed(name = ADDITIONAL_ATTRIBUTES, boost = 0.4f, stored = true, searchable = true)
+    @Indexed(name = ADDITIONAL_ATTRIBUTES, boost = 0.4f)
     private Map<String, String> additionalAttributes;
 
     /** Project Description **/
-    @Indexed(name = PROJECT_DESCRIPTION, boost = 0.7f, stored = true, searchable = true)
+    @Indexed(name = PROJECT_DESCRIPTION, boost = 0.7f)
     private String projectDescription;
 
     /** Sample Protocol **/
-    @Indexed(name = PROJECT_SAMPLE_PROTOCOL, boost = 0.6f, stored = true, searchable = true)
+    @Indexed(name = PROJECT_SAMPLE_PROTOCOL, boost = 0.6f)
     private String sampleProcessingProtocol;
 
     /** Data Processing Protocol **/
-    @Indexed(name = PROJECT_DATA_PROTOCOL, boost = 0.6f, stored = true, searchable = true)
+    @Indexed(name = PROJECT_DATA_PROTOCOL, boost = 0.6f)
     private String dataProcessingProtocol;
 
     /** Project Tags **/
-    @Indexed(name = PROJECT_TAGS, boost = 0.2f, stored = true, searchable = true)
+    @Indexed(name = PROJECT_TAGS, boost = 0.2f)
     private List<String> projectTags;
 
+    @Setter(AccessLevel.PRIVATE)
+    @Getter(AccessLevel.PRIVATE)
+    @Indexed(name = PROJECT_TAGS_FACET, type = "string")
+    private List<String> projectTagsFacets;
+
     /** Keywords **/
-    @Indexed(name = PROJECT_KEYWORDS, boost = 0.2f, stored = true, searchable = true)
+    @Indexed(name = PROJECT_KEYWORDS, boost = 0.2f)
     private List<String> keywords;
 
-    /** Original Doi of the dataset. The actual Doi is not needed in the Dataaset **/
-    @Indexed(name = PROJECT_DOI, boost = 0.2f, searchable = true)
+    /** Original Doi of the dataset. The actual Doi is not needed in the Dataset **/
+    @Indexed(name = PROJECT_DOI, boost = 0.2f)
     private String doi;
 
     /** otherOmicsLinks **/
-    @Indexed(name = PROJECT_OMICS_LINKS, boost = 0.2f, searchable = true)
+    @Indexed(name = PROJECT_OMICS_LINKS, boost = 0.2f)
     private List<String> otherOmicsLinks;
 
     /** Submission Type **/
-    @Indexed(name = PROJECT_SUBMISSION_TYPE, boost = 0.2f, searchable = true, stored = true)
+    @Indexed(name = PROJECT_SUBMISSION_TYPE, boost = 0.2f)
     private String submissionType;
 
     /** Submission Date **/
-    @Indexed(name = PROJECT_SUBMISSION_DATE, boost = 0.2f, searchable = true, stored = true)
+    @Indexed(name = PROJECT_SUBMISSION_DATE, boost = 0.2f)
     private Date submissionDate;
 
     /** Publication Date **/
-    @Indexed(name = PROJECT_PUBLICATION_DATE, boost = 0.2f, searchable = true, stored = true)
+    @Indexed(name = PROJECT_PUBLICATION_DATE, boost = 0.2f)
     private Date publicationDate;
 
     /** Updated Date **/
-    @Indexed(name = PROJECT_UPDATED_DATE, boost = 0.2f, searchable = true)
+    @Indexed(name = PROJECT_UPDATED_DATE, boost = 0.2f)
     private Date updatedDate;
 
     /** Submitter FirstName **/
-    @Indexed(name = PROJECT_SUBMITTER, boost = 0.2f, searchable = true, stored = true )
+    @Indexed(name = PROJECT_SUBMITTER, boost = 0.2f)
     private List<String> submitters;
 
     /** List of Lab Head Names **/
-    @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f, searchable = true, stored = true )
+    @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f)
     private List<String> labPIs;
 
     /** Affiliations  */
-    @Indexed(name = AFFILIATIONS, boost = 0.2f, searchable = true, stored = true)
+    @Indexed(name = AFFILIATIONS, boost = 0.2f)
     private List<String> affiliations;
 
     /** List of instruments Ids*/
-    @Dynamic
-    @Indexed(name = INSTRUMENTS, boost = 0.1f, searchable = true, stored = true)
-    private Map<String, String> instruments;
+    @Indexed(name = INSTRUMENTS, boost = 0.1f, copyTo = {INSTRUMENTS, INSTRUMENTS_FACET})
+    private List<String> instrumentNames;
+
+    @Indexed(name = INSTRUMENTS_FACET)
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private String instruments_facet;
+
+    @Indexed(name = INSTRUMENTS_IDS)
+    private List<String> instrumentIds;
 
     /** This field store all the countries associated with the experiment **/
-    @Indexed(name = COUNTRIES, boost = 0.4f, searchable = true, stored = true)
+    @Indexed(name = COUNTRIES, boost = 0.4f)
     private List<String> allCountries;
 
     /** Experimental Factor Names **/
     @Dynamic
-    @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f, searchable = true, stored = true)
+    @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
     private Map<String, List<String>> experimentalFactors;
 
     /** References related with the project **/
-    @Indexed(name = PROJECT_REFERENCES, boost = 0.7f, searchable = true)
+    @Indexed(name = PROJECT_REFERENCES, boost = 0.7f)
     private List<String> references;
 
     /** Public project or private   **/
-    @Indexed(name = PROJECT_PUBLIC, boost = 0.7f, searchable = true)
+    @Indexed(name = PROJECT_PUBLIC, boost = 0.7f)
     private boolean publicProject;
 
     /* This field is not store, so when you retrieve the value from solr is always null */
-    @Indexed(name = PROTEIN_IDENTIFICATIONS, boost = 0.6f, stored = false, searchable = true)
+    @Indexed(name = PROTEIN_IDENTIFICATIONS, boost = 0.6f, stored = false)
     private Set<String> proteinIdentifications;
 
     /** This field is not store, so when you retrieve the value from solr is always null  **/
-    @Indexed(name = PEPTIDE_SEQUENCES, boost = 0.6f, stored = false, searchable = true)
+    @Indexed(name = PEPTIDE_SEQUENCES, boost = 0.6f, stored = false)
     private Set<String> peptideSequences;
 
     /** Highlights of values that has been found for the Solr Search **/
-    @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f, stored = true, searchable = true )
+    @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f)
     private List<String> identifiedPTMStrings;
 
     /** Score for the search results **/
@@ -143,6 +157,41 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** highlights f the search **/
     private Map<String, List<String>> highlights;
+
+//
+//    public static PrideSolrProject build(String accession, String title, String description, String sampleProtocol, String dataProtocol,
+//                                         List<String> projectTags, List<String> keywords, List<CvParamProvider> additionalAttributes, String doi,
+//                                         List<String> omicsLinks, String submissionType, Date submissionDate, Date updatedDate, Date publicationDate, List<String> nameSubmitters,
+//                                         List<String> namePIs, List<String> affialitions, List<CvParamProvider> instruments, List<String> countries, List<CvParamProvider> experimentalParamters,
+//                                         List<String> references, List<String> proteinIds, List<String> peptideSequences, List<CvParamProvider> ptms) {
+//
+//        //Set accession
+//        PrideSolrProject project = new PrideSolrProject();
+//        project.setAccession(accession);
+//
+//        //Set title
+//        project.setTitle(title);
+//
+//        //Set description / Sample and Data Protocol
+//        project.setProjectDescription(description);
+//        project.setDataProcessingProtocol(dataProtocol);
+//        project.setSampleProcessingProtocol(sampleProtocol);
+//
+//        project.setKeywords(keywords);
+//
+//
+//        return project;
+//
+//    }
+
+    /**
+     * The implementation of the Project Tags is needed to set also the Facet values.
+     * @param projectTags
+     */
+    public void setProjectTags(List<String> projectTags) {
+        this.projectTags = projectTags;
+        this.projectTagsFacets = projectTags.stream().map(x -> StringUtils.convertSentenceStyle(x)).collect(Collectors.toList());
+    }
 
     /** Return the accession for the Project **/
     @Override
@@ -162,7 +211,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     @Override
     public Collection<? extends ParamProvider> getAdditionalAttributes() {
-        List<CvParamProvider> additionalCvParams = new ArrayList<CvParamProvider>();
+        List<CvParamProvider> additionalCvParams = new ArrayList<>();
         if (additionalAttributes != null) {
             additionalAttributes.forEach((key, value) -> additionalCvParams.add(new DefaultCvParam(key, value)));
         }
@@ -220,14 +269,13 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * Return the list of Instruments related with the project. The Project returns the information
-     * @return
+     * @return Collection of CvTerms
      */
     @Override
     public Collection<? extends CvParamProvider> getInstruments() {
-        List<CvParamProvider> instruments = new ArrayList<CvParamProvider>();
-        if (this.instruments != null ) {
-           this.instruments.forEach((x, y) -> instruments.add(new DefaultCvParam(x, y)));
-        }
+        List<CvParamProvider> instruments = new ArrayList<>();
+        for(int i = 0; i < instrumentNames.size(); i++)
+            instruments.add(new DefaultCvParam(instrumentIds.get(i), instrumentNames.get(i)));
         return instruments;
     }
 
@@ -269,7 +317,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Override
     public Collection<? extends String> getCountriesAsString(){
         return allCountries;
-    };
+    }
 
     /**
      * The List of terms Experimental Factors Names
