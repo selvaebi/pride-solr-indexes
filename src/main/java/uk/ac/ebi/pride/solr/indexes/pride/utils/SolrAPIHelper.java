@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.Data;
 
 import org.apache.http.HttpRequest;
@@ -8,15 +9,20 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.json.BasicJsonParser;
+import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- This class is a API helper for Solr API to enable delete/create/update delete of Collections.
+ This class is a API helper for Solr API to enable delete/create/update delete of Collections. We have decided to not use Res
 
  @author ypriverol
  @version $Id$
@@ -32,6 +38,7 @@ public class SolrAPIHelper {
     private static SolrAPIHelper instance;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SolrAPIHelper.class);
+
 
     /**
      * Default constructor for the SolrAPIHelper
@@ -91,23 +98,24 @@ public class SolrAPIHelper {
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
-
     /**
      * List all config sets in the Solr server
      * @return List of ConfigSets
      * @throws IOException
      */
-    public List<String> listConfigSets() throws IOException {
+    public boolean containsConfigSet(String collectionSet) throws IOException {
         String hostQuery = String.format("%s/solr/admin/configs?action=LIST&wt=json", config.getHostURL());
         LOGGER.debug(hostQuery);
-        List<String> configSets = new ArrayList<>();
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
-        CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
+        CloseableHttpResponse response = client.execute(new HttpGet(hostQuery));
         LOGGER.warn(response.toString());
-        if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200)
-            configSets.add(response.toString());
-        return configSets;
+        if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200){
+            String jsonString =EntityUtils.toString(response.getEntity());
+            if(jsonString.toLowerCase().contains(collectionSet.toLowerCase()))
+                return true;
+        }
+        return false;
     }
 
 

@@ -46,10 +46,9 @@ public class SolrAPIHelperTest {
 
     @Test
     public void listConfigSets() throws Exception {
-
-        List<String> configs = solrAPIHelper.listConfigSets();
-        if(!configs.isEmpty()){
-            System.out.println("All config sets in the server  -- " + configs.toString());
+        String collection = "pride_projects";
+        if(solrAPIHelper.containsConfigSet(collection)){
+            System.out.println("The following configset has been found in the server --- " + collection);
         }
     }
 
