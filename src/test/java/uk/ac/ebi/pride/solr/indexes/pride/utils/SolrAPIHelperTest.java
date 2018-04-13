@@ -4,6 +4,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -41,6 +43,16 @@ public class SolrAPIHelperTest {
             System.out.println("Collection -- pride_projects has been created  -- ");
         }
     }
+
+    @Test
+    public void listConfigSets() throws Exception {
+
+        List<String> configs = solrAPIHelper.listConfigSets();
+        if(!configs.isEmpty()){
+            System.out.println("All config sets in the server  -- " + configs.toString());
+        }
+    }
+
 
 
 }

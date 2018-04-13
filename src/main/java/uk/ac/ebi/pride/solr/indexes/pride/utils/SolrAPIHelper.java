@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  This class is a API helper for Solr API to enable delete/create/update delete of Collections.
@@ -88,6 +90,27 @@ public class SolrAPIHelper {
         LOGGER.warn(response.toString());
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
+
+
+    /**
+     * List all config sets in the Solr server
+     * @return List of ConfigSets
+     * @throws IOException
+     */
+    public List<String> listConfigSets() throws IOException {
+        String hostQuery = String.format("%s/solr/admin/configs?action=LIST&wt=json", config.getHostURL());
+        LOGGER.debug(hostQuery);
+        List<String> configSets = new ArrayList<>();
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
+        LOGGER.warn(response.toString());
+        if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200)
+            configSets.add(response.toString());
+        return configSets;
+    }
+
+
 
     /**
      * Solr Config Class containing the http URL of the Solr Server.
