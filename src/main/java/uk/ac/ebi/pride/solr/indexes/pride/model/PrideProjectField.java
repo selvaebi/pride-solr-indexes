@@ -1,7 +1,5 @@
 package uk.ac.ebi.pride.solr.indexes.pride.model;
 
-import org.springframework.data.solr.core.query.Field;
-
 /**
  * Definition of terms for PRIDE Project. This class is a helper for the Model and query builders.
  *
@@ -12,89 +10,91 @@ import org.springframework.data.solr.core.query.Field;
 public interface PrideProjectField {
 
     /** Project Accession **/
-    public String ACCESSION = "accession";
+    String ACCESSION = "accession";
 
      /** Project Title **/
-    public String PROJECT_TILE = "project_title";
+     String PROJECT_TILE = "project_title";
 
     /** Additional Attributes Accessions **/
-    public String ADDITIONAL_ATTRIBUTES = "additional_attributes_*";
+    String ADDITIONAL_ATTRIBUTES = "additional_attributes_*";
 
     /** Project Description **/
-    public String PROJECT_DESCRIPTION = "project_description";
+    String PROJECT_DESCRIPTION = "project_description";
 
     /** Sample Protocol **/
-    public String PROJECT_SAMPLE_PROTOCOL = "project_sample_protocol";
+    String PROJECT_SAMPLE_PROTOCOL = "project_sample_protocol";
 
     /** Data Processing Protocol **/
-    public String PROJECT_DATA_PROTOCOL = "project_data_protocol";
+    String PROJECT_DATA_PROTOCOL = "project_data_protocol";
 
     /** Project Tags **/
-    public String PROJECT_TAGS = "project_tags";
-    public String PROJECT_TAGS_FACET = "projects_tags_facet";
+    String PROJECT_TAGS = "project_tags";
+    String PROJECT_TAGS_FACET = "projects_tags_facet";
 
     /** Keywords **/
-    public String PROJECT_KEYWORDS = "project_keywords";
+    String PROJECT_KEYWORDS = "project_keywords";
+    String PROJECT_KEYWORDS_FACET = "project_keywords_facet";
 
     /** PROJECT DOI **/
-    public String PROJECT_DOI = "project_doi";
+    String PROJECT_DOI = "project_doi";
 
     /** PROJECT OMICS **/
-    public String PROJECT_OMICS_LINKS = "project_other_omics";
+    String PROJECT_OMICS_LINKS = "project_other_omics";
 
     /** Submission Type **/
-    public String PROJECT_SUBMISSION_TYPE = "project_submission_type";
+    String PROJECT_SUBMISSION_TYPE = "project_submission_type";
 
     /** Submission Date **/
-    public String PROJECT_SUBMISSION_DATE = "submission_date";
+    String PROJECT_SUBMISSION_DATE = "submission_date";
 
     /** Publication Date **/
-    public String PROJECT_PUBLICATION_DATE = "publication_date";
+    String PROJECT_PUBLICATION_DATE = "publication_date";
 
     /** Update Date **/
-    public String PROJECT_UPDATED_DATE = "updated_date";
+    String PROJECT_UPDATED_DATE = "updated_date";
 
     /** Submitter FirstName **/
-    public String PROJECT_SUBMITTER = "submitters";
+    String PROJECT_SUBMITTER = "submitters";
 
     /** List of Lab Head Names **/
-    public String PROJECT_PI_NAMES = "lab_heads";
+    String PROJECT_PI_NAMES = "lab_heads";
+    String PROJECT_PI_NAMES_FACET = "lab_heads_facet";
 
     /** Lab Head Affiliation  */
-    public String AFFILIATIONS = "affiliations";
+    String AFFILIATIONS = "affiliations";
+    String AFFILIATIONS_FACET = "affiliations_facet";
 
     /** List of instruments Ids*/
-    public String INSTRUMENTS = "instruments_names";
-    public String INSTRUMENTS_FACET = "instruments_facet";
+    String INSTRUMENTS = "instruments_names";
+    String INSTRUMENTS_FACET = "instruments_facet";
 
-    public String INSTRUMENTS_IDS = "instruments_ids";
+    String INSTRUMENTS_IDS = "instruments_ids";
 
      /** This field store all the countries associated with the experiment **/
-    public String COUNTRIES = "project_countries";
+     String COUNTRIES = "countries";
+     String COUNTRIES_FACET = "countries_facet";
 
     /** Experimental Factor Names **/
-    public String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors_*";
+    String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors_*";
 
     /** Species ***/
-    public String SPECIES = "species";
+    String SPECIES = "species";
 
     /** References related with the project **/
-    public String PROJECT_REFERENCES = "project_references";
-
-    /** Is public or Private **/
-    public String PROJECT_PUBLIC = "project_public";
-
+    String PROJECT_REFERENCES = "project_references";
 
     /* This field is not store, so when you retrieve the value from solr is always null */
-    public String PROTEIN_IDENTIFICATIONS = "protein_identifications";
+    String PROTEIN_IDENTIFICATIONS = "protein_identifications";
+    String PROTEIN_IDENTIFICATIONS_FACET = "protein_identifications_facet";
 
     /** This field is not store, so when you retrieve the value from solr is always null  **/
-    public String PEPTIDE_SEQUENCES  = "peptide_sequences";
+    String PEPTIDE_SEQUENCES  = "peptide_sequences";
 
     /** Identified PTMs in the Project**/
-    public String PROJECT_IDENTIFIED_PTM_STRING = "project_identified_ptms";
+    String PROJECT_IDENTIFIED_PTM_STRING = "project_identified_ptms";
+    String PROJECT_IDENTIFIED_PTM_STRING_FACET = "project_identified_ptms_facet";
 
-    public String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
+    String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
 
 
 }

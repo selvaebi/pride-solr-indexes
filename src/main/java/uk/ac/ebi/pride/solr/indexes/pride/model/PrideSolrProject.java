@@ -65,6 +65,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = PROJECT_TAGS, boost = 0.2f)
     private List<String> projectTags;
 
+    /** Project tags facet **/
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
     @Indexed(name = PROJECT_TAGS_FACET, type = "string")
@@ -73,6 +74,13 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Keywords **/
     @Indexed(name = PROJECT_KEYWORDS, boost = 0.2f)
     private List<String> keywords;
+
+    /** Projects keywords facet **/
+    @Setter(AccessLevel.PRIVATE)
+    @Getter(AccessLevel.PRIVATE)
+    @Indexed(name = PROJECT_KEYWORDS_FACET, type = "string")
+    private List<String> keywordsFacets;
+
 
     /** Original Doi of the dataset. The actual Doi is not needed in the Dataset **/
     @Indexed(name = PROJECT_DOI, boost = 0.2f)
@@ -135,10 +143,6 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = PROJECT_REFERENCES, boost = 0.7f)
     private List<String> references;
 
-    /** Public project or private   **/
-    @Indexed(name = PROJECT_PUBLIC, boost = 0.7f)
-    private boolean publicProject;
-
     /* This field is not store, so when you retrieve the value from solr is always null */
     @Indexed(name = PROTEIN_IDENTIFICATIONS, boost = 0.6f, stored = false)
     private Set<String> proteinIdentifications;
@@ -186,11 +190,21 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * The implementation of the Project Tags is needed to set also the Facet values.
-     * @param projectTags
+     * @param projectTags projectsTags
      */
     public void setProjectTags(List<String> projectTags) {
         this.projectTags = projectTags;
-        this.projectTagsFacets = projectTags.stream().map(x -> StringUtils.convertSentenceStyle(x)).collect(Collectors.toList());
+        this.projectTagsFacets = projectTags.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+
+    /**
+     * Set the keywords and the corresponding facets.
+     * @param keywords Project Keywords
+     */
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
+        this.keywordsFacets = keywords.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
 
     /** Return the accession for the Project **/
@@ -291,7 +305,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     @Override
     public boolean isPublicProject() {
-        return publicProject;
+        return true;
     }
 
     @Override

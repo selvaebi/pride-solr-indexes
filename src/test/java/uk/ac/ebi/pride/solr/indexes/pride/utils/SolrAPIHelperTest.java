@@ -20,6 +20,7 @@ import static org.junit.Assert.*;
  */
 public class SolrAPIHelperTest {
 
+
     SolrAPIHelper solrAPIHelper;
 
     @Before
@@ -69,6 +70,14 @@ public class SolrAPIHelperTest {
         String schemaString = solrAPIHelper.getSchemaByCollection(collection);
         System.out.println(schemaString);
 
+    }
+
+    @Test
+    public void refinePrideSolrProjectsSchema() throws Exception {
+        String collection = "pride_projects";
+        if(solrAPIHelper.refinePrideSolrProjectsSchema(collection)){
+            System.out.println("Collection -- pride_projects has been refined -- ");
+        }
     }
 
 }

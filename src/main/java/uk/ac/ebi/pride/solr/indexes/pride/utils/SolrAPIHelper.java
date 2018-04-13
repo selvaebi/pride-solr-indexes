@@ -19,6 +19,7 @@ import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -182,4 +183,26 @@ public class SolrAPIHelper {
             this.hostURL = hostURL; 
         }
     }
+
+    /**
+     * Refine the schema of PRIDE Solr Projects taking into account the Enum
+     * @param collection pride collection
+     * @return True if changes are possible
+     */
+    public boolean refinePrideSolrProjectsSchema(String collection){
+        boolean status = true;
+        for(PrideProjectFieldEnum fieldEnum: PrideProjectFieldEnum.values()){
+            if(fieldEnum.getType() != ConstantsSolrTypes.DEFAULT)
+                try {
+                    boolean currentStatus = updateFieldType(collection, fieldEnum.getValue(), fieldEnum.getType().getType(), fieldEnum.getMultiValue());
+                    status = currentStatus && status;
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage());
+                }
+        }
+        return status;
+    }
+
+
+
 }
