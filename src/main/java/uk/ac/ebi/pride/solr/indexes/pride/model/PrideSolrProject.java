@@ -17,6 +17,7 @@ import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.reference.ReferenceProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.*;
@@ -132,13 +133,13 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private List<String> affiliationsFacet;
 
     /** List of instruments Ids*/
-    @Indexed(name = INSTRUMENTS, boost = 0.1f, copyTo = {INSTRUMENTS, INSTRUMENTS_FACET})
+    @Indexed(name = INSTRUMENTS, boost = 0.1f)
     private List<String> instrumentNames;
 
     @Indexed(name = INSTRUMENTS_FACET)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private String instruments_facet;
+    private List<String> instrumentsFacet;
 
     @Indexed(name = INSTRUMENTS_IDS)
     private List<String> instrumentIds;
@@ -255,7 +256,6 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.projectTagsFacets = projectTags.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
 
-
     /**
      * Set the keywords and the corresponding facets.
      * @param keywords Project Keywords
@@ -263,6 +263,84 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     public void setKeywords(List<String> keywords) {
         this.keywords = keywords;
         this.keywordsFacets = keywords.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set the Head and PIs of the project
+     * @param labPIs {@link ContactProvider} of Lab PIs
+     */
+    public void setLabPIFromContacts(List<ContactProvider> labPIs) {
+        this.labPIs = labPIs.stream().map(ContactProvider::getName).collect(Collectors.toList());
+        this.labPIsFacet = this.labPIs.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set the Head PIs from String Names
+     * @param labPIsNames String names
+     */
+    public void setLabPIs(List<String> labPIsNames){
+        this.labPIs = labPIsNames;
+        this.labPIsFacet = this.labPIs.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set affiliations from String List
+     * @param affiliations
+     */
+    public void setAffiliations(List<String> affiliations) {
+        this.affiliations = affiliations;
+        this.affiliationsFacet = affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set instruments from and instruments list
+     * @param instrumentNames
+     */
+    public void setInstrumentNames(List<String> instrumentNames) {
+        this.instrumentNames = instrumentNames;
+        this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set instruments from and instruments list
+     * @param instrumentNames
+     */
+    public void setInstrumentNamesFromCvParams(List<CvParamProvider> instrumentNames) {
+        this.instrumentNames = instrumentNames.stream().map(CvParamProvider::getName).collect(Collectors.toList());
+        this.instrumentIds = instrumentNames.stream().map(CvParamProvider::getAccession).collect(Collectors.toList());
+        this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set all countries
+     * @param allCountries
+     */
+    public void setAllCountries(List<String> allCountries) {
+        this.allCountries = allCountries;
+        this.allCountriesFacet = allCountries.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set Experimental Factors from the list of CVParams that are specify as a {@link Tuple}. The current
+     * function takes the {@link uk.ac.ebi.pride.utilities.term.CvTermReference} Organism, celltype and diseases
+     * for the facet.
+     *
+     * @param experimentalFactors List of Experimental Factors.
+     */
+    public void setExperimentalFactors(List<Tuple<CvParamProvider, CvParamProvider>> experimentalFactors) {
+
+        this.experimentalFactors = experimentalFactors.stream()
+                .collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
+
+        this.experimentalFactorFacets = this.experimentalFactors.values()
+                .stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+    }
+
+    public void setIdentifiedPTMStrings(List<String> identifiedPTMStrings) {
+        this.identifiedPTMStrings = identifiedPTMStrings;
     }
 
     /** Return the accession for the Project **/
