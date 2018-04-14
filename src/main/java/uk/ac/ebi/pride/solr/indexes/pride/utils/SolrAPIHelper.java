@@ -16,7 +16,8 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import java.io.IOException;
 
 /**
- This class is a API helper for Solr API to enable delete/create/update delete of Collections. We have decided to not use Res
+ This class is a API helper for Solr API to enable delete/create/update delete of Collections.
+ We have decided to don't use the RestTemplate to do not add another extra dependency. The
 
  @author ypriverol
  @version $Id$
