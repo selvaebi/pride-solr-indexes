@@ -17,9 +17,9 @@ import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.reference.ReferenceProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
+import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 
-import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -170,19 +170,13 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Setter(AccessLevel.PRIVATE)
     private List<String> organisms;
 
-    /** Cell types **/
-    @Indexed(name = CELL_TYPE)
+    /** organism parts **/
+    @Indexed(name = ORGANISMS_PART)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> cellTypes;
+    private List<String> organismPart;
 
-    /** Tissues **/
-    @Indexed(name = TISSUES)
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
-    private List<String> tissues;
-
-    /** Tissues **/
+    /** diseases **/
     @Indexed(name = DISEASES)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
@@ -332,11 +326,20 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.experimentalFactors = experimentalFactors.stream()
                 .collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
 
-        this.experimentalFactorFacets = this.experimentalFactors.values()
-                .stream()
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
+        organisms = new ArrayList<>();
+        organismPart = new ArrayList<>();
+        diseases  = new ArrayList<>();
 
+        experimentalFactors.stream().forEach(x -> {
+            if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM))
+               organisms.add(x.getValue().getName());
+            else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM_PART))
+                organismPart.add(x.getValue().getName());
+            else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_DISEASE))
+                diseases.add(x.getValue().getName());
+            else
+                experimentalFactorFacets.add(x.getValue().getName());
+        });
     }
 
     public void setIdentifiedPTMStrings(List<String> identifiedPTMStrings) {

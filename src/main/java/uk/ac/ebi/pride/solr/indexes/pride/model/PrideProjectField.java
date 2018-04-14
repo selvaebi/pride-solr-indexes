@@ -80,8 +80,7 @@ public interface PrideProjectField {
 
     /** Species , cell types, tissues, diseases ***/
     String ORGANISMS = "organisms_facet";
-    String CELL_TYPE = "cell_types_facet";
-    String TISSUES   = "tissues_facet";
+    String ORGANISMS_PART = "organisms_part_facet";
     String DISEASES  = "diseases";
 
     /** References related with the project **/

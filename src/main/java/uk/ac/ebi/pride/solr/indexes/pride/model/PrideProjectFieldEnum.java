@@ -42,7 +42,7 @@ public enum PrideProjectFieldEnum {
     EXPERIMENTAL_FACTORS_FACET(PrideProjectField.EXPERIMENTAL_FACTORS_FACET, true, true, ConstantsSolrTypes.STRING ),
 
     ORGANISM(PrideProjectField.ORGANISMS, true, false, ConstantsSolrTypes.STRING ),
-    CELL_TYPE(PrideProjectField.CELL_TYPE, true, false, ConstantsSolrTypes.STRING ),
+    CELL_TYPE(PrideProjectField.ORGANISMS_PART, true, false, ConstantsSolrTypes.STRING ),
     DISEASES(PrideProjectField.DISEASES, true, false, ConstantsSolrTypes.STRING ),
     TISSUE(PrideProjectField.TISSUES, true, false, ConstantsSolrTypes.STRING ),
 
