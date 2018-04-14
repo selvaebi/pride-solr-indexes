@@ -4,6 +4,8 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.ConstantsSolrTypes;
 
 /**
  * Enum for the PRIDE Projects Fields. This enums heps to iterate and validate the fields.
+ * This enum is used by the {@link uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper} to
+ * update and refine the schema. With this definition not manual annotation is needed.
  *
  * @author ypriverol
  * @version $Id$
@@ -37,7 +39,13 @@ public enum PrideProjectFieldEnum {
     COUNTRIES_FACET(PrideProjectField.COUNTRIES_FACET, true, true, ConstantsSolrTypes.STRING),
 
     EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, false, true, ConstantsSolrTypes.DEFAULT ),
-    SPECIES(PrideProjectField.SPECIES, true, false, ConstantsSolrTypes.DEFAULT ),
+    EXPERIMENTAL_FACTORS_FACET(PrideProjectField.EXPERIMENTAL_FACTORS_FACET, true, true, ConstantsSolrTypes.STRING ),
+
+    ORGANISM(PrideProjectField.ORGANISMS, true, false, ConstantsSolrTypes.STRING ),
+    CELL_TYPE(PrideProjectField.CELL_TYPE, true, false, ConstantsSolrTypes.STRING ),
+    DISEASES(PrideProjectField.DISEASES, true, false, ConstantsSolrTypes.STRING ),
+    TISSUE(PrideProjectField.TISSUES, true, false, ConstantsSolrTypes.STRING ),
+
     PROJECT_REFERENCES(PrideProjectField.PROJECT_REFERENCES, false, true, ConstantsSolrTypes.DEFAULT ),
     PROTEIN_IDENTIFICATIONS(PrideProjectField.PROTEIN_IDENTIFICATIONS, true, true, ConstantsSolrTypes.DEFAULT ),
     PROTEIN_IDENTIFICATIONS_FACET(PrideProjectField.PROTEIN_IDENTIFICATIONS_FACET, true, true, ConstantsSolrTypes.STRING ),

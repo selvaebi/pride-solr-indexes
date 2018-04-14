@@ -18,6 +18,7 @@ import uk.ac.ebi.pride.archive.dataprovider.reference.ReferenceProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -114,9 +115,21 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f)
     private List<String> labPIs;
 
-    /** Affiliations  */
+    /** PI facets **/
+    @Indexed(name = PROJECT_PI_NAMES_FACET)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> labPIsFacet;
+
+    /** Affiliations */
     @Indexed(name = AFFILIATIONS, boost = 0.2f)
     private List<String> affiliations;
+
+    /** Affiliations facet **/
+    @Indexed(name = AFFILIATIONS_FACET)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> affiliationsFacet;
 
     /** List of instruments Ids*/
     @Indexed(name = INSTRUMENTS, boost = 0.1f, copyTo = {INSTRUMENTS, INSTRUMENTS_FACET})
@@ -134,10 +147,45 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = COUNTRIES, boost = 0.4f)
     private List<String> allCountries;
 
+    @Indexed(name = COUNTRIES_FACET)
+    @Setter(AccessLevel.PRIVATE)
+    @Getter(AccessLevel.PRIVATE)
+    private List<String> allCountriesFacet;
+
     /** Experimental Factor Names **/
     @Dynamic
     @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
     private Map<String, List<String>> experimentalFactors;
+
+    /** All additional experimental factors **/
+    @Indexed(name = EXPERIMENTAL_FACTORS_FACET)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> experimentalFactorFacets;
+
+    /** Organisms **/
+    @Indexed(name = ORGANISMS)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> organisms;
+
+    /** Cell types **/
+    @Indexed(name = CELL_TYPE)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> cellTypes;
+
+    /** Tissues **/
+    @Indexed(name = TISSUES)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> tissues;
+
+    /** Tissues **/
+    @Indexed(name = DISEASES)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> diseases;
 
     /** References related with the project **/
     @Indexed(name = PROJECT_REFERENCES, boost = 0.7f)
@@ -147,6 +195,11 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = PROTEIN_IDENTIFICATIONS, boost = 0.6f, stored = false)
     private Set<String> proteinIdentifications;
 
+    @Indexed(name = PROTEIN_IDENTIFICATIONS_FACET)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> proteinIdentificationFacets;
+
     /** This field is not store, so when you retrieve the value from solr is always null  **/
     @Indexed(name = PEPTIDE_SEQUENCES, boost = 0.6f, stored = false)
     private Set<String> peptideSequences;
@@ -154,6 +207,11 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Highlights of values that has been found for the Solr Search **/
     @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f)
     private List<String> identifiedPTMStrings;
+
+    @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING_FACET)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> identifiedPTMStringsFacet;
 
     /** Score for the search results **/
     @Score

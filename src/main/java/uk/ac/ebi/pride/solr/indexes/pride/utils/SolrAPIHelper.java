@@ -25,14 +25,14 @@ import java.io.IOException;
 
 public class SolrAPIHelper {
 
+    /** Logger **/
+    private static final Logger LOGGER = LoggerFactory.getLogger(SolrAPIHelper.class);
+
     /** config http URL **/
     protected SolrConfig config;
 
     /** Private instance **/
     private static SolrAPIHelper instance;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SolrAPIHelper.class);
-
 
     /**
      * Default constructor for the SolrAPIHelper

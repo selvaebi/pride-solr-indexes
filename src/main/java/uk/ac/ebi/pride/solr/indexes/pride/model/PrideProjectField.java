@@ -76,9 +76,13 @@ public interface PrideProjectField {
 
     /** Experimental Factor Names **/
     String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors_*";
+    String EXPERIMENTAL_FACTORS_FACET = "experimental_factors_facet";
 
-    /** Species ***/
-    String SPECIES = "species";
+    /** Species , cell types, tissues, diseases ***/
+    String ORGANISMS = "organisms_facet";
+    String CELL_TYPE = "cell_types_facet";
+    String TISSUES   = "tissues_facet";
+    String DISEASES  = "diseases";
 
     /** References related with the project **/
     String PROJECT_REFERENCES = "project_references";
