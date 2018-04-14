@@ -156,6 +156,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Experimental Factor Names **/
     @Dynamic
     @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
+    @Setter(AccessLevel.PRIVATE)
     private Map<String, List<String>> experimentalFactors;
 
     /** All additional experimental factors **/
@@ -297,11 +298,11 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * Set instruments from and instruments list
-     * @param instrumentNames
+     * @param instrumentCvParams
      */
-    public void setInstrumentNamesFromCvParams(List<CvParamProvider> instrumentNames) {
-        this.instrumentNames = instrumentNames.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.instrumentIds = instrumentNames.stream().map(CvParamProvider::getAccession).collect(Collectors.toList());
+    public void setInstrumentNamesFromCvParam(List<CvParamProvider> instrumentCvParams) {
+        this.instrumentNames = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
+        this.instrumentIds = instrumentCvParams.stream().map(CvParamProvider::getAccession).collect(Collectors.toList());
         this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
 
@@ -342,8 +343,22 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         });
     }
 
+    /**
+     * Set the PTMs
+     * @param identifiedPTMStrings
+     */
     public void setIdentifiedPTMStrings(List<String> identifiedPTMStrings) {
         this.identifiedPTMStrings = identifiedPTMStrings;
+        this.identifiedPTMStringsFacet = identifiedPTMStringsFacet.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
+    /**
+     * Set the PTMs
+     * @param identifiedPTMS
+     */
+    public void setIdentifiedPTMStringsFromCvParam(List<CvParamProvider> identifiedPTMS) {
+        this.identifiedPTMStrings = identifiedPTMS.stream().map(CvParamProvider::getName).collect(Collectors.toList());
+        this.identifiedPTMStringsFacet = identifiedPTMStringsFacet.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
 
     /** Return the accession for the Project **/
