@@ -2,17 +2,21 @@ package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
+import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
 import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+import uk.ac.ebi.pride.utilities.util.Tuple;
 
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
@@ -83,19 +87,27 @@ public class PrideProjectReader {
         //Read Experimental Factors
 
         // First Species
-        Map<String, List<String>> factors = new HashMap<>();
-        submission.getProjectMetaData().getSpecies().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM.getName(), factors, x));
+
+        List<Tuple<CvParamProvider, CvParamProvider>> factors = new ArrayList<>();
+        submission.getProjectMetaData().getSpecies().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM, factors, x));
 
         // Organism Part
-        submission.getProjectMetaData().getCellTypes().forEach(x -> addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
-        submission.getProjectMetaData().getTissues().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM_PART.getName(), factors, x));
+        submission.getProjectMetaData().getCellTypes().forEach(x -> addValue(CvTermReference.EFO_ORGANISM_PART, factors, x));
+        submission.getProjectMetaData().getTissues().forEach(x ->   addValue(CvTermReference.EFO_ORGANISM_PART, factors, x));
 
         // Disease
-        submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue(CvTermReference.EFO_DISEASE.getName(), factors, x));
+        submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue(CvTermReference.EFO_DISEASE, factors, x));
         project.setExperimentalFactors(factors);
 
         //PTMs
         project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toList()));
+
+        /** Set Country **/
+        String[] countryCodes = Locale.getISOCountries();
+        int randomNum = ThreadLocalRandom.current().nextInt(0, countryCodes.length - 1);
+        List<String> countries = new ArrayList<>();
+        countries.add(countryCodes[randomNum]);
+        project.setAllCountries(countries);
 
         //Add Dump date
         try {
@@ -117,12 +129,18 @@ public class PrideProjectReader {
 
     }
 
-    private static Map<String, List<String>> addValue(String key, Map<String, List<String>> factors, CvParam cvParam){
-        List<String> values = new ArrayList<>();
-        if (factors.containsKey(key))
-            values = factors.get(key);
-        values.add(cvParam.getName());
-        factors.put(key, values);
+    /**
+     * Add the experimental factors to the
+     * @param key experimental factors name
+     * @param factors factors values List
+     * @param cvParam values of experimental factor
+     * @return factors values List
+     */
+    private static List<Tuple<CvParamProvider, CvParamProvider>> addValue(CvTermReference key, List<Tuple<CvParamProvider, CvParamProvider>> factors, CvParam cvParam){
+        Tuple<CvParamProvider, CvParamProvider> param = new Tuple<>(new DefaultCvParam(key.getAccession(), key.getName()),
+                new DefaultCvParam(cvParam.getAccession(),cvParam.getName()));
+        if (!factors.contains(param))
+            factors.add(param);
         return factors;
     }
 

@@ -349,7 +349,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void setIdentifiedPTMStrings(List<String> identifiedPTMStrings) {
         this.identifiedPTMStrings = identifiedPTMStrings;
-        this.identifiedPTMStringsFacet = identifiedPTMStringsFacet.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
 
     /**
@@ -358,7 +358,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void setIdentifiedPTMStringsFromCvParam(List<CvParamProvider> identifiedPTMS) {
         this.identifiedPTMStrings = identifiedPTMS.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.identifiedPTMStringsFacet = identifiedPTMStringsFacet.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
 
     /** Return the accession for the Project **/

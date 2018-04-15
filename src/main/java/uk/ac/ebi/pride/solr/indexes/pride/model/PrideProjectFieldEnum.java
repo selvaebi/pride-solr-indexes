@@ -41,10 +41,9 @@ public enum PrideProjectFieldEnum {
     EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, false, true, ConstantsSolrTypes.DEFAULT ),
     EXPERIMENTAL_FACTORS_FACET(PrideProjectField.EXPERIMENTAL_FACTORS_FACET, true, true, ConstantsSolrTypes.STRING ),
 
-    ORGANISM(PrideProjectField.ORGANISMS, true, false, ConstantsSolrTypes.STRING ),
-    CELL_TYPE(PrideProjectField.ORGANISMS_PART, true, false, ConstantsSolrTypes.STRING ),
-    DISEASES(PrideProjectField.DISEASES, true, false, ConstantsSolrTypes.STRING ),
-    TISSUE(PrideProjectField.TISSUES, true, false, ConstantsSolrTypes.STRING ),
+    ORGANISM(PrideProjectField.ORGANISMS, true, true, ConstantsSolrTypes.STRING ),
+    CELL_TYPE(PrideProjectField.ORGANISMS_PART, true, true, ConstantsSolrTypes.STRING ),
+    DISEASES(PrideProjectField.DISEASES, true, true, ConstantsSolrTypes.STRING ),
 
     PROJECT_REFERENCES(PrideProjectField.PROJECT_REFERENCES, false, true, ConstantsSolrTypes.DEFAULT ),
     PROTEIN_IDENTIFICATIONS(PrideProjectField.PROTEIN_IDENTIFICATIONS, true, true, ConstantsSolrTypes.DEFAULT ),

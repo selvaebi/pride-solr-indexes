@@ -25,7 +25,10 @@ public interface SolrProjectRepository extends SolrProjectRepositoryCustom, Crud
     PrideSolrProject findByAccession(String accession);
 
     @Query(value = "*:*")
-    @Facet(fields = {PrideProjectField.PROJECT_PUBLICATION_DATE, PrideProjectField.PROJECT_SUBMISSION_DATE, PrideProjectField.PROJECT_UPDATED_DATE, PrideProjectField.PROJECT_TAGS_FACET, PrideProjectField.PROJECT_KEYWORDS_FACET})
+    @Facet(fields = {PrideProjectField.PROJECT_PUBLICATION_DATE, PrideProjectField.PROJECT_SUBMISSION_DATE,
+            PrideProjectField.PROJECT_UPDATED_DATE, PrideProjectField.PROJECT_TAGS_FACET, PrideProjectField.PROJECT_KEYWORDS_FACET,
+            PrideProjectField.INSTRUMENTS_FACET, PrideProjectField.AFFILIATIONS_FACET, PrideProjectField.COUNTRIES_FACET, PrideProjectField.EXPERIMENTAL_FACTORS_FACET,
+            PrideProjectField.ORGANISMS, PrideProjectField.ORGANISMS_PART, PrideProjectField.DISEASES})
     FacetPage<PrideSolrProject> findAllWithFacetIgnoreCase(Pageable pageable);
 
 }
