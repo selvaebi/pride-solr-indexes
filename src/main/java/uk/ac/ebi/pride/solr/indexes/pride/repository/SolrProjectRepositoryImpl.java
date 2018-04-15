@@ -43,7 +43,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	final SolrTemplate solrTemplate;
 
 	/** Logger use to query and filter the data **/
-	static Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
 
 	@Autowired
 	public SolrProjectRepositoryImpl(SolrTemplate solrTemplate) {

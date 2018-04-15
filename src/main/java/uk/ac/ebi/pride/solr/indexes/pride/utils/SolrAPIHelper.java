@@ -29,7 +29,7 @@ public class SolrAPIHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(SolrAPIHelper.class);
 
     /** config http URL **/
-    protected SolrConfig config;
+    private SolrConfig config;
 
     /** Private instance **/
     private static SolrAPIHelper instance;

@@ -216,32 +216,6 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** highlights f the search **/
     private Map<String, List<String>> highlights;
 
-//
-//    public static PrideSolrProject build(String accession, String title, String description, String sampleProtocol, String dataProtocol,
-//                                         List<String> projectTags, List<String> keywords, List<CvParamProvider> additionalAttributes, String doi,
-//                                         List<String> omicsLinks, String submissionType, Date submissionDate, Date updatedDate, Date publicationDate, List<String> nameSubmitters,
-//                                         List<String> namePIs, List<String> affialitions, List<CvParamProvider> instruments, List<String> countries, List<CvParamProvider> experimentalParamters,
-//                                         List<String> references, List<String> proteinIds, List<String> peptideSequences, List<CvParamProvider> ptms) {
-//
-//        //Set accession
-//        PrideSolrProject project = new PrideSolrProject();
-//        project.setAccession(accession);
-//
-//        //Set title
-//        project.setTitle(title);
-//
-//        //Set description / Sample and Data Protocol
-//        project.setProjectDescription(description);
-//        project.setDataProcessingProtocol(dataProtocol);
-//        project.setSampleProcessingProtocol(sampleProtocol);
-//
-//        project.setKeywords(keywords);
-//
-//
-//        return project;
-//
-//    }
-
     /**
      * The implementation of the Project Tags is needed to set also the Facet values.
      * @param projectTags projectsTags
@@ -280,12 +254,22 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * Set affiliations from String List
-     * @param affiliations
+     * @param affiliations PIs and Submitters affiliations
      */
     public void setAffiliations(List<String> affiliations) {
         this.affiliations = affiliations;
         this.affiliationsFacet = affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
     }
+
+    /**
+     * Set affiliations from String List
+     * @param affiliations PIs and Submitters affiliations
+     */
+    public void setAffiliationsFromContacts(List<ContactProvider> affiliations) {
+        this.affiliations = affiliations.stream().map(ContactProvider::getAffiliation).collect(Collectors.toList());
+        this.affiliationsFacet = this.affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+    }
+
 
     /**
      * Set instruments from and instruments list
@@ -331,7 +315,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         organismPart = new ArrayList<>();
         diseases  = new ArrayList<>();
 
-        experimentalFactors.stream().forEach(x -> {
+        experimentalFactors.forEach(x -> {
             if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM))
                organisms.add(x.getValue().getName());
             else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM_PART))

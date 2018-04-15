@@ -36,7 +36,7 @@ public class RequiresSolrServer {
 	private final String baseUrl;
 
 	/** LOGGER to trace all the error and meessages **/
-	static Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
 
 	/**
 	 * Private Constructor

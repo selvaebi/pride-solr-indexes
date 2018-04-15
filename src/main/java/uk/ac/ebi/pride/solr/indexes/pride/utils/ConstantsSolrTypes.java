@@ -11,7 +11,7 @@ public enum ConstantsSolrTypes {
     STRING("string"),
     DEFAULT("default");
 
-    private String type;
+    private final String type;
 
     ConstantsSolrTypes(String type) {
         this.type = type;
