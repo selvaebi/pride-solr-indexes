@@ -20,7 +20,7 @@ public enum PrideProjectFieldEnum {
     PROJECT_DATA_PROTOCOL(PrideProjectField.PROJECT_DATA_PROTOCOL, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TAGS(PrideProjectField.PROJECT_TAGS, false , true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TAGS_FACET(PrideProjectField.PROJECT_TAGS_FACET, true , true, ConstantsSolrTypes.STRING),
-    PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, true, false, ConstantsSolrTypes.TEXT_GENERAL),
+    PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, true, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_KEYWORDS_FACET(PrideProjectField.PROJECT_KEYWORDS_FACET, true, true, ConstantsSolrTypes.STRING),
     PROJECT_DOI(PrideProjectField.PROJECT_DOI, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_OMICS_LINKS(PrideProjectField.PROJECT_OMICS_LINKS, false, false, ConstantsSolrTypes.TEXT_GENERAL ),
