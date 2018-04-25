@@ -55,7 +55,7 @@ public class BasicLocalhostRepositoryTests {
 	@Test
 	public void findProjectsByKeyFacet(){
 
-		FacetPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
+		FacetPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
 
 		// Print all the projects search
 		page.forEach( x-> {
@@ -75,6 +75,4 @@ public class BasicLocalhostRepositoryTests {
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);
 	}
-
-
 }
