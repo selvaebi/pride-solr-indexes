@@ -20,10 +20,30 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 public interface SolrProjectRepository extends SolrProjectRepositoryCustom, CrudRepository<PrideSolrProject, String> {
 
-    /** Find Projects by Accession **/
+    /**
+     * Return a {@link PrideSolrProject} for a given Accession
+     * @param accession PRoject accession
+     * @return PrideSolrProject
+     */
     @Query(PrideProjectField.ACCESSION + ":?0")
     PrideSolrProject findByAccession(String accession);
 
+    /**
+     * This function returns all the {@link PrideSolrProject} in the registry including the following facets:
+     *  - project publication date
+     *  - project submission date
+     *  - project updated date
+     *  - project tags
+     *  - project keywords
+     *  - project instruments
+     *  - project affiliations
+     *  - project experimental factors
+     *  - project organisms
+     *  - project organism_parts
+     *  - project diseases
+     * @param pageable {@link Pageable}
+     * @return
+     */
     @Query(value = "*:*")
     @Facet(fields = {PrideProjectField.PROJECT_PUBLICATION_DATE, PrideProjectField.PROJECT_SUBMISSION_DATE,
             PrideProjectField.PROJECT_UPDATED_DATE, PrideProjectField.PROJECT_TAGS_FACET, PrideProjectField.PROJECT_KEYWORDS_FACET,
