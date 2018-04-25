@@ -9,6 +9,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.utils;
 public enum ConstantsSolrTypes {
 
     STRING("string"),
+    TEXT_GENERAL("text_general"),
     DEFAULT("default");
 
     private final String type;

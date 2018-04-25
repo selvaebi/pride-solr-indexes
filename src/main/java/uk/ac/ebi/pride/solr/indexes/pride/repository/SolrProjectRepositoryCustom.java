@@ -41,5 +41,4 @@ interface SolrProjectRepositoryCustom {
 	@Highlight(fragsize = 20, snipplets = 3)
 	HighlightPage<PrideSolrProject> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page);
 
-
 }
