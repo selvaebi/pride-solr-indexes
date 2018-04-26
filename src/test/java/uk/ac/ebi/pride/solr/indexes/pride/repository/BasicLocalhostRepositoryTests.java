@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.archive.repo.project.ProjectRepository;
+import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -18,13 +20,17 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
  * @author ypriverol
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SolrLocalhostTestConfiguration.class)
+@SpringBootTest(classes = {SolrLocalhostTestConfiguration.class, ArchiveOracleConfig.class})
 public class BasicLocalhostRepositoryTests {
 
 	public static RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
 
 	@Autowired
 	SolrProjectRepository repository;
+
+	@Autowired
+	ProjectRepository oracleRepository;
+
 
 	/** Finds all entries using a single request. */
 	@Test

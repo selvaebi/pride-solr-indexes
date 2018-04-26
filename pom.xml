@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -24,9 +25,12 @@
     <properties>
         <archive.data.provider.api.version>1.0.0-SNAPSHOT</archive.data.provider.api.version>
         <uk.ac.ebi.pride.architectural-pride-tdd.version>1.0.3</uk.ac.ebi.pride.architectural-pride-tdd.version>
-        <uk.ac.ebi.pride.architectural-pride-spring.version>1.0.0-SNAPSHOT</uk.ac.ebi.pride.architectural-pride-spring.version>
+        <uk.ac.ebi.pride.architectural-pride-spring.version>1.0.0-SNAPSHOT
+        </uk.ac.ebi.pride.architectural-pride-spring.version>
         <uk.ac.ebi.pride.px-submission-core.version>2.0.18</uk.ac.ebi.pride.px-submission-core.version>
-        <uk.ac.ebi.pride.utilities.pride-utilities.version>2.0.19-SNAPSHOT</uk.ac.ebi.pride.utilities.pride-utilities.version>
+        <uk.ac.ebi.pride.utilities.pride-utilities.version>2.0.19-SNAPSHOT
+        </uk.ac.ebi.pride.utilities.pride-utilities.version>
+        <archive.repo.version>1.0.2-springboot-SNAPSHOT</archive.repo.version>
     </properties>
 
     <dependencies>
@@ -75,6 +79,26 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- tested with the previous ORACLE DB -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>6.0.9.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ebi.pride.archive</groupId>
+            <artifactId>archive-repo</artifactId>
+            <version>${archive.repo.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>oracle-thin</artifactId>
+            <version>11.2.0.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -84,20 +108,20 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>**/*.properties</include>
+                    <include>*.properties</include>
                 </includes>
             </resource>
-            <!-- Maven should not filter other files -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>false</filtering>
-                <excludes>
-                    <exclude>**/*.properties</exclude>
-                </excludes>
-            </resource>
         </resources>
-
-	    <plugins>
+        <testResources>
+            <testResource>
+                    <directory>src/test/resources</directory>
+                    <filtering>true</filtering>
+                    <includes>
+                        <include>*.properties</include>
+                    </includes>
+            </testResource>
+        </testResources>
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -124,7 +148,7 @@
                     <goals>deploy</goals>
                 </configuration>
             </plugin>
-		</plugins>
+        </plugins>
     </build>
 
     <profiles>
