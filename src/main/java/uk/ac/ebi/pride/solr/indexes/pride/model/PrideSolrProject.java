@@ -110,7 +110,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Submitter FirstName **/
     @Indexed(name = PROJECT_SUBMITTER, boost = 0.2f)
-    private List<String> submitters;
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private Set<String> submitters;
 
     /** List of Lab Head Names **/
     @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f)
@@ -130,7 +132,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = AFFILIATIONS_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> affiliationsFacet;
+    private Set<String> affiliationsFacet;
 
     /** List of instruments Ids*/
     @Indexed(name = INSTRUMENTS, boost = 0.1f)
@@ -141,7 +143,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = INSTRUMENTS_FACET)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private List<String> instrumentsFacet;
+    private Set<String> instrumentsFacet;
 
     @Indexed(name = INSTRUMENTS_IDS)
     @Setter(AccessLevel.NONE)
@@ -150,12 +152,12 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** This field store all the countries associated with the experiment **/
     @Indexed(name = COUNTRIES, boost = 0.4f)
-    private List<String> allCountries;
+    private Set<String> allCountries;
 
     @Indexed(name = COUNTRIES_FACET)
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
-    private List<String> allCountriesFacet;
+    private Set<String> allCountriesFacet;
 
     /** Experimental Factor Names **/
     @Dynamic
@@ -173,23 +175,23 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = ORGANISMS)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> organisms;
+    private Set<String> organisms;
 
     /** organism parts **/
     @Indexed(name = ORGANISMS_PART)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> organismPart;
+    private Set<String> organismPart;
 
     /** diseases **/
     @Indexed(name = DISEASES)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> diseases;
+    private Set<String> diseases;
 
     /** References related with the project **/
     @Indexed(name = PROJECT_REFERENCES, boost = 0.7f)
-    private List<String> references;
+    private Set<String> references;
 
     /* This field is not store, so when you retrieve the value from solr is always null */
     @Indexed(name = PROTEIN_IDENTIFICATIONS, boost = 0.6f, stored = false)
@@ -198,7 +200,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = PROTEIN_IDENTIFICATIONS_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> proteinIdentificationFacets;
+    private Set<String> proteinIdentificationFacets;
 
     /** This field is not store, so when you retrieve the value from solr is always null  **/
     @Indexed(name = PEPTIDE_SEQUENCES, boost = 0.6f, stored = false)
@@ -206,12 +208,12 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Highlights of values that has been found for the Solr Search **/
     @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f)
-    private List<String> identifiedPTMStrings;
+    private Set<String> identifiedPTMStrings;
 
     @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> identifiedPTMStringsFacet;
+    private Set<String> identifiedPTMStringsFacet;
 
     /** Score for the search results **/
     @Score
@@ -248,30 +250,12 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     }
 
     /**
-     * Set the Head PIs from String Names
-     * @param labPIsNames String names
-     */
-    public void setLabPIs(List<String> labPIsNames){
-        this.labPIs = labPIsNames;
-        this.labPIsFacet = this.labPIs.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
-    }
-
-    /**
-     * Set affiliations from String List
-     * @param affiliations PIs and Submitters affiliations
-     */
-    public void setAffiliations(List<String> affiliations) {
-        this.affiliations = affiliations;
-        this.affiliationsFacet = affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
-    }
-
-    /**
      * Set affiliations from String List
      * @param affiliations PIs and Submitters affiliations
      */
     public void setAffiliationsFromContacts(List<ContactProvider> affiliations) {
         this.affiliations = affiliations.stream().map(ContactProvider::getAffiliation).collect(Collectors.toList());
-        this.affiliationsFacet = this.affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.affiliationsFacet = this.affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
 
@@ -282,16 +266,16 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     public void setInstrumentsFromCvParam(List<CvParamProvider> instrumentCvParams) {
         this.instrumentNames = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.instrumentIds = instrumentCvParams.stream().map(CvParamProvider::getAccession).collect(Collectors.toList());
-        this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
     /**
      * Set all countries
      * @param allCountries
      */
-    public void setAllCountries(List<String> allCountries) {
+    public void setAllCountries(Set<String> allCountries) {
         this.allCountries = allCountries;
-        this.allCountriesFacet = allCountries.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.allCountriesFacet = allCountries.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
     /**
@@ -306,9 +290,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.experimentalFactors = experimentalFactors.stream()
                 .collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
 
-        organisms = new ArrayList<>();
-        organismPart = new ArrayList<>();
-        diseases  = new ArrayList<>();
+        organisms = new HashSet<>();
+        organismPart = new HashSet<>();
+        diseases  = new HashSet<>();
 
         experimentalFactors.forEach(x -> {
             if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM))
@@ -326,9 +310,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * Set the PTMs
      * @param identifiedPTMStrings
      */
-    public void setIdentifiedPTMStrings(List<String> identifiedPTMStrings) {
+    public void setIdentifiedPTMStrings(Set<String> identifiedPTMStrings) {
         this.identifiedPTMStrings = identifiedPTMStrings;
-        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
     /**
@@ -336,8 +320,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param identifiedPTMS
      */
     public void setIdentifiedPTMStringsFromCvParam(List<CvParamProvider> identifiedPTMS) {
-        this.identifiedPTMStrings = identifiedPTMS.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.identifiedPTMStrings = identifiedPTMS.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
     /** Return the accession for the Project **/
@@ -563,5 +547,25 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
                 "accession='" + accession + '\'' +
                 ", title='" + title + '\'' +
                 '}';
+    }
+
+    /**
+     * Set the submitters to a new submitters value. This function create a new Set and
+     * add the submitter.
+     * @param submitter Submitter information
+     */
+    public void setSubmittersFromContacts(ContactProvider submitter) {
+       this.submitters = new HashSet<>();
+       addSubmittersFromContacts(submitter);
+    }
+
+    /**
+     * Add a submitter, if the list is null it create as new list of submitters.
+     * @param submitter Submitter information
+     */
+    public void addSubmittersFromContacts(ContactProvider submitter) {
+        if(this.submitters == null)
+            this.submitters = new HashSet<>();
+        submitters.add(submitter.getName());
     }
 }

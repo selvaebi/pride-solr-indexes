@@ -18,6 +18,7 @@ import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
 import uk.ac.ebi.pride.archive.repo.project.Project;
 import uk.ac.ebi.pride.archive.repo.project.ProjectRepository;
 import uk.ac.ebi.pride.archive.repo.project.ProjectTag;
+import uk.ac.ebi.pride.archive.repo.project.Reference;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
@@ -27,6 +28,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,20 +83,29 @@ public class OracleSolrRepositoryTests {
             solrProject.setUpdatedDate(x.getUpdateDate());
 
             // Affiliations
-            List<ContactProvider> contacts = new ArrayList<>();
+            List<ContactProvider> labHead = new ArrayList<>();
             x.getLabHeads().stream().forEach(contactX -> {
-                contacts.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", "")); }
+                labHead.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", "")); }
             );
-            contacts.add(new DefaultContact(TitleConstants.fromString(x.getSubmitter().getTitle().getTitle()), x.getSubmitter().getFirstName(), x.getSubmitter().getLastName(), x.getSubmitter().getId().toString(), x.getSubmitter().getAffiliation(),
-                    x.getSubmitter().getEmail(), "US", ""));
+            solrProject.setLabPIFromContacts(labHead);
 
+            ContactProvider submitter = new DefaultContact(TitleConstants.fromString(x.getSubmitter().getTitle().getTitle()), x.getSubmitter().getFirstName(), x.getSubmitter().getLastName(), x.getSubmitter().getId().toString(), x.getSubmitter().getAffiliation(),x.getSubmitter().getEmail(), "US", "");
+            solrProject.setSubmittersFromContacts(submitter);
+
+            List<ContactProvider> contacts= labHead;
+            contacts.add(submitter);
             solrProject.setAffiliationsFromContacts(contacts);
 
+            // Get Instruments
             List<CvParamProvider> instruments =  new ArrayList<>();
             x.getInstruments().stream().forEach(instrumet -> {
                 instruments.add(new DefaultCvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue()));
             });
             solrProject.setInstrumentsFromCvParam(instruments);
+
+            // References
+            List<String> references = x.getReferences().stream().map(Reference::getReferenceLine).collect(Collectors.toList());
+            solrProject.setReferences(new HashSet<>(references));
 
             projects.add(solrProject);
         });

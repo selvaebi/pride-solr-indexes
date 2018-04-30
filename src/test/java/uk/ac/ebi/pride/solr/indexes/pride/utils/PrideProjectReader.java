@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
+import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
+import uk.ac.ebi.pride.data.model.Contact;
 import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -74,9 +76,8 @@ public class PrideProjectReader {
         project.setLabPIs(contacts);
 
         //Get the submitters information
-        List<String> submitters = new ArrayList<>();
-        submitters.add(submission.getProjectMetaData().getSubmitterContact().getName());
-        project.setSubmitters(submitters);
+        Contact submitterOld = submission.getProjectMetaData().getSubmitterContact();
+        project.setSubmittersFromContacts(new DefaultContact(submitterOld.getName(), "", submitterOld.getAffiliation(), ""));
 
         //Get the affiliations
         List<String> affiliations = new ArrayList<>();
@@ -100,14 +101,14 @@ public class PrideProjectReader {
         project.setExperimentalFactors(factors);
 
         //PTMs
-        project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toList()));
+        project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toSet()));
 
         /** Set Country **/
         String[] countryCodes = Locale.getISOCountries();
         int randomNum = ThreadLocalRandom.current().nextInt(0, countryCodes.length - 1);
         List<String> countries = new ArrayList<>();
         countries.add(countryCodes[randomNum]);
-        project.setAllCountries(countries);
+        project.setAllCountries(new HashSet<>(countries));
 
         //Add Dump date
         try {
