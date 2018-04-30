@@ -171,6 +171,18 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Setter(AccessLevel.PRIVATE)
     private List<String> experimentalFactorFacets;
 
+    /** Sample attributes names **/
+    @Dynamic
+    @Indexed(name = SAMPLE_ATTRIBUTES_NAMES, boost = 0.5f)
+    @Setter(AccessLevel.PRIVATE)
+    private Map<String, List<String>> sampleAttributes;
+
+    /** sample attributes facet **/
+    @Indexed(name = SAMPLE_ATTRIBUTES_FACET)
+    @Getter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PRIVATE)
+    private List<String> sampleAttributesFacets;
+
     /** Organisms **/
     @Indexed(name = ORGANISMS)
     @Getter(AccessLevel.PRIVATE)
@@ -289,30 +301,35 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
         this.experimentalFactors = experimentalFactors.stream()
                 .collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
+       experimentalFactorFacets = this.experimentalFactors.values().stream().flatMap(List::stream).collect(Collectors.toList());
+
+    }
+
+    /**
+     * Set sample Atributes from the list of CVParams that are specify as a {@link Tuple}. The current
+     * function takes the {@link uk.ac.ebi.pride.utilities.term.CvTermReference} Organism, celltype and diseases
+     * for the facet.
+     *
+     * @param sampleAttributes List of Experimental Factors.
+     */
+    public void setSampleInfoFactors(List<Tuple<CvParamProvider, CvParamProvider>> sampleAttributes) {
+
+        this.sampleAttributes = sampleAttributes.stream().collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
 
         organisms = new HashSet<>();
         organismPart = new HashSet<>();
         diseases  = new HashSet<>();
 
-        experimentalFactors.forEach(x -> {
+        sampleAttributes.forEach(x -> {
             if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM))
-               organisms.add(x.getValue().getName());
+                organisms.add(x.getValue().getName());
             else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM_PART))
                 organismPart.add(x.getValue().getName());
             else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_DISEASE))
                 diseases.add(x.getValue().getName());
             else
-                experimentalFactorFacets.add(x.getValue().getName());
+                sampleAttributesFacets.add(x.getValue().getName());
         });
-    }
-
-    /**
-     * Set the PTMs
-     * @param identifiedPTMStrings
-     */
-    public void setIdentifiedPTMStrings(Set<String> identifiedPTMStrings) {
-        this.identifiedPTMStrings = identifiedPTMStrings;
-        this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
     /**

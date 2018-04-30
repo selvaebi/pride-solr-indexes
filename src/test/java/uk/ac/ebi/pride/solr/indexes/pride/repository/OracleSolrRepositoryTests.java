@@ -12,13 +12,12 @@ import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
+import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
-import uk.ac.ebi.pride.archive.repo.project.Project;
-import uk.ac.ebi.pride.archive.repo.project.ProjectRepository;
-import uk.ac.ebi.pride.archive.repo.project.ProjectTag;
-import uk.ac.ebi.pride.archive.repo.project.Reference;
+import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
+import uk.ac.ebi.pride.archive.repo.project.*;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
@@ -26,10 +25,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -106,6 +102,14 @@ public class OracleSolrRepositoryTests {
             // References
             List<String> references = x.getReferences().stream().map(Reference::getReferenceLine).collect(Collectors.toList());
             solrProject.setReferences(new HashSet<>(references));
+
+            //Modifications
+            solrProject.setIdentifiedPTMStringsFromCvParam(x.getPtms().stream().map(xPTM -> new DefaultCvParam(xPTM.getCvLabel(), xPTM.getAccession(), xPTM.getName(), xPTM.getValue())).collect(Collectors.toList()));
+
+            //Set sample Attributes
+            List<Tuple<CvParamProvider, CvParamProvider>> cvTermsSample= new ArrayList<>();
+            Collection<ProjectSampleCvParam> samples = x.getSamples();
+            Collection<ParamProvider> terms = x.getParams();
 
             projects.add(solrProject);
         });

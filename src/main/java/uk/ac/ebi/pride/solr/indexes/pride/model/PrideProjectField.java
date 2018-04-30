@@ -78,6 +78,10 @@ public interface PrideProjectField {
     String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors_*";
     String EXPERIMENTAL_FACTORS_FACET = "experimental_factors_facet";
 
+    /** Sample metadata names and facet **/
+    String SAMPLE_ATTRIBUTES_NAMES = "sample_attributes_*";
+    String SAMPLE_ATTRIBUTES_FACET = "sample_attributes_facet";
+
     /** Species , cell types, tissues, diseases ***/
     String ORGANISMS = "organisms_facet";
     String ORGANISMS_PART = "organisms_part_facet";
@@ -98,6 +102,5 @@ public interface PrideProjectField {
     String PROJECT_IDENTIFIED_PTM_STRING_FACET = "project_identified_ptms_facet";
 
     String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
-
 
 }
