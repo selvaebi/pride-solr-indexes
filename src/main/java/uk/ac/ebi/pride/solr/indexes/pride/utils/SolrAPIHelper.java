@@ -211,7 +211,7 @@ public class SolrAPIHelper {
             String schemaFields = getSchemaByCollection(collection);
             for(PrideProjectFieldEnum fieldEnum: PrideProjectFieldEnum.values()){
                 if(!schemaFields.contains(fieldEnum.getValue())){
-                    String fieldType = (fieldEnum.getType() == ConstantsSolrTypes.DEFAULT)?"text":ConstantsSolrTypes.STRING.getType();
+                    String fieldType = fieldEnum.getType().getType();
                     if(addField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue())){
                         LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
                     }

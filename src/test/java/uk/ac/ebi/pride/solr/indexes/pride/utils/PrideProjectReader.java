@@ -120,11 +120,12 @@ public class PrideProjectReader {
 
 
         //Instruments properties
-        List<String> instrumentNames = submission.getProjectMetaData().getInstruments().stream().map(CvParam::getName).collect(Collectors.toList());
-        project.setInstrumentNames(instrumentNames);
-        List<String> instrumentIds = submission.getProjectMetaData().getInstruments().stream().map(CvParam::getAccession).collect(Collectors.toList());
-        project.setInstrumentIds(instrumentIds);
+        List<CvParamProvider> instruments = new ArrayList<>();
+        submission.getProjectMetaData().getInstruments().stream().forEach( x-> {
+            instruments.add(new DefaultCvParam(x.getCvLabel(), x.getAccession(), x.getName(), x.getValue()));
+        });
 
+        project.setInstrumentsFromCvParam(instruments);
         return project;
 
     }

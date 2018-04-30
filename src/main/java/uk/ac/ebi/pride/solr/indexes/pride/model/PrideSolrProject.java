@@ -134,6 +134,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** List of instruments Ids*/
     @Indexed(name = INSTRUMENTS, boost = 0.1f)
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     private List<String> instrumentNames;
 
     @Indexed(name = INSTRUMENTS_FACET)
@@ -142,6 +144,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private List<String> instrumentsFacet;
 
     @Indexed(name = INSTRUMENTS_IDS)
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     private List<String> instrumentIds;
 
     /** This field store all the countries associated with the experiment **/
@@ -273,18 +277,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * Set instruments from and instruments list
-     * @param instrumentNames
-     */
-    public void setInstrumentNames(List<String> instrumentNames) {
-        this.instrumentNames = instrumentNames;
-        this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
-    }
-
-    /**
-     * Set instruments from and instruments list
      * @param instrumentCvParams
      */
-    public void setInstrumentNamesFromCvParam(List<CvParamProvider> instrumentCvParams) {
+    public void setInstrumentsFromCvParam(List<CvParamProvider> instrumentCvParams) {
         this.instrumentNames = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.instrumentIds = instrumentCvParams.stream().map(CvParamProvider::getAccession).collect(Collectors.toList());
         this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());

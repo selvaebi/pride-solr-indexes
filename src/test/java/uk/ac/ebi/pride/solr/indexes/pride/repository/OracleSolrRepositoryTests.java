@@ -10,6 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
+import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
+import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
+import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
+import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
 import uk.ac.ebi.pride.archive.repo.project.Project;
 import uk.ac.ebi.pride.archive.repo.project.ProjectRepository;
 import uk.ac.ebi.pride.archive.repo.project.ProjectTag;
@@ -65,11 +70,32 @@ public class OracleSolrRepositoryTests {
             solrProject.setProjectDescription(x.getProjectDescription());
             solrProject.setDataProcessingProtocol(x.getDataProcessingProtocol());
             solrProject.setSampleProcessingProtocol(x.getSampleProcessingProtocol());
+
+            //Capture keywords
             solrProject.setKeywords(Arrays.asList(x.getKeywords().split(",")));
             solrProject.setProjectTags(x.getProjectTags().stream().map(ProjectTag::getTag).collect(Collectors.toList()));
+
+            //Capture datasets
             solrProject.setSubmissionDate(x.getSubmissionDate());
             solrProject.setPublicationDate(x.getPublicationDate());
             solrProject.setUpdatedDate(x.getUpdateDate());
+
+            // Affiliations
+            List<ContactProvider> contacts = new ArrayList<>();
+            x.getLabHeads().stream().forEach(contactX -> {
+                contacts.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", "")); }
+            );
+            contacts.add(new DefaultContact(TitleConstants.fromString(x.getSubmitter().getTitle().getTitle()), x.getSubmitter().getFirstName(), x.getSubmitter().getLastName(), x.getSubmitter().getId().toString(), x.getSubmitter().getAffiliation(),
+                    x.getSubmitter().getEmail(), "US", ""));
+
+            solrProject.setAffiliationsFromContacts(contacts);
+
+            List<CvParamProvider> instruments =  new ArrayList<>();
+            x.getInstruments().stream().forEach(instrumet -> {
+                instruments.add(new DefaultCvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue()));
+            });
+            solrProject.setInstrumentsFromCvParam(instruments);
+
             projects.add(solrProject);
         });
         repository.saveAll(projects);
