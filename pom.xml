@@ -118,7 +118,9 @@
                     <filtering>true</filtering>
                     <includes>
                         <include>*.properties</include>
+                        <include>*/*</include>
                     </includes>
+
             </testResource>
         </testResources>
         <plugins>

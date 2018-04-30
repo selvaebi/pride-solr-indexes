@@ -20,7 +20,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
  * @author ypriverol
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {SolrLocalhostTestConfiguration.class, ArchiveOracleConfig.class})
+@SpringBootTest(classes = SolrLocalhostTestConfiguration.class)
 public class BasicLocalhostRepositoryTests {
 
 	public static RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
@@ -29,7 +29,7 @@ public class BasicLocalhostRepositoryTests {
 	SolrProjectRepository repository;
 
 	@Autowired
-	ProjectRepository oracleRepository;
+
 
 
 	/** Finds all entries using a single request. */

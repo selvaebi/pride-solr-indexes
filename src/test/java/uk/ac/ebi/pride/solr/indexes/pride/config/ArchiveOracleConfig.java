@@ -42,7 +42,7 @@ public class ArchiveOracleConfig {
                 .build();
     }
 
-    @Bean(name = "jpaTransactionManager")
+    @Bean(name = "transactionManager")
     public JpaTransactionManager jpaTransactionManager(
             @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);

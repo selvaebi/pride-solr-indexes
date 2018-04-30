@@ -23,8 +23,8 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
@@ -35,7 +35,7 @@ import java.net.URISyntaxException;
 /**
  * @author ypriverol
  */
-@SpringBootApplication
+@Configuration
 @EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = false)
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
