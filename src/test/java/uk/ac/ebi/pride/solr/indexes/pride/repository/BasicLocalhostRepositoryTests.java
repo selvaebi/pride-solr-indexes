@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -61,7 +62,7 @@ public class BasicLocalhostRepositoryTests {
 	@Test
 	public void findProjectsByKeyFacet(){
 
-		FacetPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
+		FacetAndHighlightPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
 
 		// Print all the projects search
 		page.forEach( x-> {
@@ -76,7 +77,7 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void finadAllAndaFacet(){
-		FacetPage<PrideSolrProject> projects = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
+		FacetAndHighlightPage<PrideSolrProject> projects = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);

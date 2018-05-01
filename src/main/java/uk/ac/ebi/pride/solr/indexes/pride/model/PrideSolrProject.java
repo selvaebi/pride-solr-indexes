@@ -393,23 +393,24 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      *
      * @param sampleAttributes List of Experimental Factors.
      */
-    public void setSampleInfoFactors(List<Tuple<CvParamProvider, CvParamProvider>> sampleAttributes) {
+    public void setSampleAttributes(List<CvParamProvider> sampleAttributes) {
 
-        this.sampleAttributes = sampleAttributes.stream().collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
+        this.sampleAttributes = sampleAttributes.stream().collect(Collectors.groupingBy(CvParamProvider::getAccession, Collectors.mapping(ParamProvider::getName, Collectors.toList())));
+        this.sampleAttributesFacets = new ArrayList<>();
 
         organisms = new HashSet<>();
         organismPart = new HashSet<>();
         diseases  = new HashSet<>();
 
         sampleAttributes.forEach(x -> {
-            if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM))
-                organisms.add(x.getValue().getName());
-            else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_ORGANISM_PART))
-                organismPart.add(x.getValue().getName());
-            else if(StringUtils.isCvTerm(x.getKey(), CvTermReference.EFO_DISEASE))
-                diseases.add(x.getValue().getName());
+            if(StringUtils.isCvTerm(x.getAccession(), CvTermReference.EFO_ORGANISM))
+                organisms.add(x.getName());
+            else if(StringUtils.isCvTerm(x.getAccession(), CvTermReference.EFO_ORGANISM_PART))
+                organismPart.add(x.getName());
+            else if(StringUtils.isCvTerm(x.getAccession(), CvTermReference.EFO_DISEASE))
+                diseases.add(x.getName());
             else
-                sampleAttributesFacets.add(x.getValue().getName());
+                sampleAttributesFacets.add(x.getName());
         });
     }
 

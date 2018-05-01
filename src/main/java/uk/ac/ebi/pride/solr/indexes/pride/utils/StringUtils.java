@@ -30,4 +30,14 @@ public class StringUtils {
         return cvParam.getName().equalsIgnoreCase(cvTermReference.getName()) || cvParam.getAccession().equalsIgnoreCase(cvTermReference.getAccession());
     }
 
+    /**
+     * Compare a CvTerm with a Reference Term
+     * @param accession
+     * @param cvTermReference CvTerm Reference
+     * @return
+     */
+    public static boolean isCvTerm(String accession, CvTermReference cvTermReference){
+        return accession.equalsIgnoreCase(cvTermReference.getAccession());
+    }
+
 }

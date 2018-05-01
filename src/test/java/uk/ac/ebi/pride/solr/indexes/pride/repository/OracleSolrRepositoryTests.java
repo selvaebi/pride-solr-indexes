@@ -7,6 +7,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.solr.core.query.FacetAndHighlightQuery;
+import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -114,10 +116,9 @@ public class OracleSolrRepositoryTests {
             solrProject.addAdditionalAttributesFromCvParams(x.getExperimentTypes().stream().map(xType -> new DefaultCvParam(xType.getAccession(), xType.getName())).collect(Collectors.toList()));
             solrProject.addQuantificationMethodsFromCvParams(x.getQuantificationMethods().stream().map(xQuant -> new DefaultCvParam(xQuant.getAccession(), xQuant.getName())).collect(Collectors.toList()));
 
-            List<Tuple<CvParamProvider, CvParamProvider>> cvTermsSample= new ArrayList<>();
             Collection<ProjectSampleCvParam> samples = x.getSamples();
-            Collection<ParamProvider> terms = x.getParams();
 
+            solrProject.setSampleAttributes(samples.stream().map(xSample -> new DefaultCvParam(xSample.getAccession(), xSample.getName())).collect(Collectors.toList()));
             projects.add(solrProject);
         });
         repository.saveAll(projects);
@@ -152,7 +153,7 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findProjectsByKeyFacet(){
 
-        FacetPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
+        FacetAndHighlightPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
 
         // Print all the projects search
         page.forEach( x-> {
@@ -167,8 +168,8 @@ public class OracleSolrRepositoryTests {
 
     @Test
     public void finadAllAndaFacet(){
-        FacetPage<PrideSolrProject> projects = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
-        Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
+        FacetAndHighlightPage<PrideSolrProject> projects = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
+        Assert.assertEquals(((FacetAndHighlightPage) projects).getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
         Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
         Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);
     }
