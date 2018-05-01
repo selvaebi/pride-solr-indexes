@@ -17,6 +17,7 @@ public interface PrideProjectField {
 
     /** Additional Attributes Accessions **/
     String ADDITIONAL_ATTRIBUTES = "additional_attributes_*";
+    String ADDITIONAL_ATTRIBUTES_FACET = "additional_attributes_facet";
 
     /** Project Description **/
     String PROJECT_DESCRIPTION = "project_description";
@@ -65,12 +66,17 @@ public interface PrideProjectField {
     String AFFILIATIONS_FACET = "affiliations_facet";
 
     /** List of instruments Ids*/
-    String INSTRUMENTS = "instruments_names";
+    String INSTRUMENTS = "instruments_*";
     String INSTRUMENTS_FACET = "instruments_facet";
 
-    String INSTRUMENTS_IDS = "instruments_ids";
+    String SOFTWARES = "softwares_*";
+    String SOFTWARES_FACET = "softwares_facet";
 
-     /** This field store all the countries associated with the experiment **/
+    String QUANTIFICATION_METHODS = "quatification_methods*";
+    String QUANTIFICATION_METHODS_FACET = "quatification_methods_facet";
+
+
+    /** This field store all the countries associated with the experiment **/
      String COUNTRIES = "countries";
      String COUNTRIES_FACET = "countries_facet";
 

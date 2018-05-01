@@ -106,7 +106,14 @@ public class OracleSolrRepositoryTests {
             //Modifications
             solrProject.setIdentifiedPTMStringsFromCvParam(x.getPtms().stream().map(xPTM -> new DefaultCvParam(xPTM.getCvLabel(), xPTM.getAccession(), xPTM.getName(), xPTM.getValue())).collect(Collectors.toList()));
 
-            //Set sample Attributes
+            //Get software information
+            Collection<ProjectSoftwareCvParam> softwaresOld = x.getSoftware();
+            solrProject.setSoftwaresFromCvParam(softwaresOld.stream().map(xSoft -> new DefaultCvParam(xSoft.getAccession(), xSoft.getName())).collect(Collectors.toList()));
+
+            //Add Additional Attributes
+            solrProject.addAdditionalAttributesFromCvParams(x.getExperimentTypes().stream().map(xType -> new DefaultCvParam(xType.getAccession(), xType.getName())).collect(Collectors.toList()));
+            solrProject.addQuantificationMethodsFromCvParams(x.getQuantificationMethods().stream().map(xQuant -> new DefaultCvParam(xQuant.getAccession(), xQuant.getName())).collect(Collectors.toList()));
+
             List<Tuple<CvParamProvider, CvParamProvider>> cvTermsSample= new ArrayList<>();
             Collection<ProjectSampleCvParam> samples = x.getSamples();
             Collection<ParamProvider> terms = x.getParams();

@@ -48,8 +48,16 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Additional Attributes Identifiers **/
     @Dynamic
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     @Indexed(name = ADDITIONAL_ATTRIBUTES, boost = 0.4f)
-    private Map<String, String> additionalAttributes;
+    private Map<String, List<String>> additionalAttributes;
+
+    /** Additional Attributes Identifiers **/
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    @Indexed(name = ADDITIONAL_ATTRIBUTES_FACET, boost = 0.4f)
+    private Set<String> additionalAttributesFacet;
 
     /** Project Description **/
     @Indexed(name = PROJECT_DESCRIPTION, boost = 0.7f)
@@ -134,21 +142,42 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Setter(AccessLevel.PRIVATE)
     private Set<String> affiliationsFacet;
 
-    /** List of instruments Ids*/
+    /** List of instruments as key value pair*/
     @Indexed(name = INSTRUMENTS, boost = 0.1f)
+    @Dynamic
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private List<String> instrumentNames;
+    private Map<String, List<String>> instruments;
 
     @Indexed(name = INSTRUMENTS_FACET)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> instrumentsFacet;
 
-    @Indexed(name = INSTRUMENTS_IDS)
+    /** List of softwares as key value pair*/
+    @Indexed(name = SOFTWARES, boost = 0.1f)
+    @Dynamic
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private List<String> instrumentIds;
+    private Map<String, List<String>> softwares;
+
+    @Indexed(name = SOFTWARES_FACET)
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private Set<String> softwaresFacet;
+
+    /** List of quantification methods as key value pair*/
+    @Indexed(name = QUANTIFICATION_METHODS, boost = 0.1f)
+    @Dynamic
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private Map<String, List<String>> quantificationMethods;
+
+    @Indexed(name = QUANTIFICATION_METHODS_FACET)
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private Set<String> quantificationMethodsFacet;
+
 
     /** This field store all the countries associated with the experiment **/
     @Indexed(name = COUNTRIES, boost = 0.4f)
@@ -235,6 +264,51 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private Map<String, List<String>> highlights;
 
     /**
+     * This method set the list of additional attributes taking as a parameter a list of {@link CvParamProvider}
+     * @param params List of params
+     */
+    public void setAdditionalAttributesFromCvParams(List<CvParamProvider> params){
+        this.additionalAttributes = params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.additionalAttributesFacet = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+    }
+
+    /**
+     * This method add the to the current list of additional attributes the given list of Cvparams
+     * @param params List of params
+     */
+    public void addAdditionalAttributesFromCvParams(List<CvParamProvider> params){
+        if(additionalAttributes == null)
+            additionalAttributes = new HashMap<>();
+        this.additionalAttributes.putAll(params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList()))));
+        if(additionalAttributesFacet == null)
+            additionalAttributesFacet = new HashSet<>();
+        this.additionalAttributesFacet.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toSet()));
+    }
+
+
+    /**
+     * This method set the list of quantification methods taking as a parameter a list of {@link CvParamProvider}
+     * @param params List of params
+     */
+    public void setQuantificationMethodsFromCvParams(List<CvParamProvider> params){
+        this.quantificationMethods = params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.quantificationMethodsFacet = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+    }
+
+    /**
+     * This method add the to the current list of quantification methods the given list of Cvparams
+     * @param params List of params
+     */
+    public void addQuantificationMethodsFromCvParams(List<CvParamProvider> params){
+        if(quantificationMethods == null)
+            quantificationMethods = new HashMap<>();
+        this.quantificationMethods.putAll(params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList()))));
+        if(quantificationMethodsFacet == null)
+            quantificationMethodsFacet = new HashSet<>();
+        this.quantificationMethodsFacet.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toSet()));
+    }
+
+    /**
      * The implementation of the Project Tags is needed to set also the Facet values.
      * @param projectTags projectsTags
      */
@@ -270,15 +344,22 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.affiliationsFacet = this.affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
-
     /**
      * Set instruments from and instruments list
      * @param instrumentCvParams
      */
     public void setInstrumentsFromCvParam(List<CvParamProvider> instrumentCvParams) {
-        this.instrumentNames = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.instrumentIds = instrumentCvParams.stream().map(CvParamProvider::getAccession).collect(Collectors.toList());
-        this.instrumentsFacet = this.instrumentNames.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
+        this.instruments = instrumentCvParams.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.instrumentsFacet = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+    }
+
+    /**
+     * Set Softwares information
+     * @param softwares
+     */
+    public void setSoftwaresFromCvParam(List<CvParamProvider> softwares) {
+        this.softwares = softwares.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.softwaresFacet = softwares.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
     }
 
     /**
@@ -361,7 +442,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     public Collection<? extends ParamProvider> getAdditionalAttributes() {
         List<CvParamProvider> additionalCvParams = new ArrayList<>();
         if (additionalAttributes != null) {
-            additionalAttributes.forEach((key, value) -> additionalCvParams.add(new DefaultCvParam(key, value)));
+            additionalAttributes.forEach((key, value) -> {
+                value.forEach(valueIn ->additionalCvParams.add(new DefaultCvParam(key, valueIn)));
+            });
         }
         return additionalCvParams;
     }
@@ -421,10 +504,13 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     @Override
     public Collection<? extends CvParamProvider> getInstruments() {
-        List<CvParamProvider> instruments = new ArrayList<>();
-        for(int i = 0; i < instrumentNames.size(); i++)
-            instruments.add(new DefaultCvParam(instrumentIds.get(i), instrumentNames.get(i)));
-        return instruments;
+        List<CvParamProvider> instrumentsCvParams = new ArrayList<>();
+        if (instruments != null) {
+            instruments.forEach((key, value) -> {
+                value.forEach(valueIn ->instrumentsCvParams.add(new DefaultCvParam(key, valueIn)));
+            });
+        }
+        return instrumentsCvParams;
     }
 
     @Override

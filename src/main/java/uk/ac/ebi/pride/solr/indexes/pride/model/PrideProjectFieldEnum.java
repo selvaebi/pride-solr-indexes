@@ -14,7 +14,8 @@ public enum PrideProjectFieldEnum {
 
     ACCESSION(PrideProjectField.ACCESSION, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TILE(PrideProjectField.PROJECT_TILE, false, false, ConstantsSolrTypes.TEXT_GENERAL),
-    ADDITIONAL_ATTRIBUTES(PrideProjectField.ADDITIONAL_ATTRIBUTES, false, false, ConstantsSolrTypes.TEXT_GENERAL),
+    ADDITIONAL_ATTRIBUTES(PrideProjectField.ADDITIONAL_ATTRIBUTES, false, true, ConstantsSolrTypes.TEXT_GENERAL),
+    ADDITIONAL_ATTRIBUTES_FACET(PrideProjectField.ADDITIONAL_ATTRIBUTES_FACET, true, true, ConstantsSolrTypes.STRING),
     PROJECT_DESCRIPTION(PrideProjectField.PROJECT_DESCRIPTION, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_SAMPLE_PROTOCOL(PrideProjectField.PROJECT_SAMPLE_PROTOCOL, false ,false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_DATA_PROTOCOL(PrideProjectField.PROJECT_DATA_PROTOCOL, false, false, ConstantsSolrTypes.TEXT_GENERAL),
@@ -33,10 +34,15 @@ public enum PrideProjectFieldEnum {
     PROJECT_PI_NAMES_FACET(PrideProjectField.PROJECT_PI_NAMES_FACET, true, true, ConstantsSolrTypes.STRING),
     AFFILIATIONS(PrideProjectField.AFFILIATIONS, false ,true, ConstantsSolrTypes.DEFAULT),
     AFFILIATIONS_FACET(PrideProjectField.AFFILIATIONS_FACET, true, true, ConstantsSolrTypes.STRING),
-    INSTRUMENTS(PrideProjectField.INSTRUMENTS, false, false, ConstantsSolrTypes.DEFAULT ),
+    INSTRUMENTS(PrideProjectField.INSTRUMENTS, false, true, ConstantsSolrTypes.DEFAULT ),
     INSTRUMENTS_FACET(PrideProjectField.INSTRUMENTS_FACET, true, true, ConstantsSolrTypes.STRING),
+    SOFTWARES(PrideProjectField.SOFTWARES, false, true, ConstantsSolrTypes.DEFAULT ),
+    SOFTWARES_FACET(PrideProjectField.SOFTWARES_FACET, true, true, ConstantsSolrTypes.STRING),
+    QUANTIFICATION_METHOD(PrideProjectField.QUANTIFICATION_METHODS, false, true, ConstantsSolrTypes.DEFAULT ),
+    QUANTIFICATION_METHOD_FACET(PrideProjectField.QUANTIFICATION_METHODS_FACET, true, true, ConstantsSolrTypes.STRING),
     COUNTRIES(PrideProjectField.COUNTRIES, true, false, ConstantsSolrTypes.DEFAULT),
     COUNTRIES_FACET(PrideProjectField.COUNTRIES_FACET, true, true, ConstantsSolrTypes.STRING),
+
 
     EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     EXPERIMENTAL_FACTORS_FACET(PrideProjectField.EXPERIMENTAL_FACTORS_FACET, true, true, ConstantsSolrTypes.STRING ),
