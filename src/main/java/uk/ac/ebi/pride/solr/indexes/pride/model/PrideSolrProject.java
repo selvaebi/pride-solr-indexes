@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.solr.core.mapping.Dynamic;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 import org.springframework.data.solr.repository.Score;
@@ -47,11 +46,10 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private String title;
 
     /** Additional Attributes Identifiers **/
-    @Dynamic
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     @Indexed(name = ADDITIONAL_ATTRIBUTES, boost = 0.4f)
-    private Map<String, List<String>> additionalAttributes;
+    private List<String> additionalAttributes;
 
     /** Additional Attributes Identifiers **/
     @Setter(AccessLevel.NONE)
@@ -144,10 +142,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** List of instruments as key value pair*/
     @Indexed(name = INSTRUMENTS, boost = 0.1f)
-    @Dynamic
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private Map<String, List<String>> instruments;
+    private List<String> instruments;
 
     @Indexed(name = INSTRUMENTS_FACET)
     @Setter(AccessLevel.NONE)
@@ -156,10 +153,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** List of softwares as key value pair*/
     @Indexed(name = SOFTWARES, boost = 0.1f)
-    @Dynamic
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private Map<String, List<String>> softwares;
+    private List<String> softwares;
 
     @Indexed(name = SOFTWARES_FACET)
     @Setter(AccessLevel.NONE)
@@ -168,10 +164,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** List of quantification methods as key value pair*/
     @Indexed(name = QUANTIFICATION_METHODS, boost = 0.1f)
-    @Dynamic
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private Map<String, List<String>> quantificationMethods;
+    private List<String> quantificationMethods;
 
     @Indexed(name = QUANTIFICATION_METHODS_FACET)
     @Setter(AccessLevel.NONE)
@@ -189,10 +184,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private Set<String> allCountriesFacet;
 
     /** Experimental Factor Names **/
-    @Dynamic
     @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
     @Setter(AccessLevel.PRIVATE)
-    private Map<String, List<String>> experimentalFactors;
+    private List<String> experimentalFactors;
 
     /** All additional experimental factors **/
     @Indexed(name = EXPERIMENTAL_FACTORS_FACET)
@@ -201,10 +195,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     private List<String> experimentalFactorFacets;
 
     /** Sample attributes names **/
-    @Dynamic
     @Indexed(name = SAMPLE_ATTRIBUTES_NAMES, boost = 0.5f)
     @Setter(AccessLevel.PRIVATE)
-    private Map<String, List<String>> sampleAttributes;
+    private List<String> sampleAttributes;
 
     /** sample attributes facet **/
     @Indexed(name = SAMPLE_ATTRIBUTES_FACET)
@@ -268,7 +261,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param params List of params
      */
     public void setAdditionalAttributesFromCvParams(List<CvParamProvider> params){
-        this.additionalAttributes = params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.additionalAttributes = params.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.additionalAttributesFacet = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
     }
 
@@ -278,8 +271,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void addAdditionalAttributesFromCvParams(List<CvParamProvider> params){
         if(additionalAttributes == null)
-            additionalAttributes = new HashMap<>();
-        this.additionalAttributes.putAll(params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList()))));
+            additionalAttributes = new ArrayList<>();
+        this.additionalAttributes.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toList()));
         if(additionalAttributesFacet == null)
             additionalAttributesFacet = new HashSet<>();
         this.additionalAttributesFacet.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toSet()));
@@ -291,7 +284,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param params List of params
      */
     public void setQuantificationMethodsFromCvParams(List<CvParamProvider> params){
-        this.quantificationMethods = params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.quantificationMethods = params.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.quantificationMethodsFacet = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
     }
 
@@ -301,8 +294,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void addQuantificationMethodsFromCvParams(List<CvParamProvider> params){
         if(quantificationMethods == null)
-            quantificationMethods = new HashMap<>();
-        this.quantificationMethods.putAll(params.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList()))));
+            quantificationMethods = new ArrayList<>();
+        this.quantificationMethods.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toList()));
         if(quantificationMethodsFacet == null)
             quantificationMethodsFacet = new HashSet<>();
         this.quantificationMethodsFacet.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toSet()));
@@ -349,7 +342,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param instrumentCvParams
      */
     public void setInstrumentsFromCvParam(List<CvParamProvider> instrumentCvParams) {
-        this.instruments = instrumentCvParams.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.instruments = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.instrumentsFacet = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
     }
 
@@ -358,7 +351,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param softwares
      */
     public void setSoftwaresFromCvParam(List<CvParamProvider> softwares) {
-        this.softwares = softwares.stream().collect(Collectors.groupingBy(s -> s.getAccession(), Collectors.mapping(s -> s.getName(), Collectors.toList())));
+        this.softwares = softwares.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.softwaresFacet = softwares.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
     }
 
@@ -379,10 +372,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param experimentalFactors List of Experimental Factors.
      */
     public void setExperimentalFactors(List<Tuple<CvParamProvider, CvParamProvider>> experimentalFactors) {
-
-        this.experimentalFactors = experimentalFactors.stream()
-                .collect(Collectors.groupingBy(s -> s.getKey().getName(), Collectors.mapping(s -> s.getValue().getName(), Collectors.toList())));
-       experimentalFactorFacets = this.experimentalFactors.values().stream().flatMap(List::stream).collect(Collectors.toList());
+        this.experimentalFactors = experimentalFactors.stream().map(Tuple::getKey).map(CvParamProvider::getName).collect(Collectors.toList());
+        experimentalFactorFacets = this.experimentalFactors;
 
     }
 
@@ -395,7 +386,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void setSampleAttributes(List<CvParamProvider> sampleAttributes) {
 
-        this.sampleAttributes = sampleAttributes.stream().collect(Collectors.groupingBy(CvParamProvider::getAccession, Collectors.mapping(ParamProvider::getName, Collectors.toList())));
+        this.sampleAttributes = sampleAttributes.stream().map(CvParamProvider::getName).collect(Collectors.toList());
         this.sampleAttributesFacets = new ArrayList<>();
 
         organisms = new HashSet<>();
@@ -440,14 +431,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @return Collection of ParamProvider
      */
     @Override
-    public Collection<? extends ParamProvider> getAdditionalAttributes() {
-        List<CvParamProvider> additionalCvParams = new ArrayList<>();
-        if (additionalAttributes != null) {
-            additionalAttributes.forEach((key, value) -> {
-                value.forEach(valueIn ->additionalCvParams.add(new DefaultCvParam(key, valueIn)));
-            });
-        }
-        return additionalCvParams;
+    public Collection<? extends String> getAdditionalAttributes() {
+        return additionalAttributes;
     }
 
     /**
@@ -475,6 +460,16 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     }
 
     @Override
+    public Collection<? extends String> getSubmitters() {
+        return submitters;
+    }
+
+    @Override
+    public Collection<? extends String> getHeadLab() {
+        return labPIs;
+    }
+
+    @Override
     public Collection<? extends String> getKeywords() {
         return keywords;
     }
@@ -484,34 +479,24 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         return projectTags;
     }
 
-    /**
-     * The experiment types is better to store the information in List of terms rather
-     * than CVParams. In this implementation of solr the list is always EMPTY_LIST
-     * @return empty list
-     */
     @Override
-    public Collection<? extends CvParamProvider> getExperimentTypes() {
-        return Collections.emptyList();
+    public Collection<? extends String> getPtms() {
+        return null;
     }
 
     @Override
-    public Collection<? extends CvParamProvider> getPtms() {
-        return Collections.emptyList();
+    public Collection<? extends String> getInstruments() {
+        return instruments;
     }
 
-    /**
-     * Return the list of Instruments related with the project. The Project returns the information
-     * @return Collection of CvTerms
-     */
     @Override
-    public Collection<? extends CvParamProvider> getInstruments() {
-        List<CvParamProvider> instrumentsCvParams = new ArrayList<>();
-        if (instruments != null) {
-            instruments.forEach((key, value) -> {
-                value.forEach(valueIn ->instrumentsCvParams.add(new DefaultCvParam(key, valueIn)));
-            });
-        }
-        return instrumentsCvParams;
+    public Collection<? extends String> getSoftwares() {
+        return softwares;
+    }
+
+    @Override
+    public Collection<? extends String> getQuantificationMethods() {
+        return quantificationMethods;
     }
 
     @Override
@@ -549,61 +534,24 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         return updatedDate;
     }
 
-    @Override
-    public Collection<? extends String> getCountriesAsString(){
-        return allCountries;
-    }
-
-    /**
-     * The List of terms Experimental Factors Names
-     * @return Experimental factor names.
-     */
-    @Override
-    public Collection<? extends String> getExperimentalFactorNamesAsString(){
-        return experimentalFactors.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
-    }
-
-    /**
-     * Each Reference is Converted into an String and is added to a List
-     * @return List of references.
-     */
-    @Override
-    public Collection<? extends String> getReferencesAsString(){
-        return references;
-    }
 
     /** In the Solr implementation some of the {@link ProjectProvider} methods are returning empty Collections. This can be
      * extended in the future depending on Solr performance.
      * */
 
     @Override
-    public Map<? extends CvParamProvider, ? extends CvParamProvider> getExperimentalFactors() {
-        return Collections.emptyMap();
+    public Collection<? extends String> getExperimentalFactors() {
+        return experimentalFactors;
     }
 
     @Override
-    public Collection<? extends CvParamProvider> getSoftwares() {
-        return Collections.emptyList();
+    public Collection<? extends String> getCountries() {
+        return null;
     }
 
     @Override
-    public Collection<? extends CvParamProvider> getQuantificationMethods() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Collection<? extends ReferenceProvider> getReferences() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public <T extends ContactProvider> Optional<ContactProvider> getSubmitter() {
-        return Optional.empty();
-    }
-
-    @Override
-    public Collection<? extends ContactProvider> getHeadLab() {
-        return Collections.emptyList();
+    public Collection<? extends String> getAllAffiliations() {
+        return null;
     }
 
     public Set<String> getProteinIdentifications() {

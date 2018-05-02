@@ -16,7 +16,7 @@ public interface PrideProjectField {
      String PROJECT_TILE = "project_title";
 
     /** Additional Attributes Accessions **/
-    String ADDITIONAL_ATTRIBUTES = "additional_attributes_*";
+    String ADDITIONAL_ATTRIBUTES = "additional_attributes";
     String ADDITIONAL_ATTRIBUTES_FACET = "additional_attributes_facet";
 
     /** Project Description **/
@@ -66,13 +66,13 @@ public interface PrideProjectField {
     String AFFILIATIONS_FACET = "affiliations_facet";
 
     /** List of instruments Ids*/
-    String INSTRUMENTS = "instruments_*";
+    String INSTRUMENTS = "instruments";
     String INSTRUMENTS_FACET = "instruments_facet";
 
-    String SOFTWARES = "softwares_*";
+    String SOFTWARES = "softwares";
     String SOFTWARES_FACET = "softwares_facet";
 
-    String QUANTIFICATION_METHODS = "quatification_methods*";
+    String QUANTIFICATION_METHODS = "quantification_methods";
     String QUANTIFICATION_METHODS_FACET = "quatification_methods_facet";
 
 
@@ -81,11 +81,11 @@ public interface PrideProjectField {
      String COUNTRIES_FACET = "countries_facet";
 
     /** Experimental Factor Names **/
-    String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors_*";
+    String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors";
     String EXPERIMENTAL_FACTORS_FACET = "experimental_factors_facet";
 
     /** Sample metadata names and facet **/
-    String SAMPLE_ATTRIBUTES_NAMES = "sample_attributes_*";
+    String SAMPLE_ATTRIBUTES_NAMES = "sample_attributes";
     String SAMPLE_ATTRIBUTES_FACET = "sample_attributes_facet";
 
     /** Species , cell types, tissues, diseases ***/

@@ -11,7 +11,7 @@ public enum ConstantsSolrTypes {
     STRING("string"),
     TEXT_GENERAL("text_general"),
     DATE("pdate"),
-    DEFAULT("default");
+    DEFAULT("text_general");
 
     private final String type;
 

@@ -173,6 +173,35 @@ public class SolrAPIHelper {
     }
 
     /**
+     * This function add a dynamic field in the schema of a given collection. It can be use to refine and be sure that the collection
+     * has the proper Types in the  model.
+     * @param collection collection with the field
+     * @param fieldName field
+     * @param type type of the field
+     * @return True if the field has been change.
+     */
+    public boolean addDynamicField(String collection, String fieldName, String type, Boolean multiValue) throws IOException {
+
+        String hostQuery = String.format("%s/solr/%s/schema", config.getHostURL(), collection);
+        HttpPost httpost = new HttpPost(hostQuery);
+
+        String schemaQuery = String.format("{'add-dynamic-field':{'name':'%s', 'type':'%s', 'multiValued':'%s'}}", fieldName, type, multiValue.toString());
+        //passes the results to a string builder/entity
+        StringEntity se = new StringEntity(schemaQuery);
+        httpost.setEntity(se);
+        //sets a request header so the page receving the request
+        //will know what to do with it
+        httpost.setHeader("Accept", "application/json");
+        httpost.setHeader("Content-type", "application/json");
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(httpost);
+        String jsonString =EntityUtils.toString(response.getEntity());
+        LOGGER.debug(jsonString);
+        return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+    }
+
+    /**
      * Get the Schema for an specific collection
      * @param collection name of the collection
      * @return result the schema in Json String
@@ -212,8 +241,15 @@ public class SolrAPIHelper {
             for(PrideProjectFieldEnum fieldEnum: PrideProjectFieldEnum.values()){
                 if(!schemaFields.contains(fieldEnum.getValue())){
                     String fieldType = fieldEnum.getType().getType();
-                    if(addField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue())){
-                        LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
+                    boolean dynamic = fieldEnum.getDynamic();
+                    if(dynamic){
+                        if(addDynamicField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue())){
+                            LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
+                        }
+                    }else{
+                        if(addField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue())){
+                            LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
+                        }
                     }
                 }else{
                     boolean currentStatus = updateFieldType(collection, fieldEnum.getValue(), fieldEnum.getType().getType(), fieldEnum.getMultiValue());
