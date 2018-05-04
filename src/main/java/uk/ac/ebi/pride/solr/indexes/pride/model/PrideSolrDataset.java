@@ -9,11 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 import org.springframework.data.solr.repository.Score;
+import uk.ac.ebi.pride.archive.dataprovider.dataset.DatasetProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
-import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
-import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
-import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
-import uk.ac.ebi.pride.archive.dataprovider.reference.ReferenceProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
@@ -23,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
+ * The {@link PrideSolrDataset} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
  *   - Accession Array
  *   - Name Array
  * In some cases is relevant to add the parent Terms for the original terms into the search. For example in the Taxonomy or Instrument, it isi important to add to the Project the parent term.
@@ -34,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Data
 @SolrDocument(solrCoreName = PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME)
-public class PrideSolrProject implements ProjectProvider, PrideProjectField {
+public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
@@ -366,7 +363,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * Set Experimental Factors from the list of CVParams that are specify as a {@link Tuple}. The current
-     * function takes the {@link uk.ac.ebi.pride.utilities.term.CvTermReference} Organism, celltype and diseases
+     * function takes the {@link CvTermReference} Organism, celltype and diseases
      * for the facet.
      *
      * @param experimentalFactors List of Experimental Factors.
@@ -379,7 +376,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /**
      * Set sample Atributes from the list of CVParams that are specify as a {@link Tuple}. The current
-     * function takes the {@link uk.ac.ebi.pride.utilities.term.CvTermReference} Organism, celltype and diseases
+     * function takes the {@link CvTermReference} Organism, celltype and diseases
      * for the facet.
      *
      * @param sampleAttributes List of Experimental Factors.
@@ -535,7 +532,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     }
 
 
-    /** In the Solr implementation some of the {@link ProjectProvider} methods are returning empty Collections. This can be
+    /** In the Solr implementation some of the {@link DatasetProvider} methods are returning empty Collections. This can be
      * extended in the future depending on Solr performance.
      * */
 
@@ -583,7 +580,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PrideSolrProject that = (PrideSolrProject) o;
+        PrideSolrDataset that = (PrideSolrDataset) o;
 
         return accession != null ? accession.equals(that.accession) : that.accession == null;
     }
@@ -595,7 +592,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     @Override
     public String toString() {
-        return "PrideSolrProject{" +
+        return "PrideSolrDataset{" +
                 "accession='" + accession + '\'' +
                 ", title='" + title + '\'' +
                 '}';

@@ -21,13 +21,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.*;
+import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 /**
@@ -51,8 +52,8 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
 	@Override
-	public Cursor<PrideSolrProject> findAllUsingCursor() {
-		return solrTemplate.queryForCursor(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, new SimpleQuery("*:*").addSort(Sort.by("id")), PrideSolrProject.class);
+	public Cursor<PrideSolrDataset> findAllUsingCursor() {
+		return solrTemplate.queryForCursor(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, new SimpleQuery("*:*").addSort(Sort.by("id")), PrideSolrDataset.class);
 	}
 
 	/**
@@ -64,7 +65,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public HighlightPage<PrideSolrProject> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page) {
+	public HighlightPage<PrideSolrDataset> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page) {
 
 		PrideProjectFieldEnum field = PrideProjectFieldEnum.findKey(sortField);
 		if(field == null){
@@ -73,6 +74,6 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		}
 
 		Query query = new SimpleQuery(keyword).addSort(Sort.by(sortField));
-		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query , PrideSolrProject.class);
+		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query , PrideSolrDataset.class);
 	}
 }

@@ -10,7 +10,7 @@ import uk.ac.ebi.pride.data.io.SubmissionFileParser;
 import uk.ac.ebi.pride.data.model.Contact;
 import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 
@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 /**
- * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrProject}. This class is using the
+ * This class helps to read PRIDE projects from Files and convert them into {@link PrideSolrDataset}. This class is using the
  * PX Core library to read PX Submission Files.
  *
  * @author ypriverol
@@ -38,9 +38,9 @@ public class PrideProjectReader {
      * @param pxSubmissionFile Pride Submission File in PX
      * @return Pride Project
      */
-    public static PrideSolrProject read(File pxSubmissionFile){
+    public static PrideSolrDataset read(File pxSubmissionFile){
 
-        PrideSolrProject project = new PrideSolrProject();
+        PrideSolrDataset project = new PrideSolrDataset();
         try {
             Submission pxSubmission = SubmissionFileParser.parse(pxSubmissionFile);
             project = convertSubmissionToProject(pxSubmission);
@@ -56,8 +56,8 @@ public class PrideProjectReader {
      * @param submission PX submission file
      * @return Pride Solr  Project
      */
-    static PrideSolrProject convertSubmissionToProject(Submission submission){
-        PrideSolrProject project = new PrideSolrProject();
+    static PrideSolrDataset convertSubmissionToProject(Submission submission){
+        PrideSolrDataset project = new PrideSolrDataset();
 
         //Get accession, title, keywords, Data and Sample protocols
         project.setAccession(submission.getProjectMetaData().getResubmissionPxAccession());

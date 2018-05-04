@@ -55,11 +55,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
         </dependency>
@@ -84,6 +79,11 @@
         </dependency>
 
         <!-- tested with the previous ORACLE DB -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
@@ -140,6 +140,7 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <junitArtifactName>junit:junit</junitArtifactName>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
             <plugin>

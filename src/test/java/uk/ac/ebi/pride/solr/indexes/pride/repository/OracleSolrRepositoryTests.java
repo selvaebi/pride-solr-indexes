@@ -1,29 +1,24 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.solr.core.query.FacetAndHighlightQuery;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
-import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
-import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.archive.repo.project.*;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 import javax.annotation.PostConstruct;
@@ -62,9 +57,9 @@ public class OracleSolrRepositoryTests {
     }
 
     public void insertDatasetsFromOracle(){
-        List<PrideSolrProject> projects = new ArrayList<>();
+        List<PrideSolrDataset> projects = new ArrayList<>();
         oracleRepository.findAll().forEach(x -> {
-            PrideSolrProject solrProject = new PrideSolrProject();
+            PrideSolrDataset solrProject = new PrideSolrDataset();
             solrProject.setAccession(x.getAccession());
             solrProject.setTitle(x.getTitle());
             solrProject.setProjectDescription(x.getProjectDescription());
@@ -140,20 +135,20 @@ public class OracleSolrRepositoryTests {
     /** Find the dataset for specific accession **/
     @Test
     public void findByAccession(){
-        PrideSolrProject x = repository.findByAccession("PXD000001");
+        PrideSolrDataset x = repository.findByAccession("PXD000001");
         System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
     }
 
     @Test
     public void findProjectsByKey(){
-        HighlightPage<PrideSolrProject> page = repository.findByKeyword("*:*", null, PrideProjectField.ACCESSION, new PageRequest(1, 10));
+        HighlightPage<PrideSolrDataset> page = repository.findByKeyword("*:*", null, PrideProjectField.ACCESSION, new PageRequest(1, 10));
         page.forEach(System.out::println);
     }
 
     @Test
     public void findProjectsByKeyFacet(){
 
-        FacetAndHighlightPage<PrideSolrProject> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
+        FacetAndHighlightPage<PrideSolrDataset> page = repository.findAllWithFacetIgnoreCase(new PageRequest(0, 10));
 
         // Print all the projects search
         page.forEach( x-> {
@@ -168,7 +163,7 @@ public class OracleSolrRepositoryTests {
 
     @Test
     public void finadAllAndaFacet(){
-        FacetAndHighlightPage<PrideSolrProject> projects = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
+        FacetAndHighlightPage<PrideSolrDataset> projects = repository.findAllWithFacetIgnoreCase(new PageRequest(1, 10));
         Assert.assertEquals(((FacetAndHighlightPage) projects).getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
         Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
         Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);

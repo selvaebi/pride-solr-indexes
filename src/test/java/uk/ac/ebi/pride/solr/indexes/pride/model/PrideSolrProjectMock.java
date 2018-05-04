@@ -14,7 +14,7 @@ public class PrideSolrProjectMock {
     @Test
     public void prideSolrMock(){
 
-        PrideSolrProject mockPrideSolrProject = Mockito.mock(PrideSolrProject.class);
+        PrideSolrDataset mockPrideSolrProject = Mockito.mock(PrideSolrDataset.class);
         System.out.println(mockPrideSolrProject);
     }
 

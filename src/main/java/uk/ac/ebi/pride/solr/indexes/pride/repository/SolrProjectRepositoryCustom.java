@@ -21,7 +21,7 @@ import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
 
 /**
  * Custom repository implementation to show special solr functions without {@link Repository} abstraction.
@@ -36,9 +36,9 @@ interface SolrProjectRepositoryCustom {
 	 *
 	 * @return
 	 */
-	Cursor<PrideSolrProject> findAllUsingCursor();
+	Cursor<PrideSolrDataset> findAllUsingCursor();
 
 	@Highlight(fragsize = 20, snipplets = 3)
-	HighlightPage<PrideSolrProject> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page);
+	HighlightPage<PrideSolrDataset> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page);
 
 }
