@@ -204,19 +204,16 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
 
     /** Organisms **/
     @Indexed(name = ORGANISMS)
-    @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organisms;
 
     /** organism parts **/
     @Indexed(name = ORGANISMS_PART)
-    @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organismPart;
 
     /** diseases **/
     @Indexed(name = DISEASES)
-    @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases;
 
@@ -428,7 +425,7 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
      * @return Collection of ParamProvider
      */
     @Override
-    public Collection<? extends String> getAdditionalAttributes() {
+    public Collection<String> getAdditionalAttributes() {
         return additionalAttributes;
     }
 
@@ -457,42 +454,42 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
     }
 
     @Override
-    public Collection<? extends String> getSubmitters() {
+    public Collection<String> getSubmitters() {
         return submitters;
     }
 
     @Override
-    public Collection<? extends String> getHeadLab() {
+    public Collection<String> getHeadLab() {
         return labPIs;
     }
 
     @Override
-    public Collection<? extends String> getKeywords() {
+    public Collection<String> getKeywords() {
         return keywords;
     }
 
     @Override
-    public Collection<? extends String> getProjectTags() {
+    public Collection<String> getProjectTags() {
         return projectTags;
     }
 
     @Override
-    public Collection<? extends String> getPtms() {
+    public Collection<String> getPtms() {
         return null;
     }
 
     @Override
-    public Collection<? extends String> getInstruments() {
+    public Collection<String> getInstruments() {
         return instruments;
     }
 
     @Override
-    public Collection<? extends String> getSoftwares() {
+    public Collection<String> getSoftwares() {
         return softwares;
     }
 
     @Override
-    public Collection<? extends String> getQuantificationMethods() {
+    public Collection<String> getQuantificationMethods() {
         return quantificationMethods;
     }
 
@@ -502,7 +499,7 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
     }
 
     @Override
-    public Collection<? extends String> getOtherOmicsLink() {
+    public Collection<String> getOtherOmicsLink() {
         return otherOmicsLinks;
     }
 
@@ -537,17 +534,17 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
      * */
 
     @Override
-    public Collection<? extends String> getExperimentalFactors() {
+    public Collection<String> getExperimentalFactors() {
         return experimentalFactors;
     }
 
     @Override
-    public Collection<? extends String> getCountries() {
+    public Collection<String> getCountries() {
         return null;
     }
 
     @Override
-    public Collection<? extends String> getAllAffiliations() {
+    public Collection<String> getAllAffiliations() {
         return null;
     }
 
