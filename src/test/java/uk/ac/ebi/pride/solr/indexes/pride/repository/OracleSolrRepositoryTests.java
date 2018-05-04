@@ -123,7 +123,6 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findAll() {
         repository.findAll().forEach(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
-
     }
 
     /** Finds all entries using a single request by Cursor */

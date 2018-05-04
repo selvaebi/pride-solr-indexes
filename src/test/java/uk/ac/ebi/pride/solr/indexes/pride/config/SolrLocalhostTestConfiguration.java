@@ -51,14 +51,6 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 	}
 
 	/**
-	 * Remove test data when context is shut down.
-	 */
-	@PreDestroy
-	public void deleteDocumentsOnShutdown() {
-		repo.deleteAll();
-	}
-
-	/**
 	 * Initialize Solr instance with test data once context has started.
 	 */
 	@PostConstruct
