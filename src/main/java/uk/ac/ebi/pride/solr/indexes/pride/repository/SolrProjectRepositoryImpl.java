@@ -21,9 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.Query;
-import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.Cursor;
+import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
@@ -75,5 +75,15 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 
 		Query query = new SimpleQuery(keyword).addSort(Sort.by(sortField));
 		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query , PrideSolrDataset.class);
+	}
+
+	@Override
+	public FacetPage<PrideSolrDataset> findAllFacetIgnoreCase(Pageable pageRequest) {
+		FacetOptions facets = new FacetOptions().setPageable(pageRequest);
+		for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values())
+			if(field.getFacet())
+				facets.addFacetOnField(field.getValue());
+		FacetQuery query = new SimpleFacetQuery(new SimpleStringCriteria("*:*")).setFacetOptions(facets);
+		return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query, PrideSolrDataset.class);
 	}
 }
