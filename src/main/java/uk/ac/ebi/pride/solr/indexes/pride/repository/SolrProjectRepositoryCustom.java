@@ -24,6 +24,8 @@ import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
+import java.util.List;
+
 /**
  * Custom repository implementation to show special solr functions without {@link Repository} abstraction.
  *
@@ -40,10 +42,10 @@ interface SolrProjectRepositoryCustom {
 	public Cursor<PrideSolrProject> findAllUsingCursor();
 
 	@Highlight(fragsize = 20, snipplets = 3)
-	public HighlightPage<PrideSolrProject> findByKeyword(Query query, Pageable page);
+	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, Pageable page);
 
 	/**
-	 * Find all datasets with Facets
+	 * Find all Projects with Facets
 	 * @param pageRequest
 	 * @return
 	 */

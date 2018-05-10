@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
+import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
@@ -42,8 +43,10 @@ public class OracleSolrRepositoryTests {
 
     @PostConstruct
     public void setTest(){
-        repository.deleteAll();
-        insertDatasetsFromOracle();
+        if(!repository.findAll().iterator().hasNext()){
+            repository.deleteAll();
+            insertDatasetsFromOracle();
+        }
     }
 
     public void insertDatasetsFromOracle(){
@@ -112,7 +115,9 @@ public class OracleSolrRepositoryTests {
     /** Finds all entries using a single request. */
     @Test
     public void findAll() {
-        repository.findAll().forEach(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
+        repository.findAll().forEach(x -> {
+            System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
+        });
     }
 
     /** Finds all entries using a single request by Cursor */
@@ -130,8 +135,10 @@ public class OracleSolrRepositoryTests {
 
     @Test
     public void findProjectsByKey(){
-//        HighlightPage<PrideSolrProject> page = repository.findByKeyword("*:*", null, PrideProjectField.ACCESSION, new PageRequest(1, 10));
-//        page.forEach(System.out::println);
+        HighlightPage<PrideSolrProject> page = repository.findByKeyword(Arrays.asList("PRD", "PXD"), new PageRequest(1, 10));
+        page.forEach(x -> {
+            System.out.println(x);
+        });
     }
 
     @Test

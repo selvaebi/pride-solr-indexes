@@ -28,9 +28,11 @@ import org.springframework.data.solr.core.query.result.HighlightPage;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Implementation of {@link SolrProjectRepositoryCustom}.
@@ -63,28 +65,18 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public HighlightPage<PrideSolrProject> findByKeyword(Query simpleQuery, Pageable page) {
-		HighlightQuery highlightQuery = new SimpleHighlightQuery();
+	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, Pageable page) {
+		HighlightQuery highlightQuery = QueryBuilder.prideProjectQueryBuild(keywords);
 		highlightQuery.setPageRequest(page);
 
-		simpleQuery.getFilterQueries().stream().forEach( x-> highlightQuery.addFilterQuery(x));
-
-        Criteria queryCriteria = simpleQuery.getCriteria();
-        if(queryCriteria.getField() == null){
-            queryCriteria = new SimpleStringCriteria(queryCriteria.toString()).and(PrideProjectFieldEnum.PROJECT_TILE.getValue());
-        }
-
-		highlightQuery.addCriteria(queryCriteria);
 		HighlightOptions highlightOptions = new HighlightOptions();
         Arrays.asList(PrideProjectFieldEnum.values()).forEach(x-> highlightOptions.addField(x.getValue()));
         highlightQuery.setHighlightOptions(highlightOptions);
 
-        if(simpleQuery.getSort() == null)
+        if(highlightQuery.getSort() == null)
 		    highlightQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
-        assert queryCriteria != null;
-        highlightQuery.addCriteria(queryCriteria);
 
-		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, simpleQuery , PrideSolrProject.class);
+		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, highlightQuery , PrideSolrProject.class);
 	}
 
 	@Override
