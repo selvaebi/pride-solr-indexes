@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 import org.springframework.data.solr.repository.Score;
-import uk.ac.ebi.pride.archive.dataprovider.dataset.DatasetProvider;
+import uk.ac.ebi.pride.archive.dataprovider.dataset.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * The {@link PrideSolrDataset} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
+ * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
  *   - Accession Array
  *   - Name Array
  * In some cases is relevant to add the parent Terms for the original terms into the search. For example in the Taxonomy or Instrument, it isi important to add to the Project the parent term.
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Data
 @SolrDocument(solrCoreName = PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME)
-public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
+public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
     @Id
@@ -529,7 +529,7 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
     }
 
 
-    /** In the Solr implementation some of the {@link DatasetProvider} methods are returning empty Collections. This can be
+    /** In the Solr implementation some of the {@link ProjectProvider} methods are returning empty Collections. This can be
      * extended in the future depending on Solr performance.
      * */
 
@@ -577,7 +577,7 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        PrideSolrDataset that = (PrideSolrDataset) o;
+        PrideSolrProject that = (PrideSolrProject) o;
 
         return accession != null ? accession.equals(that.accession) : that.accession == null;
     }
@@ -589,7 +589,7 @@ public class PrideSolrDataset implements DatasetProvider, PrideProjectField {
 
     @Override
     public String toString() {
-        return "PrideSolrDataset{" +
+        return "PrideSolrProject{" +
                 "accession='" + accession + '\'' +
                 ", title='" + title + '\'' +
                 '}';

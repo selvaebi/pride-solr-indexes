@@ -21,7 +21,7 @@ public enum PrideProjectFieldEnum {
     PROJECT_DATA_PROTOCOL(PrideProjectField.PROJECT_DATA_PROTOCOL, false, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TAGS(PrideProjectField.PROJECT_TAGS, false , true, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TAGS_FACET(PrideProjectField.PROJECT_TAGS_FACET, true , true, false, ConstantsSolrTypes.STRING),
-    PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, true, true, false, ConstantsSolrTypes.TEXT_GENERAL),
+    PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, false, true, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_KEYWORDS_FACET(PrideProjectField.PROJECT_KEYWORDS_FACET, true, true, false, ConstantsSolrTypes.STRING),
     PROJECT_DOI(PrideProjectField.PROJECT_DOI, false, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_OMICS_LINKS(PrideProjectField.PROJECT_OMICS_LINKS, false, false, false, ConstantsSolrTypes.TEXT_GENERAL ),
@@ -40,7 +40,7 @@ public enum PrideProjectFieldEnum {
     SOFTWARES_FACET(PrideProjectField.SOFTWARES_FACET, true, true, false, ConstantsSolrTypes.STRING),
     QUANTIFICATION_METHOD(PrideProjectField.QUANTIFICATION_METHODS, false, true, false, ConstantsSolrTypes.TEXT_GENERAL ),
     QUANTIFICATION_METHOD_FACET(PrideProjectField.QUANTIFICATION_METHODS_FACET, true, true, false, ConstantsSolrTypes.STRING),
-    COUNTRIES(PrideProjectField.COUNTRIES, true, false, false, ConstantsSolrTypes.TEXT_GENERAL),
+    COUNTRIES(PrideProjectField.COUNTRIES, false, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     COUNTRIES_FACET(PrideProjectField.COUNTRIES_FACET, true, true, false, ConstantsSolrTypes.STRING),
 
     SAMPLE_ATTRIBUTES_NAMES(PrideProjectField.SAMPLE_ATTRIBUTES_NAMES, false, true, false, ConstantsSolrTypes.TEXT_GENERAL ),

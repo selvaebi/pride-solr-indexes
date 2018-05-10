@@ -25,11 +25,12 @@ import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
+
+import java.util.Arrays;
 
 /**
  * Implementation of {@link SolrProjectRepositoryCustom}.
@@ -52,38 +53,47 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
 	@Override
-	public Cursor<PrideSolrDataset> findAllUsingCursor() {
-		return solrTemplate.queryForCursor(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, new SimpleQuery("*:*").addSort(Sort.by("id")), PrideSolrDataset.class);
+	public Cursor<PrideSolrProject> findAllUsingCursor() {
+		return solrTemplate.queryForCursor(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, new SimpleQuery("*:*").addSort(Sort.by("id")), PrideSolrProject.class);
 	}
 
 	/**
 	 * This method will search Pride projects using the keywords defined by pride and will filter but only a set of fields
-	 *
-	 * @param keyword
-	 * @param sortField
 	 * @param page
 	 * @return
 	 */
 	@Override
-	public HighlightPage<PrideSolrDataset> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page) {
+	public HighlightPage<PrideSolrProject> findByKeyword(Query simpleQuery, Pageable page) {
+		HighlightQuery highlightQuery = new SimpleHighlightQuery();
+		highlightQuery.setPageRequest(page);
 
-		PrideProjectFieldEnum field = PrideProjectFieldEnum.findKey(sortField);
-		if(field == null){
-			LOGGER.warn("The following field for sorting ids not found -- " + sortField + " Accession will be use by Default");
-			sortField = PrideProjectFieldEnum.ACCESSION.getValue();
-		}
+		simpleQuery.getFilterQueries().stream().forEach( x-> highlightQuery.addFilterQuery(x));
 
-		Query query = new SimpleQuery(keyword).addSort(Sort.by(sortField));
-		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query , PrideSolrDataset.class);
+        Criteria queryCriteria = simpleQuery.getCriteria();
+        if(queryCriteria.getField() == null){
+            queryCriteria = new SimpleStringCriteria(queryCriteria.toString()).and(PrideProjectFieldEnum.PROJECT_TILE.getValue());
+        }
+
+		highlightQuery.addCriteria(queryCriteria);
+		HighlightOptions highlightOptions = new HighlightOptions();
+        Arrays.asList(PrideProjectFieldEnum.values()).forEach(x-> highlightOptions.addField(x.getValue()));
+        highlightQuery.setHighlightOptions(highlightOptions);
+
+        if(simpleQuery.getSort() == null)
+		    highlightQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
+        assert queryCriteria != null;
+        highlightQuery.addCriteria(queryCriteria);
+
+		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, simpleQuery , PrideSolrProject.class);
 	}
 
 	@Override
-	public FacetPage<PrideSolrDataset> findAllFacetIgnoreCase(Pageable pageRequest) {
+	public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest) {
 		FacetOptions facets = new FacetOptions().setPageable(pageRequest);
 		for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values())
 			if(field.getFacet())
 				facets.addFacetOnField(field.getValue());
 		FacetQuery query = new SimpleFacetQuery(new SimpleStringCriteria("*:*")).setFacetOptions(facets);
-		return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query, PrideSolrDataset.class);
+		return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query, PrideSolrProject.class);
 	}
 }

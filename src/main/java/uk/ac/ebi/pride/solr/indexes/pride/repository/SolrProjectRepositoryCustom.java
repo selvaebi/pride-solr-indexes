@@ -17,14 +17,12 @@ package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.solr.core.query.Query;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
-import org.springframework.data.solr.repository.Facet;
 import org.springframework.data.solr.repository.Highlight;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 /**
  * Custom repository implementation to show special solr functions without {@link Repository} abstraction.
@@ -39,16 +37,16 @@ interface SolrProjectRepositoryCustom {
 	 *
 	 * @return
 	 */
-	public Cursor<PrideSolrDataset> findAllUsingCursor();
+	public Cursor<PrideSolrProject> findAllUsingCursor();
 
 	@Highlight(fragsize = 20, snipplets = 3)
-	public HighlightPage<PrideSolrDataset> findByKeyword(String keyword, Tuple<String, String> filters, String sortField, Pageable page);
+	public HighlightPage<PrideSolrProject> findByKeyword(Query query, Pageable page);
 
 	/**
 	 * Find all datasets with Facets
 	 * @param pageRequest
 	 * @return
 	 */
-	public FacetPage<PrideSolrDataset> findAllFacetIgnoreCase(Pageable pageRequest);
+	public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest);
 
 }

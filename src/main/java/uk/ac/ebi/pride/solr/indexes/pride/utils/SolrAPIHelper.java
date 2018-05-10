@@ -13,6 +13,10 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  This class is a API helper for Solr API to enable delete/create/update delete of Collections.
@@ -257,10 +261,49 @@ public class SolrAPIHelper {
                     }
                 }
             }
+
+            // Add to facets the facet fields
+            List<String> facetFields = new ArrayList<>();
+            Arrays.asList(PrideProjectFieldEnum.values()).stream().filter(PrideProjectFieldEnum::getFacet).forEach(x -> facetFields.add(x.getValue()));
+            return addFacetToConfig(collection, facetFields);
+
         }catch (IOException e){
             LOGGER.error(e.getMessage());
         }
         return true;
+    }
+
+    /**
+     * This function add a set of fields as facets by default in your collection
+     * @param collection
+     * @param fields
+     * @return
+     */
+    public boolean addFacetToConfig(String collection, List<String> fields) throws IOException {
+        String hostQuery = String.format("%s/solr/%s/config/params", config.getHostURL(), collection);
+        HttpPost httpost = new HttpPost(hostQuery);
+
+        StringBuilder fieldNameBuilder = new StringBuilder();
+        if(fields != null && !fields.isEmpty())
+            fields.forEach(x -> fieldNameBuilder.append("'" + x + "'").append(","));
+        String fieldName = fieldNameBuilder.substring(0, fieldNameBuilder.length()-1);
+
+        String configQuery = String.format("{'update':{'facets':{'facet.field':[%s]}}}", fieldName);
+
+        //passes the results to a string builder/entity
+        StringEntity se = new StringEntity(configQuery);
+        httpost.setEntity(se);
+        //sets a request header so the page receving the request
+        //will know what to do with it
+        httpost.setHeader("Accept", "application/json");
+        httpost.setHeader("Content-type", "application/json");
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(httpost);
+        String jsonString =EntityUtils.toString(response.getEntity());
+        LOGGER.debug(jsonString);
+        return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+
     }
 
 

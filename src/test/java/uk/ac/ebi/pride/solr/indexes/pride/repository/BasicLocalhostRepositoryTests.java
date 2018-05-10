@@ -6,13 +6,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.solr.core.query.result.FacetPage;
-import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrDataset;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 /**
@@ -47,20 +45,20 @@ public class BasicLocalhostRepositoryTests {
 	/** Find the dataset for specific accession **/
 	@Test
 	public void findByAccession(){
-		PrideSolrDataset x = repository.findByAccession("PXD000001");
+		PrideSolrProject x = repository.findByAccession("PXD000001");
 		System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
 	}
 
 	@Test
 	public void findProjectsByKey(){
-		HighlightPage<PrideSolrDataset> page = repository.findByKeyword("*:*", null, PrideProjectField.ACCESSION, new PageRequest(1, 10));
-		page.forEach(System.out::println);
+//		HighlightPage<PrideSolrProject> page = repository.findByKeyword("*:*", null, PrideProjectField.ACCESSION, new PageRequest(1, 10));
+//		page.forEach(System.out::println);
 	}
 
 	@Test
 	public void findProjectsByKeyFacet(){
 
-		FacetPage<PrideSolrDataset> page = repository.findAllFacetIgnoreCase(new PageRequest(0, 10));
+		FacetPage<PrideSolrProject> page = repository.findAllFacetIgnoreCase(new PageRequest(0, 10));
 
 		// Print all the projects search
 		page.forEach( x-> {
@@ -75,7 +73,7 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void finadAllAndaFacet(){
-		FacetPage<PrideSolrDataset> projects = repository.findAllFacetIgnoreCase(new PageRequest(1, 10));
+		FacetPage<PrideSolrProject> projects = repository.findAllFacetIgnoreCase(new PageRequest(1, 10));
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);
