@@ -25,6 +25,7 @@ import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
+import org.springframework.data.solr.repository.Highlight;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -70,13 +71,15 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		highlightQuery.setPageRequest(page);
 
 		HighlightOptions highlightOptions = new HighlightOptions();
-        Arrays.asList(PrideProjectFieldEnum.values()).forEach(x-> highlightOptions.addField(x.getValue()));
+        Arrays.stream(PrideProjectFieldEnum.values()).filter(PrideProjectFieldEnum::getHighlight).forEach(x-> highlightOptions.addField(x.getValue()));
+		highlightOptions.setFragsize(10);
         highlightQuery.setHighlightOptions(highlightOptions);
+
 
         if(highlightQuery.getSort() == null)
 		    highlightQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
 
-		return solrTemplate.query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, highlightQuery , PrideSolrProject.class);
+		return solrTemplate.queryForHighlightPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, highlightQuery , PrideSolrProject.class);
 	}
 
 	@Override

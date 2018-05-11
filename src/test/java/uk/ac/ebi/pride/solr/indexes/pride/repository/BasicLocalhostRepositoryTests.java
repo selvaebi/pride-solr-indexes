@@ -15,6 +15,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * @author ypriverol
@@ -54,7 +55,7 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void findProjectsByKey(){
-		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Arrays.asList("proteome", "PXD"), new PageRequest(1, 10));
+		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Collections.singletonList("PXD"), new PageRequest(1, 10));
     	page.forEach(System.out::println);
 	}
 

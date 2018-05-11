@@ -34,7 +34,10 @@ import java.util.stream.Collectors;
 public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
+
     @Id
+    String id;
+
     @Indexed(name = ACCESSION, boost = 1.0f, required = true)
     private String accession;
 
