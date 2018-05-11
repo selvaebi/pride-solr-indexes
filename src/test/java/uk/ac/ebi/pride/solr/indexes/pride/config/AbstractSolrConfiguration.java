@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.solr.core.SolrTemplate;
-import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
+import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideProjectReader;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class AbstractSolrConfiguration {
      *
      * @param repository to insert the data
      */
-    protected void doInitTestData(SolrProjectRepository repository, String ... filePaths) {
+    protected void doInitTestData(SolrProjectService repository, String ... filePaths) {
         Lists.newArrayList(filePaths).stream().forEach(x -> repository.save(PrideProjectReader.read(new File(x))));
     }
 
@@ -45,7 +45,7 @@ public class AbstractSolrConfiguration {
      * This function helps to clean all.
      * @param repository
      */
-    protected void deleteAllData(CrudRepository<SolrProjectRepository, String> repository){
+    protected void deleteAllData(CrudRepository<SolrProjectService, String> repository){
         repository.deleteAll();
     }
 

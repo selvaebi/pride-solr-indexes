@@ -22,6 +22,7 @@ import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.util.List;
@@ -50,5 +51,4 @@ interface SolrProjectRepositoryCustom {
 	 * @return
 	 */
 	public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest);
-
 }

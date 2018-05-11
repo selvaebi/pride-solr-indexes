@@ -414,7 +414,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Return the accession for the Project **/
     @Override
     public Comparable getId() {
-        return accession;
+        return id;
     }
 
     /** Get the title of the project **/

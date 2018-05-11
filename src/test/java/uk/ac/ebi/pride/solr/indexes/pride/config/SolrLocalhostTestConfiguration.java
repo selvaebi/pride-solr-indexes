@@ -17,17 +17,17 @@ package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
+import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -37,10 +37,11 @@ import java.net.URISyntaxException;
  */
 @Configuration
 @EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = false)
+@ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.services")
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired
-	SolrProjectRepository repo;
+	SolrProjectService projectService;
 
 	/** LOGGER to trace all the error and messages **/
 	static Logger LOGGER = LoggerFactory.getLogger(SolrLocalhostTestConfiguration.class);
@@ -55,13 +56,13 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 	 */
 	@PostConstruct
 	public void initWithTestData() {
-		if(!repo.findAll().iterator().hasNext()){
-			repo.deleteAll(); // This needs to be added here to avoid
+		if(!projectService.findAll().iterator().hasNext()){
+			projectService.deleteAll(); // This needs to be added here to avoid
 			try{
 				String filePathOne = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-one.px").toURI()).getAbsolutePath();
 				String filePathTwo = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-two.px").toURI()).getAbsolutePath();
 				String filePathThree = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-three.px").toURI()).getAbsolutePath();
-				doInitTestData(repo, filePathOne, filePathTwo, filePathThree);
+				doInitTestData(projectService, filePathOne, filePathTwo, filePathThree);
 			}catch (URISyntaxException e){
 				/** LOGGER to trace all the error and meessages **/
 				LOGGER.error("The provided files for testing are wrong -- " + e.getMessage(), e);

@@ -36,7 +36,7 @@ public class ArchiveOracleConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("dataSourceOracle") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("uk.ac.ebi.pride.archive.repo")
+                .packages("uk.ac.ebi.pride.archive.projectService")
                 .persistenceUnit("Project")
                 .persistenceUnit("ProjectFile")
                 .build();

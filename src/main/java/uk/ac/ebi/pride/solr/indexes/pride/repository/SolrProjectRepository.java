@@ -46,4 +46,6 @@ public interface SolrProjectRepository extends SolrProjectRepositoryCustom, Crud
     @Query(value = "*:*")
     Page<PrideSolrProject> findAllIgnoreCase(Pageable pageable);
 
+
+
 }
