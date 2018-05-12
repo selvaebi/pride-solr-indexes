@@ -5,10 +5,12 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateExceptionTranslator;
@@ -22,7 +24,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"uk.ac.ebi.pride.archive.repo"})
+@EnableJpaRepositories(basePackages = {"uk.ac.ebi.pride.archive.repo.repos"})
+@ComponentScan(basePackages = "uk.ac.ebi.pride.archive.repo.services")
 @TestPropertySource(locations = "classpath:application.properties")
 public class ArchiveOracleConfig {
 
@@ -36,9 +39,7 @@ public class ArchiveOracleConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("dataSourceOracle") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("uk.ac.ebi.pride.archive.projectService")
-                .persistenceUnit("Project")
-                .persistenceUnit("ProjectFile")
+                .packages("uk.ac.ebi.pride.archive.repo.repos", "uk.ac.ebi.pride.archive.repo.services")
                 .build();
     }
 

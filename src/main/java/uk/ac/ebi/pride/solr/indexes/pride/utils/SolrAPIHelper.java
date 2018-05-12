@@ -264,7 +264,8 @@ public class SolrAPIHelper {
 
             // Add to facets the facet fields
             List<String> facetFields = new ArrayList<>();
-            Arrays.asList(PrideProjectFieldEnum.values()).stream().filter(PrideProjectFieldEnum::getFacet).forEach(x -> facetFields.add(x.getValue()));
+            Arrays.stream(PrideProjectFieldEnum.values()).filter(PrideProjectFieldEnum::getFacet).forEach(x -> facetFields.add(x.getValue()));
+
             return addFacetToConfig(collection, facetFields);
 
         }catch (IOException e){
@@ -303,7 +304,6 @@ public class SolrAPIHelper {
         String jsonString =EntityUtils.toString(response.getEntity());
         LOGGER.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
-
     }
 
 

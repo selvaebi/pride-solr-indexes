@@ -29,7 +29,7 @@
         </uk.ac.ebi.pride.architectural-pride-spring.version>
         <uk.ac.ebi.pride.px-submission-core.version>2.0.18</uk.ac.ebi.pride.px-submission-core.version>
         <uk.ac.ebi.pride.utilities.pride-utilities.version>2.0.19-SNAPSHOT</uk.ac.ebi.pride.utilities.pride-utilities.version>
-        <archive.repo.version>1.0.2-springboot-SNAPSHOT</archive.repo.version>
+        <archive.repo.version>1.0.2-springboot-SNAPSHOT.yasset</archive.repo.version>
     </properties>
 
     <dependencies>

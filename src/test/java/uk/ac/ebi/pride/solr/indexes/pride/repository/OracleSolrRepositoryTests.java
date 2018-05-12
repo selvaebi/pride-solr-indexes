@@ -15,7 +15,8 @@ import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
-import uk.ac.ebi.pride.archive.repo.project.*;
+import uk.ac.ebi.pride.archive.repo.repos.project.*;
+import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
@@ -36,6 +37,7 @@ public class OracleSolrRepositoryTests {
 
     public static RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
 
+    @Autowired
     SolrProjectService projectService;
 
     @Autowired
@@ -70,7 +72,7 @@ public class OracleSolrRepositoryTests {
 
             // Affiliations
             List<ContactProvider> labHead = new ArrayList<>();
-            x.getLabHeads().stream().forEach(contactX -> {
+            x.getLabHeads().forEach(contactX -> {
                 labHead.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", "")); }
             );
             solrProject.setLabPIFromContacts(labHead);
@@ -84,7 +86,7 @@ public class OracleSolrRepositoryTests {
 
             // Get Instruments
             List<CvParamProvider> instruments =  new ArrayList<>();
-            x.getInstruments().stream().forEach(instrumet -> {
+            x.getInstruments().forEach(instrumet -> {
                 instruments.add(new DefaultCvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue()));
             });
             solrProject.setInstrumentsFromCvParam(instruments);

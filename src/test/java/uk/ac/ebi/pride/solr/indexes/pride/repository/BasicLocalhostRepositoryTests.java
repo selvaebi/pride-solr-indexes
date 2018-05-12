@@ -29,10 +29,6 @@ public class BasicLocalhostRepositoryTests {
 	@Autowired
 	SolrProjectRepository repository;
 
-	@Autowired
-
-
-
 	/** Finds all entries using a single request. */
 	@Test
 	public void findAll() {
