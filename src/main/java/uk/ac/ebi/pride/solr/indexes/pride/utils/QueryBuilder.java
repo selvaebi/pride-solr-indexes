@@ -20,23 +20,17 @@ public class QueryBuilder {
      * @return HighlightQuery
      */
     public static HighlightQuery keywordORQuery(List<String> keywords){
-         HighlightQuery highlightQuery = new SimpleHighlightQuery();
-
-//        //The query starts wit the first key + Accession
-//        Criteria simpleCriteria = Criteria.where(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords.get(0));
-//        for(int i=1; i<keywords.size(); i++)
-//            simpleCriteria.or(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords.get(i));
+        HighlightQuery highlightQuery = new SimpleHighlightQuery();
 
         Criteria conditions = null;
 
         for (String word: keywords) {
-            if (conditions == null) {
-                conditions = new Criteria(PrideProjectFieldEnum.ACCESSION.getValue()).contains(word)
-                        .or(new Criteria(PrideProjectFieldEnum.PROJECT_TILE.getValue()).contains(word));
-            }
-            else {
-                conditions = conditions.or(new Criteria(PrideProjectFieldEnum.ACCESSION.getValue()).contains(word))
-                        .or(new Criteria(PrideProjectFieldEnum.PROJECT_TILE.getValue()).contains(word));
+            for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
+                if(conditions == null){
+                    conditions = new Criteria(field.getValue()).contains(word);
+                }else{
+                    conditions = conditions.or(new Criteria(field.getValue()).contains(word));
+                }
             }
         }
         highlightQuery.addCriteria(conditions);
