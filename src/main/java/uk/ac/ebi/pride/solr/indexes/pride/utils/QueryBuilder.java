@@ -1,12 +1,10 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import org.springframework.data.solr.core.DefaultQueryParser;
-import org.springframework.data.solr.core.QueryParser;
-import org.springframework.data.solr.core.TermsQueryParser;
 import org.springframework.data.solr.core.query.*;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
-import java.util.Arrays;
+
 import java.util.List;
 
 /**
@@ -21,21 +19,27 @@ public class QueryBuilder {
      * @param keywords List of Keywords to be combined.
      * @return HighlightQuery
      */
-    public static HighlightQuery prideProjectQueryBuild(List<String> keywords){
-        HighlightQuery highlightQuery = new SimpleHighlightQuery();
+    public static HighlightQuery keywordORQuery(List<String> keywords){
+         HighlightQuery highlightQuery = new SimpleHighlightQuery();
 
-        //The query starts wit the first key + Accession
-        Criteria simpleCriteria = Criteria.where(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords.get(0));
-        for(int i=1; i<keywords.size(); i++)
-            simpleCriteria.or(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords.get(i));
+//        //The query starts wit the first key + Accession
+//        Criteria simpleCriteria = Criteria.where(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords.get(0));
+//        for(int i=1; i<keywords.size(); i++)
+//            simpleCriteria.or(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords.get(i));
 
-//        final Criteria criteriaGlobal = new Criteria(PrideProjectFieldEnum.ACCESSION.getValue()).contains(keywords);
-//        Arrays.stream(PrideProjectFieldEnum.values()).filter(x-> !x.getValue().equals(PrideProjectFieldEnum.ACCESSION.getValue())).forEach(attribute -> {
-//            Criteria criteria = new Criteria(attribute.getValue()).in(keywords);
-//            criteriaGlobal.or(criteria);
-//
-//        });
-        highlightQuery.addCriteria(simpleCriteria);
+        Criteria conditions = null;
+
+        for (String word: keywords) {
+            if (conditions == null) {
+                conditions = new Criteria(PrideProjectFieldEnum.ACCESSION.getValue()).contains(word)
+                        .or(new Criteria(PrideProjectFieldEnum.PROJECT_TILE.getValue()).contains(word));
+            }
+            else {
+                conditions = conditions.or(new Criteria(PrideProjectFieldEnum.ACCESSION.getValue()).contains(word))
+                        .or(new Criteria(PrideProjectFieldEnum.PROJECT_TILE.getValue()).contains(word));
+            }
+        }
+        highlightQuery.addCriteria(conditions);
         return highlightQuery;
     }
 }

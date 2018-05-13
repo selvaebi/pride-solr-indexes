@@ -25,7 +25,6 @@ import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
-import org.springframework.data.solr.repository.Highlight;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -67,7 +66,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	 */
 	@Override
 	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, Pageable page) {
-		HighlightQuery highlightQuery = QueryBuilder.prideProjectQueryBuild(keywords);
+		HighlightQuery highlightQuery = QueryBuilder.keywordORQuery(keywords);
 		highlightQuery.setPageRequest(page);
 
 		HighlightOptions highlightOptions = new HighlightOptions();

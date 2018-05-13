@@ -9,6 +9,8 @@ package uk.ac.ebi.pride.solr.indexes.pride.model;
  */
 public interface PrideProjectField {
 
+    String ID = "id";
+
     /** Project Accession **/
     String ACCESSION = "accession";
 

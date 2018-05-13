@@ -12,6 +12,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.ConstantsSolrTypes;
  */
 public enum PrideProjectFieldEnum {
 
+    INTERNAL_ID(PrideProjectField.ID, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     ACCESSION(PrideProjectField.ACCESSION, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TILE(PrideProjectField.PROJECT_TILE, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     ADDITIONAL_ATTRIBUTES(PrideProjectField.ADDITIONAL_ATTRIBUTES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL),

@@ -36,6 +36,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Project accession is used in solr to identified the document, The accession will be bosst compare with any other field **/
 
     @Id
+    @Indexed(name = ID)
     String id;
 
     @Indexed(name = ACCESSION, boost = 1.0f, required = true)
