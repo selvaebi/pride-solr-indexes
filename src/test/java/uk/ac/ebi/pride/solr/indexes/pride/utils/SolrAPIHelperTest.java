@@ -32,6 +32,9 @@ public class SolrAPIHelperTest {
         if(solrAPIHelper.deleteCollection(collection)){
             System.out.println("Collection -- pride_projects has been deleted -- ");
         }
+        if(solrAPIHelper.deleteConfigSet(collection)){
+            System.out.println("ConfigSet -- pride_projects has been deleted -- ");
+        }
     }
 
     @Test
@@ -53,7 +56,7 @@ public class SolrAPIHelperTest {
     @Test
     public void updateFieldType() throws Exception {
         String collection = "pride_projects";
-        if(solrAPIHelper.updateFieldType(collection, PrideProjectField.PROJECT_TAGS_FACET, "string", true)){
+        if(solrAPIHelper.updateFieldType(collection, PrideProjectField.PROJECT_TAGS_FACET, "string", true, null)){
             System.out.println("The field -- " + PrideProjectField.PROJECT_TAGS_FACET + " -- has been changed in the type -- " + "string" + " -- in collection -- " + collection);
         }
     }

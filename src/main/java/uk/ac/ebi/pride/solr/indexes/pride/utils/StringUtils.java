@@ -1,7 +1,13 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
+
+import java.util.Arrays;
 
 /**
  * String Utils helps to convert the
@@ -9,6 +15,10 @@ import uk.ac.ebi.pride.utilities.term.CvTermReference;
  * @version $Id$
  */
 public class StringUtils {
+
+    /** Logger use to query and filter the data **/
+    private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
+
 
     /**
      * Get convert sentence to Capitalize Style
@@ -38,6 +48,25 @@ public class StringUtils {
      */
     public static boolean isCvTerm(String accession, CvTermReference cvTermReference){
         return accession.equalsIgnoreCase(cvTermReference.getAccession());
+    }
+
+
+    public static MultiValueMap<String, String> parseFilterParameters(String filterQuery){
+        MultiValueMap<String, String> filters = new LinkedMultiValueMap<>();
+        if(filterQuery != null && !filterQuery.trim().isEmpty()){
+            String[] filtersString = (filterQuery + ",").split(",");
+            if(filtersString.length > 0){
+                Arrays.asList(filtersString).forEach(filter ->{
+                    String[] filterString = filter.split(":");
+                    if(filterString.length == 2)
+                        filters.add(filterString[0], filterString[1]);
+                    else
+                        LOGGER.debug("The filter provided is not well-formatted, please format the filter in field:value -- " + filter);
+
+                });
+            }
+        }
+        return filters;
     }
 
 }

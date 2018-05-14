@@ -45,8 +45,8 @@ public class OracleSolrRepositoryTests {
 
     @PostConstruct
     public void setTest(){
-        if(!projectService.findAll().iterator().hasNext()){
-            projectService.deleteAll();
+        if(projectService.findAll().iterator().hasNext()){
+            //projectService.deleteAll();
             insertDatasetsFromOracle();
         }
     }
@@ -137,7 +137,14 @@ public class OracleSolrRepositoryTests {
 
     @Test
     public void findProjectsByKey(){
-        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), new PageRequest(1, 10));
+        // Search for two keywords, No filter
+        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(1, 10));
+        page.forEach(x -> {
+            System.out.println(x);
+        });
+
+        // Search for two keywords, filter date
+        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date:2004-01-01", new PageRequest(1, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
@@ -158,7 +165,5 @@ public class OracleSolrRepositoryTests {
     public void finadAllAndaFacet(){
         Page<PrideSolrProject> projects = projectService.findAllIgnoreCase(new PageRequest(1, 10));
         Assert.assertEquals(((FacetAndHighlightPage) projects).getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
-//        Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
-//        Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);
     }
 }

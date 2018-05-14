@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.LinkedMultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -51,7 +52,7 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void findProjectsByKey(){
-		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Arrays.asList("PXD"), new PageRequest(1, 10));
+		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Arrays.asList("PXD"), new LinkedMultiValueMap<>(), new PageRequest(1, 10));
     	page.forEach(System.out::println);
 	}
 

@@ -76,6 +76,23 @@ public class SolrAPIHelper {
     }
 
     /**
+     * Delete configSet for an specific collection using the Collection for Solr Cloud
+     * @param collection collection name
+     * @return True if the results happens
+     * @throws IOException
+     */
+    public boolean deleteConfigSet(String collection) throws IOException{
+        String hostQuery = String.format("%s/solr/admin/configs?action=DELETE&name=%s", config.getHostURL(), collection);
+        LOGGER.debug(hostQuery);
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
+
+        LOGGER.warn(response.toString());
+        return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+    }
+
+    /**
      * Create an specific collection in Solr using the API with different shards and replicates.
      * @param collection Name of the collection
      * @param numShards Number of Shards
@@ -124,12 +141,14 @@ public class SolrAPIHelper {
      * @return True if the field has been change.
      */
 
-    public boolean updateFieldType(String collection, String fieldName, String type, Boolean multiValue) throws IOException {
+    public boolean updateFieldType(String collection, String fieldName, String type, Boolean multiValue, String dateFormat) throws IOException {
 
         String hostQuery = String.format("%s/solr/%s/schema", config.getHostURL(), collection);
         HttpPost httpost = new HttpPost(hostQuery);
 
         String schemaQuery = String.format("{'replace-field':{'name':'%s', 'type':'%s', 'multiValued':'%s'}}", fieldName, type, multiValue.toString());
+        if(dateFormat != null && type.equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.getType()))
+            schemaQuery = String.format("{'replace-field':{'name':'%s', 'type':'%s', 'multiValued':'%s', 'datetimeformat':'%s'}}", fieldName, type, multiValue.toString(), dateFormat);
         //passes the results to a string builder/entity
         StringEntity se = new StringEntity(schemaQuery);
         httpost.setEntity(se);
@@ -154,12 +173,14 @@ public class SolrAPIHelper {
      * @param type type of the field
      * @return True if the field has been change.
      */
-    public boolean addField(String collection, String fieldName, String type, Boolean multiValue) throws IOException {
+    public boolean addField(String collection, String fieldName, String type, Boolean multiValue, String dateFormat) throws IOException {
 
         String hostQuery = String.format("%s/solr/%s/schema", config.getHostURL(), collection);
         HttpPost httpost = new HttpPost(hostQuery);
 
         String schemaQuery = String.format("{'add-field':{'name':'%s', 'type':'%s', 'multiValued':'%s'}}", fieldName, type, multiValue.toString());
+        if(dateFormat != null && type.equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.toString()))
+             schemaQuery = String.format("{'add-field':{'name':'%s', 'type':'%s', 'multiValued':'%s', 'datetimeformat':'%s'}}", fieldName, type, multiValue.toString(), dateFormat);
         //passes the results to a string builder/entity
         StringEntity se = new StringEntity(schemaQuery);
         httpost.setEntity(se);
@@ -183,12 +204,15 @@ public class SolrAPIHelper {
      * @param type type of the field
      * @return True if the field has been change.
      */
-    public boolean addDynamicField(String collection, String fieldName, String type, Boolean multiValue) throws IOException {
+    public boolean addDynamicField(String collection, String fieldName, String type, Boolean multiValue, String dateFormat) throws IOException {
 
         String hostQuery = String.format("%s/solr/%s/schema", config.getHostURL(), collection);
         HttpPost httpost = new HttpPost(hostQuery);
 
         String schemaQuery = String.format("{'add-dynamic-field':{'name':'%s', 'type':'%s', 'multiValued':'%s'}}", fieldName, type, multiValue.toString());
+        if(dateFormat != null && type.equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.toString()))
+            schemaQuery = String.format("{'add-dynamic-field':{'name':'%s', 'type':'%s', 'multiValued':'%s', 'datetimeformat':'%s'}}", fieldName, type, multiValue.toString(), dateFormat);
+
         //passes the results to a string builder/entity
         StringEntity se = new StringEntity(schemaQuery);
         httpost.setEntity(se);
@@ -242,20 +266,21 @@ public class SolrAPIHelper {
         try{
             String schemaFields = getSchemaByCollection(collection);
             for(PrideProjectFieldEnum fieldEnum: PrideProjectFieldEnum.values()){
+                String dateFormat = (fieldEnum.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE)?"yyyy-mm-dd":null;
                 if(!schemaFields.contains(fieldEnum.getValue())){
                     String fieldType = fieldEnum.getType().getType();
                     boolean dynamic = fieldEnum.getDynamic();
                     if(dynamic){
-                        if(addDynamicField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue())){
+                        if(addDynamicField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue(), dateFormat)){
                             LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
                         }
                     }else{
-                        if(addField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue())){
+                        if(addField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue(), dateFormat)){
                             LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
                         }
                     }
                 }else{
-                    boolean currentStatus = updateFieldType(collection, fieldEnum.getValue(), fieldEnum.getType().getType(), fieldEnum.getMultiValue());
+                    boolean currentStatus = updateFieldType(collection, fieldEnum.getValue(), fieldEnum.getType().getType(), fieldEnum.getMultiValue(),dateFormat);
                     if(currentStatus){
                         LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been updated");
                     }

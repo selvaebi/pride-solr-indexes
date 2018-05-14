@@ -25,9 +25,11 @@ import org.springframework.data.solr.core.query.*;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
+import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
@@ -65,13 +67,14 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, Pageable page) {
-		HighlightQuery highlightQuery = QueryBuilder.keywordORQuery(keywords);
+	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page) {
+		HighlightQuery highlightQuery = QueryBuilder.keywordORQuery(keywords, filters);
 		highlightQuery.setPageRequest(page);
 
 		HighlightOptions highlightOptions = new HighlightOptions();
         Arrays.stream(PrideProjectFieldEnum.values()).filter(PrideProjectFieldEnum::getHighlight).forEach(x-> highlightOptions.addField(x.getValue()));
-		highlightOptions.setFragsize(10);
+		highlightOptions.setFragsize(PrideSolrConstants.DEFAULT_FRAGMENT_SIZE);
+		highlightOptions.setNrSnipplets(PrideSolrConstants.DEFAULT_NRSNIPPLETS_SIZE);
         highlightQuery.setHighlightOptions(highlightOptions);
 
 
