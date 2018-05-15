@@ -44,6 +44,9 @@ interface SolrProjectRepositoryCustom {
 	@Highlight(fragsize = 20, snipplets = 3)
 	HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page);
 
+	FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page);
+
+
 	/**
 	 * Find all Projects with Facets
 	 * @param pageRequest

@@ -65,7 +65,8 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	 */
 	@Override
 	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page) {
-		HighlightQuery highlightQuery = QueryBuilder.keywordORQuery(keywords, filters);
+		HighlightQuery highlightQuery = new SimpleHighlightQuery();
+		highlightQuery = (HighlightQuery) QueryBuilder.keywordORQuery(highlightQuery, keywords, filters);
 		highlightQuery.setPageRequest(page);
 
 		HighlightOptions highlightOptions = new HighlightOptions();
@@ -81,7 +82,25 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		return solrTemplate.queryForHighlightPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, highlightQuery , PrideSolrProject.class);
 	}
 
-	@Override
+    @Override
+    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page) {
+
+	    FacetQuery facetQuery = new SimpleFacetQuery();
+        facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters);
+        facetQuery.setPageRequest(page);
+
+        FacetOptions facetOptions = new FacetOptions();
+
+        Arrays.asList(PrideProjectFieldEnum.values()).stream().filter(PrideProjectFieldEnum::getFacet).forEach(facetField -> facetOptions.addFacetOnField(facetField.getValue()));
+        facetQuery.setFacetOptions(facetOptions);
+
+        if(facetQuery.getSort() == null)
+            facetQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
+
+        return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, facetQuery , PrideSolrProject.class);
+    }
+
+    @Override
 	public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest) {
 		FacetOptions facets = new FacetOptions().setPageable(pageRequest);
 		for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values())

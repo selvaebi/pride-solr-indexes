@@ -24,8 +24,11 @@ public class QueryBuilder {
      * @param filters Key, Value pair Map where the key is the name of the property and the value if the value to filter.
      * @return HighlightQuery
      */
-    public static HighlightQuery keywordORQuery(List<String> keywords, MultiValueMap<String, String> filters){
-        HighlightQuery highlightQuery = new SimpleHighlightQuery();
+    public static Query keywordORQuery(Query query, List<String> keywords, MultiValueMap<String, String> filters){
+
+        if(query == null)
+            query = new SimpleFacetAndHighlightQuery();
+
         keywords =  processKeywords(keywords);
 
         Criteria conditions = null;
@@ -43,7 +46,7 @@ public class QueryBuilder {
             }
         }
         if(conditions != null)
-            highlightQuery.addCriteria(conditions);
+            query.addCriteria(conditions);
 
         Criteria filterCriteria = null;
 
@@ -53,9 +56,9 @@ public class QueryBuilder {
             }
         }
         if(filterCriteria != null)
-            highlightQuery.addFilterQuery(new SimpleFilterQuery(filterCriteria));
+            query.addFilterQuery(new SimpleFilterQuery(filterCriteria));
 
-        return highlightQuery;
+        return query;
     }
 
     /**

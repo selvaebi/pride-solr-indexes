@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
+import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
@@ -151,6 +152,28 @@ public class OracleSolrRepositoryTests {
 
         // Search for two keywords, filter date
         page = projectService.findByKeyword(Arrays.asList("*:*"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page.forEach(x -> {
+            System.out.println(x);
+        });
+    }
+
+
+    @Test
+    public void findFacetProjectsByKey(){
+        // Search for two keywords, No filter
+        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10));
+        page.forEach(x -> {
+            System.out.println(x);
+        });
+
+        // Search for two keywords, filter date
+        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page.forEach(x -> {
+            System.out.println(x);
+        });
+
+        // Search for two keywords, filter date
+        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date:2012-12-31", new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
