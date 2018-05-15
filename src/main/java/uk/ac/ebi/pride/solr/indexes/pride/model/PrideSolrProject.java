@@ -186,7 +186,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Experimental Factor Names **/
     @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
-    @Setter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.NONE)
     private List<String> experimentalFactors;
 
     /** All additional experimental factors **/
@@ -197,7 +197,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Sample attributes names **/
     @Indexed(name = SAMPLE_ATTRIBUTES_NAMES, boost = 0.5f)
-    @Setter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.NONE)
     private List<String> sampleAttributes;
 
     /** sample attributes facet **/

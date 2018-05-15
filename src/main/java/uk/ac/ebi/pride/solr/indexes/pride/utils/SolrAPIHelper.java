@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -126,8 +125,7 @@ public class SolrAPIHelper {
         LOGGER.warn(response.toString());
         if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200){
             String jsonString =EntityUtils.toString(response.getEntity());
-            if(jsonString.toLowerCase().contains(collectionSet.toLowerCase()))
-                return true;
+            return jsonString.toLowerCase().contains(collectionSet.toLowerCase());
         }
         return false;
     }
@@ -311,7 +309,7 @@ public class SolrAPIHelper {
 
         StringBuilder fieldNameBuilder = new StringBuilder();
         if(fields != null && !fields.isEmpty())
-            fields.forEach(x -> fieldNameBuilder.append("'" + x + "'").append(","));
+            fields.forEach(x -> fieldNameBuilder.append("'").append(x).append("'").append(","));
         String fieldName = fieldNameBuilder.substring(0, fieldNameBuilder.length()-1);
 
         String configQuery = String.format("{'update':{'facets':{'facet.field':[%s]}}}", fieldName);

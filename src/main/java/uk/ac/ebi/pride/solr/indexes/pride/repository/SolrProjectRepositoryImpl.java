@@ -48,9 +48,6 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	/** Solr Template **/
 	final SolrTemplate solrTemplate;
 
-	/** Logger use to query and filter the data **/
-	private static final Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
-
 	@Autowired
 	public SolrProjectRepositoryImpl(SolrTemplate solrTemplate) {
 		this.solrTemplate = solrTemplate;

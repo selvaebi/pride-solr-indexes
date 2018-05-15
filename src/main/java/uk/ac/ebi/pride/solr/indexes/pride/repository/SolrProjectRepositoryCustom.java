@@ -17,13 +17,11 @@ package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.solr.core.query.Query;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.util.List;
@@ -41,15 +39,15 @@ interface SolrProjectRepositoryCustom {
 	 *
 	 * @return
 	 */
-	public Cursor<PrideSolrProject> findAllUsingCursor();
+	Cursor<PrideSolrProject> findAllUsingCursor();
 
 	@Highlight(fragsize = 20, snipplets = 3)
-	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page);
+	HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page);
 
 	/**
 	 * Find all Projects with Facets
 	 * @param pageRequest
 	 * @return
 	 */
-	public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest);
+	FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest);
 }

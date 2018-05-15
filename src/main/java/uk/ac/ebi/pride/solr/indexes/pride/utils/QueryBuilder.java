@@ -1,18 +1,15 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import org.springframework.data.solr.core.convert.DateTimeConverters;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Query Builder helps to build the query for the solr services and repositories.
@@ -29,28 +26,55 @@ public class QueryBuilder {
      */
     public static HighlightQuery keywordORQuery(List<String> keywords, MultiValueMap<String, String> filters){
         HighlightQuery highlightQuery = new SimpleHighlightQuery();
+        keywords =  processKeywords(keywords);
 
         Criteria conditions = null;
-        for (String word: keywords) {
-            for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
-                if(conditions == null){
-                    conditions = new Criteria(field.getValue()).contains(word);
-                }else{
-                    conditions = conditions.or(new Criteria(field.getValue()).contains(word));
+        if(keywords.contains("*")){
+            conditions = new SimpleStringCriteria("*:*");
+        }else {
+            for (String word: keywords) {
+                for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
+                    if(conditions == null){
+                        conditions = new Criteria(field.getValue()).contains(word);
+                    }else{
+                        conditions = conditions.or(new Criteria(field.getValue()).contains(word));
+                    }
                 }
             }
         }
+        if(conditions != null)
+            highlightQuery.addCriteria(conditions);
+
         Criteria filterCriteria = null;
+
         if(!filters.isEmpty()){
             for(String filter: filters.keySet()){
                 filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.getFirst(filter));
             }
         }
-        highlightQuery.addCriteria(conditions);
         if(filterCriteria != null)
             highlightQuery.addFilterQuery(new SimpleFilterQuery(filterCriteria));
 
         return highlightQuery;
+    }
+
+    /**
+     * This function process all the keywords provided to the service to remove un-wanted characters.
+     * If the keyword containes the following character : we skip the word.
+     *
+     * @param keywords Keywords List
+     * @return Return keyword List
+     */
+    private static List<String> processKeywords(List<String> keywords) {
+        keywords = keywords.stream().map( x-> {
+            String[] keywordValues = x.split(":");
+            if(keywordValues.length == 2){
+                return keywordValues[1];
+            }else if(keywordValues.length > 2)
+                return null;
+            return x;
+        }).filter(x -> (x!=null && !x.trim().isEmpty())).collect(Collectors.toList());
+        return keywords;
     }
 
     /**

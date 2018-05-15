@@ -13,15 +13,12 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 
 @Configuration
-@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = false)
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
 @ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.services")
 public class HttpSolrConfiguration {
 
     @Value("${solr.url}")
     private String solrURL;
-
-    /** LOGGER to trace all the error and messages **/
-    static Logger LOGGER = LoggerFactory.getLogger(HttpSolrConfiguration.class);
 
     @Bean
     public SolrTemplate solrTemplate() {

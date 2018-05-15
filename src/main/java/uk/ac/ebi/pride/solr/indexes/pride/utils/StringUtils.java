@@ -105,7 +105,7 @@ public class StringUtils {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
-    static Date localDateTimeToDate(LocalDateTime localDateTime) {
+    private static Date localDateTimeToDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 

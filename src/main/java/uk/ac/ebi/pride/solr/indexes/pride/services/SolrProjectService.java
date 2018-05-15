@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -21,11 +23,15 @@ import java.util.*;
 @Service
 public class SolrProjectService {
 
-    @Autowired
-    SolrProjectRepository repository;
+    final SolrProjectRepository repository;
 
     /** Logger use to query and filter the data **/
     private static final Logger LOGGER = LoggerFactory.getLogger(SolrProjectService.class);
+
+    @Autowired
+    public SolrProjectService(SolrProjectRepository repository) {
+        this.repository = repository;
+    }
 
 
     /**
@@ -79,7 +85,7 @@ public class SolrProjectService {
      * @param projects
      */
     public void saveAll(List<PrideSolrProject> projects) {
-         projects.stream().forEach(this::save);
+         projects.forEach(this::save);
     }
 
     public Iterator<PrideSolrProject> findAllUsingCursor() {
@@ -107,5 +113,9 @@ public class SolrProjectService {
     public Page<PrideSolrProject> findAllIgnoreCase(PageRequest pageRequest) {
         return repository.findAllIgnoreCase(pageRequest);
 
+    }
+
+    public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest){
+        return repository.findAllFacetIgnoreCase(pageRequest);
     }
 }

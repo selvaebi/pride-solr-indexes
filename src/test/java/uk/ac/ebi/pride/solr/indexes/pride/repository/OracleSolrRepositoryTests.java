@@ -148,6 +148,12 @@ public class OracleSolrRepositoryTests {
         page.forEach(x -> {
             System.out.println(x);
         });
+
+        // Search for two keywords, filter date
+        page = projectService.findByKeyword(Arrays.asList("*:*"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page.forEach(x -> {
+            System.out.println(x);
+        });
     }
 
     @Test
