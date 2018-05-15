@@ -40,12 +40,16 @@ public class QueryBuilder {
                 }
             }
         }
+        Criteria filterCriteria = null;
         if(!filters.isEmpty()){
             for(String filter: filters.keySet()){
-                conditions = convertStringToCriteria(conditions, filter, filters.getFirst(filter));
+                filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.getFirst(filter));
             }
         }
         highlightQuery.addCriteria(conditions);
+        if(filterCriteria != null)
+            highlightQuery.addFilterQuery(new SimpleFilterQuery(filterCriteria));
+
         return highlightQuery;
     }
 
@@ -59,13 +63,12 @@ public class QueryBuilder {
         for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
             if(field.getValue().equalsIgnoreCase(key) && field.getType().getType().equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.getType())){
                 try {
-                    Date date = new SimpleDateFormat("yyyyy-mm-dd").parse(value);
-                    String start = DateTimeConverters.JavaDateConverter.INSTANCE.convert(date)+"/DAY";
-                    String end = DateTimeConverters.JavaDateConverter.INSTANCE.convert(date)+"/DAY";
+                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+                    Date startDate = StringUtils.atStartOfDay(date);
                     if(conditions == null){
-                        conditions = new Criteria(key).between(start, end);
+                        conditions = new Criteria(key).is(startDate);
                     }else{
-                        conditions = conditions.and(new Criteria(key).between(start, end));
+                        conditions = conditions.and(new Criteria(key).between(date, date));
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
