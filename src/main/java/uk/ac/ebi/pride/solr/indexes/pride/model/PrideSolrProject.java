@@ -9,8 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 import org.springframework.data.solr.repository.Score;
-import uk.ac.ebi.pride.archive.dataprovider.dataset.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
+import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link CvParamProvider} the testdata structure should be partitioned in Arrays values:
+ * The {@link PrideSolrProject} provides a mechanism to retrieve from SolrCloud the project information. For the composite testdata types such as {@link uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider} the testdata structure should be partitioned in Arrays values:
  *   - Accession Array
  *   - Name Array
  * In some cases is relevant to add the parent Terms for the original terms into the search. For example in the Taxonomy or Instrument, it isi important to add to the Project the parent term.
@@ -429,7 +429,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @return Collection of ParamProvider
      */
     @Override
-    public Collection<String> getAdditionalAttributes() {
+    public Collection<String> getAdditionalAttributesStrings() {
         return additionalAttributes;
     }
 
@@ -437,7 +437,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @return Get Project Description
      */
     @Override
-    public String getProjectDescription() {
+    public String getDescription() {
         return projectDescription;
     }
 

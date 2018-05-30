@@ -46,7 +46,6 @@ interface SolrProjectRepositoryCustom {
 
 	FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page);
 
-
 	/**
 	 * Find all Projects with Facets
 	 * @param pageRequest

@@ -98,7 +98,7 @@ public class SolrProjectService {
 
     /**
      * The keywords are all the words we would like to find datasets for them into the Solr index. Filter Query should have the following structure:
-     * field1:queryValue, field1:QueryValue
+     * field1==queryValue, field1==QueryValue
      * @param keywords List of keywords to be found in the search
      * @param filterQuery filter Query in the following format ield1:queryValue, field1:QueryValue
      * @param pageRequest Page Request.

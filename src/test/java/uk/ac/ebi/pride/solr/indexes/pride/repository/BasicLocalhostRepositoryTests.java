@@ -52,7 +52,7 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void findProjectsByKey(){
-		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Arrays.asList("PXD"), new LinkedMultiValueMap<>(), new PageRequest(1, 10));
+		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Collections.singletonList("PXD"), new LinkedMultiValueMap<>(), new PageRequest(1, 10));
     	page.forEach(System.out::println);
 	}
 

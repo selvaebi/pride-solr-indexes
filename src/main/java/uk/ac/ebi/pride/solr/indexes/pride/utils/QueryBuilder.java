@@ -3,6 +3,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.utils;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
+import uk.ac.ebi.pride.utilities.util.DateUtils;
 
 
 import java.text.ParseException;
@@ -91,7 +92,7 @@ public class QueryBuilder {
             if(field.getValue().equalsIgnoreCase(key) && field.getType().getType().equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.getType())){
                 try {
                     Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
-                    Date startDate = StringUtils.atStartOfDay(date);
+                    Date startDate = DateUtils.atStartOfDay(date);
                     if(conditions == null){
                         conditions = new Criteria(key).is(startDate);
                     }else{

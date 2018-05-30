@@ -145,13 +145,13 @@ public class OracleSolrRepositoryTests {
         });
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Arrays.asList("*:*"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
@@ -167,13 +167,13 @@ public class OracleSolrRepositoryTests {
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date:2012-12-31", new PageRequest(0, 10));
+        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
