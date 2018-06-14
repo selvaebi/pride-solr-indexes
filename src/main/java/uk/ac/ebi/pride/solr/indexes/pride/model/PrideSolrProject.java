@@ -335,6 +335,17 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.affiliationsFacet = this.affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
+
+    /**
+     * Set affiliations from String List
+     * @param submitterNames submitter Names
+     */
+    public void setSubmittersFromNames(List<String> submitterNames) {
+        this.submitters = new HashSet<>(submitterNames);
+    }
+
+
+
     /**
      * Set instruments from and instruments list
      * @param instrumentCvParams

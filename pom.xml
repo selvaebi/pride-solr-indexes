@@ -11,7 +11,7 @@
 
     <groupId>uk.ac.ebi.pride.archive</groupId>
     <artifactId>pride-solr-indexes</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.2-springboot-SNAPSHOT</version>
     <name>PRIDE Solr Indexes</name>
 
     <!-- This project requires several maven profiles to build and run correctly.
@@ -28,7 +28,7 @@
         <uk.ac.ebi.pride.architectural-pride-spring.version>1.0.0-SNAPSHOT</uk.ac.ebi.pride.architectural-pride-spring.version>
         <uk.ac.ebi.pride.px-submission-core.version>2.0.18</uk.ac.ebi.pride.px-submission-core.version>
         <uk.ac.ebi.pride.utilities.pride-utilities.version>2.0.19-SNAPSHOT</uk.ac.ebi.pride.utilities.pride-utilities.version>
-        <archive.repo.version>1.0.2-springboot-SNAPSHOT.yasset</archive.repo.version>
+        <archive.repo.version>1.0.2-springboot-SNAPSHOT</archive.repo.version>
     </properties>
 
     <dependencies>
@@ -127,6 +127,21 @@
             </testResource>
         </testResources>
         <plugins>
+            <!-- We are disabling by default the site -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                    <skipDeploy>true</skipDeploy>
+                </configuration>
+            </plugin>
+            <!-- We are disabling by default the deploy -->
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
