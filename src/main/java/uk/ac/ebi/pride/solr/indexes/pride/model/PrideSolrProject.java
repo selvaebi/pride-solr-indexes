@@ -10,6 +10,7 @@ import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
 import org.springframework.data.solr.repository.Score;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
+import uk.ac.ebi.pride.archive.dataprovider.param.ParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.project.ProjectProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
@@ -200,24 +201,18 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Setter(AccessLevel.NONE)
     private List<String> sampleAttributes;
 
-    /** sample attributes facet **/
-    @Indexed(name = SAMPLE_ATTRIBUTES_FACET)
-    @Getter(AccessLevel.PRIVATE)
-    @Setter(AccessLevel.PRIVATE)
-    private List<String> sampleAttributesFacets;
-
     /** Organisms **/
-    @Indexed(name = ORGANISMS)
+    @Indexed(name = ORGANISMS_FACET)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organisms;
 
     /** organism parts **/
-    @Indexed(name = ORGANISMS_PART)
+    @Indexed(name = ORGANISMS_PART_FACET)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organismPart;
 
     /** diseases **/
-    @Indexed(name = DISEASES)
+    @Indexed(name = DISEASES_FACET)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases;
 
@@ -393,24 +388,34 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      *
      * @param sampleAttributes List of Experimental Factors.
      */
-    public void setSampleAttributes(List<CvParamProvider> sampleAttributes) {
+    public void setSampleAttributes(List<Tuple<CvParamProvider, List<CvParamProvider>>> sampleAttributes) {
 
-        this.sampleAttributes = sampleAttributes.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.sampleAttributesFacets = new ArrayList<>();
+        this.sampleAttributes = sampleAttributes.stream()
+                .flatMap(x -> x.getValue()
+                        .stream()
+                        .map(ParamProvider::getName))
+                .collect(Collectors.toList());
 
         organisms = new HashSet<>();
         organismPart = new HashSet<>();
         diseases  = new HashSet<>();
 
         sampleAttributes.forEach(x -> {
-            if(StringUtils.isCvTerm(x.getAccession(), CvTermReference.EFO_ORGANISM))
-                organisms.add(x.getName());
-            else if(StringUtils.isCvTerm(x.getAccession(), CvTermReference.EFO_ORGANISM_PART))
-                organismPart.add(x.getName());
-            else if(StringUtils.isCvTerm(x.getAccession(), CvTermReference.EFO_DISEASE))
-                diseases.add(x.getName());
-            else
-                sampleAttributesFacets.add(x.getName());
+            if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_ORGANISM))
+                organisms.addAll(x.getValue()
+                        .stream()
+                        .map(value -> StringUtils.convertSentenceStyle(value.getName()))
+                        .collect(Collectors.toList()));
+            else if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_ORGANISM_PART))
+                organismPart.addAll(x.getValue()
+                        .stream()
+                        .map(value -> StringUtils.convertSentenceStyle(value.getName()))
+                        .collect(Collectors.toList()));
+            else if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_DISEASE))
+                diseases.addAll(x.getValue()
+                        .stream()
+                        .map(value -> StringUtils.convertSentenceStyle(value.getName()))
+                        .collect(Collectors.toList()));
         });
     }
 

@@ -44,15 +44,13 @@ public enum PrideProjectFieldEnum {
     COUNTRIES_FACET(PrideProjectField.COUNTRIES_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
 
     SAMPLE_ATTRIBUTES_NAMES(PrideProjectField.SAMPLE_ATTRIBUTES_NAMES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
-    SAMPLE_ATTRIBUTES_FACET(PrideProjectField.SOFTWARES_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
-
 
     EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     EXPERIMENTAL_FACTORS_FACET(PrideProjectField.EXPERIMENTAL_FACTORS_FACET, true, true, false, false, ConstantsSolrTypes.STRING ),
 
-    ORGANISM(PrideProjectField.ORGANISMS, true, true, false, true, ConstantsSolrTypes.STRING ),
-    CELL_TYPE(PrideProjectField.ORGANISMS_PART, true, true, false, true, ConstantsSolrTypes.STRING ),
-    DISEASES(PrideProjectField.DISEASES, true, true, false, true, ConstantsSolrTypes.STRING ),
+    ORGANISM(PrideProjectField.ORGANISMS_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
+    CELL_TYPE(PrideProjectField.ORGANISMS_PART_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
+    DISEASES(PrideProjectField.DISEASES_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
 
     PROJECT_REFERENCES(PrideProjectField.PROJECT_REFERENCES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     PROTEIN_IDENTIFICATIONS(PrideProjectField.PROTEIN_IDENTIFICATIONS, true, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),

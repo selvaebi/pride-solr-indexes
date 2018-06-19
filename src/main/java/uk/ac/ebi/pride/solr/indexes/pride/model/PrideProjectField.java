@@ -88,12 +88,11 @@ public interface PrideProjectField {
 
     /** Sample metadata names and facet **/
     String SAMPLE_ATTRIBUTES_NAMES = "sample_attributes";
-    String SAMPLE_ATTRIBUTES_FACET = "sample_attributes_facet";
 
     /** Species , cell types, tissues, diseases ***/
-    String ORGANISMS = "organisms_facet";
-    String ORGANISMS_PART = "organisms_part_facet";
-    String DISEASES  = "diseases";
+    String ORGANISMS_FACET = "organisms_facet";
+    String ORGANISMS_PART_FACET = "organisms_part_facet";
+    String DISEASES_FACET  = "diseases_facet";
 
     /** References related with the project **/
     String PROJECT_REFERENCES = "project_references";
