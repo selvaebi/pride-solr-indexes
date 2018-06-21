@@ -378,8 +378,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     public void setExperimentalFactors(List<Tuple<CvParamProvider, CvParamProvider>> experimentalFactors) {
         this.experimentalFactors = experimentalFactors.stream().map(Tuple::getKey).map(CvParamProvider::getName).collect(Collectors.toList());
         experimentalFactorFacets = this.experimentalFactors;
-
-    }
+        }
 
     /**
      * Set sample Atributes from the list of CVParams that are specify as a {@link Tuple}. The current

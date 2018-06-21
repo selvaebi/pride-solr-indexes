@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -327,6 +328,34 @@ public class SolrAPIHelper {
         String jsonString =EntityUtils.toString(response.getEntity());
         LOGGER.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+    }
+
+    /**
+     * This method adds a Request Handler to your SolrCloud, This is used to add the replicates from Hinxton to London
+     * @param collection Collection
+     * @param jsonHandler Collection
+     * @return
+     * @throws IOException
+     */
+    public boolean addRequestHandler(String collection, String jsonHandler) throws IOException {
+        String hostQuery = String.format("%s/solr/%s/config", config.getHostURL(), collection);
+        HttpPost httpost = new HttpPost(hostQuery);
+
+        String handlerQuery = String.format("{'add-requesthandler' : %s }", jsonHandler);
+        StringEntity se = new StringEntity(handlerQuery);
+        httpost.setEntity(se);
+        //sets a request header so the page receving the request
+        //will know what to do with it
+        httpost.setHeader("Accept", "application/json");
+        httpost.setHeader("Content-type", "application/json");
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(httpost);
+        String jsonString =EntityUtils.toString(response.getEntity());
+        LOGGER.debug(jsonString);
+        return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+
+
     }
 
 
