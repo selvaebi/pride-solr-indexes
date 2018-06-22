@@ -113,6 +113,26 @@ public class SolrAPIHelper {
     }
 
     /**
+     * Create an specific collection in Solr using the API with different shards and replicates.
+     * @param collection Name of the collection
+     * @param numShards Number of Shards
+     * @param replicationFactor Number of Replicates
+     * @param maxShardsPerNode Max of Shards per Node.
+     * @return True if the collection has been created.
+     * @throws IOException
+     */
+    public boolean createCollection(String collection, int numShards, int replicationFactor, int maxShardsPerNode, String configName) throws IOException {
+
+        String hostQuery = String.format("%s/solr/admin/collections?action=CREATE&name=%s&numShards=%s&replicationFactor=%s&maxShardsPerNode=%s&collection.configName=%s", config.getHostURL(), collection, numShards, replicationFactor, maxShardsPerNode, configName);
+        LOGGER.debug(hostQuery);
+
+        CloseableHttpClient client = HttpClientBuilder.create().build();
+        CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
+        LOGGER.warn(response.toString());
+        return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
+    }
+
+    /**
      * List all config sets in the Solr server
      * @return List of ConfigSets
      * @throws IOException
