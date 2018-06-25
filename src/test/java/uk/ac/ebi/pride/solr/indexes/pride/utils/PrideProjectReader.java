@@ -98,7 +98,7 @@ public class PrideProjectReader {
 
         // Disease
         submission.getProjectMetaData().getDiseases().stream().forEach(x->   addValue(CvTermReference.EFO_DISEASE, factors, x));
-        project.setExperimentalFactors(factors);
+//        project.setExperimentalFactors(factors);
 
         //PTMs
         project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toSet()));

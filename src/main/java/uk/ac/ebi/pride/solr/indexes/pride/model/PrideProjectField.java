@@ -15,7 +15,7 @@ public interface PrideProjectField {
     String ACCESSION = "accession";
 
      /** Project Title **/
-     String PROJECT_TILE = "project_title";
+    String PROJECT_TILE = "project_title";
 
     /** Additional Attributes Accessions **/
     String ADDITIONAL_ATTRIBUTES = "additional_attributes";
@@ -79,8 +79,8 @@ public interface PrideProjectField {
 
 
     /** This field store all the countries associated with the experiment **/
-     String COUNTRIES = "countries";
-     String COUNTRIES_FACET = "countries_facet";
+    String COUNTRIES = "countries";
+    String COUNTRIES_FACET = "countries_facet";
 
     /** Experimental Factor Names **/
     String EXPERIMENTAL_FACTORS_NAMES = "experimental_factors";

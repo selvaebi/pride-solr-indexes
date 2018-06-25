@@ -91,7 +91,13 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 
         FacetOptions facetOptions = new FacetOptions();
 
-        Arrays.asList(PrideProjectFieldEnum.values()).stream().filter(PrideProjectFieldEnum::getFacet).forEach(facetField -> facetOptions.addFacetOnField(facetField.getValue()));
+        Arrays.asList(PrideProjectFieldEnum.values())
+				.stream()
+				.filter(PrideProjectFieldEnum::getFacet)
+				.forEach(facetField -> facetOptions
+						.addFacetOnField(facetField.getValue()
+						)
+				);
         facetQuery.setFacetOptions(facetOptions);
 
         if(facetQuery.getSort() == null)

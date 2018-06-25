@@ -16,6 +16,7 @@ import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
+import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.archive.repo.repos.project.*;
 import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
@@ -109,7 +110,9 @@ public class OracleSolrRepositoryTests {
 
             Collection<ProjectSampleCvParam> samples = x.getSamples();
 
-            solrProject.setSampleAttributes(samples.stream().map(xSample -> new DefaultCvParam(xSample.getAccession(), xSample.getName())).collect(Collectors.toList()));
+//            solrProject.setSampleAttributes(samples
+//                    .stream()
+//                    .map(xSample -> new Tuple()DefaultCvParam(xSample.getAccession(), xSample.getName())).collect(Collectors.toList()));
             projects.add(solrProject);
         });
         projectService.saveAll(projects);

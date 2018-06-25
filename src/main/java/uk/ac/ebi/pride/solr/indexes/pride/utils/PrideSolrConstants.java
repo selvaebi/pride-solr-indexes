@@ -9,8 +9,8 @@ package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 public class PrideSolrConstants{
 
-    public static final int DEFAULT_NRSNIPPLETS_SIZE = 10;
-    public static final int DEFAULT_FRAGMENT_SIZE = 20;
+    public static final int DEFAULT_NRSNIPPLETS_SIZE = 20;
+    public static final int DEFAULT_FRAGMENT_SIZE = 30;
 
 
 public enum ConstantsSolrTypes {

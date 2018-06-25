@@ -292,7 +292,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.quantificationMethods.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toList()));
         if(quantificationMethodsFacet == null)
             quantificationMethodsFacet = new HashSet<>();
-        this.quantificationMethodsFacet.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toSet()));
+        this.quantificationMethodsFacet.addAll(params.stream().map( x-> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet()));
     }
 
     /**
@@ -348,7 +348,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void setInstrumentsFromCvParam(List<CvParamProvider> instrumentCvParams) {
         this.instruments = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.instrumentsFacet = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+        this.instrumentsFacet = instrumentCvParams.stream().map(x-> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
     }
 
     /**
@@ -357,7 +357,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void setSoftwaresFromCvParam(List<CvParamProvider> softwares) {
         this.softwares = softwares.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.softwaresFacet = softwares.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+        this.softwaresFacet = softwares.stream().map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
     }
 
     /**
@@ -424,7 +424,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param identifiedPTMS
      */
     public void setIdentifiedPTMStringsFromCvParam(List<CvParamProvider> identifiedPTMS) {
-        this.identifiedPTMStrings = identifiedPTMS.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+        this.identifiedPTMStrings = identifiedPTMS.stream().map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
         this.identifiedPTMStringsFacet = this.identifiedPTMStrings.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
     }
 
