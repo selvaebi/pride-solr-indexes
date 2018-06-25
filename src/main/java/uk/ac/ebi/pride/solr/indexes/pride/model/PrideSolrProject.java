@@ -38,6 +38,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     @Id
     @Indexed(name = ID)
+    @Getter(AccessLevel.NONE)
     String id;
 
     @Indexed(name = ACCESSION, boost = 1.0f, required = true)
