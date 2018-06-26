@@ -119,8 +119,8 @@ public class SolrProjectService {
         return repository.findAllFacetIgnoreCase(pageRequest);
     }
 
-    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, String filterQuery, PageRequest pageRequest){
+    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, String filterQuery, PageRequest pageRequest, PageRequest facetPage){
         MultiValueMap<String, String> filters = StringUtils.parseFilterParameters(filterQuery);
-        return repository.findFacetByKeyword(keywords, filters, pageRequest);
+        return repository.findFacetByKeyword(keywords, filters, pageRequest, facetPage);
     }
 }

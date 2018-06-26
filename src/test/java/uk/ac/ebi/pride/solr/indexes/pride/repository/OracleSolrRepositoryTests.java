@@ -16,7 +16,6 @@ import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.archive.repo.repos.project.*;
 import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
@@ -164,19 +163,19 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findFacetProjectsByKey(){
         // Search for two keywords, No filter
-        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10));
+        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10), new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10));
+        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10), new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10));
+        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10),new PageRequest(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });

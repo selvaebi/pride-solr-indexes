@@ -83,21 +83,23 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
     @Override
-    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page) {
+    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage) {
 
 	    FacetQuery facetQuery = new SimpleFacetQuery();
         facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters);
         facetQuery.setPageRequest(page);
 
         FacetOptions facetOptions = new FacetOptions();
+        facetOptions.setFacetMinCount(1);
+        facetOptions.setPageable(facetPage);
+
 
         Arrays.asList(PrideProjectFieldEnum.values())
 				.stream()
 				.filter(PrideProjectFieldEnum::getFacet)
-				.forEach(facetField -> facetOptions
-						.addFacetOnField(facetField.getValue()
-						)
-				);
+				.forEach(facetField -> {
+					facetOptions.addFacetOnField(facetField.getValue());
+				});
         facetQuery.setFacetOptions(facetOptions);
 
         if(facetQuery.getSort() == null)
