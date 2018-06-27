@@ -15,6 +15,7 @@
  */
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
+import org.apache.solr.common.params.FacetParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,11 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,24 +86,46 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
     @Override
-    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage) {
+    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String gap) {
 
-	    FacetQuery facetQuery = new SimpleFacetQuery();
+		FacetQuery facetQuery = new SimpleFacetQuery();
         facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters);
         facetQuery.setPageRequest(page);
 
         FacetOptions facetOptions = new FacetOptions();
-        facetOptions.setFacetMinCount(1);
         facetOptions.setPageable(facetPage);
+		PrideSolrConstants.AllowedDateGapConstants gapConstants = PrideSolrConstants.AllowedDateGapConstants.findByString(gap);
+        if( gapConstants != PrideSolrConstants.AllowedDateGapConstants.UNKONWN){
+			Arrays.asList(PrideProjectFieldEnum.values())
+					.stream()
+					.filter(x -> x.getFacet())
+					.forEach(facetField -> {
+						if(facetField.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE){
+							try {
+								Date startDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2004");
+								FacetOptions.FieldWithDateRangeParameters dateRange = new FacetOptions.FieldWithDateRangeParameters(facetField.getValue(), startDate, new Date(), gapConstants.value);
+								dateRange.setHardEnd(true).setInclude(FacetParams.FacetRangeInclude.LOWER).setOther(FacetParams.FacetRangeOther.BEFORE);
+								facetOptions.addFacetByRange(dateRange);
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+						}else{
+							facetOptions.addFacetOnField(facetField.getValue());
+						}
 
+					});
+		}else{
+			Arrays.asList(PrideProjectFieldEnum.values())
+					.stream()
+					.filter(PrideProjectFieldEnum::getFacet)
+					.forEach(facetField -> {
+						facetOptions.addFacetOnField(facetField.getValue());
+					});
+			facetOptions.setFacetMinCount(1);
+		}
 
-        Arrays.asList(PrideProjectFieldEnum.values())
-				.stream()
-				.filter(PrideProjectFieldEnum::getFacet)
-				.forEach(facetField -> {
-					facetOptions.addFacetOnField(facetField.getValue());
-				});
         facetQuery.setFacetOptions(facetOptions);
+
 
         if(facetQuery.getSort() == null)
             facetQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));

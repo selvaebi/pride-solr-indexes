@@ -103,9 +103,9 @@ public class QueryBuilder {
                 }
             }else if(field.getValue().equalsIgnoreCase(key)){
                 if(conditions == null){
-                    conditions = new Criteria(key).is(value);
+                    conditions = new Criteria(key).contains(value);
                 }else{
-                    conditions = conditions.and(new Criteria(key).is(value));
+                    conditions = conditions.and(new Criteria(key).contains(value));
                 }
             }
         }

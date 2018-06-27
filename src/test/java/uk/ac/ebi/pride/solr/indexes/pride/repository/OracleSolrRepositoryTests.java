@@ -23,6 +23,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 import javax.annotation.PostConstruct;
@@ -107,11 +108,6 @@ public class OracleSolrRepositoryTests {
             solrProject.addAdditionalAttributesFromCvParams(x.getExperimentTypes().stream().map(xType -> new DefaultCvParam(xType.getAccession(), xType.getName())).collect(Collectors.toList()));
             solrProject.addQuantificationMethodsFromCvParams(x.getQuantificationMethods().stream().map(xQuant -> new DefaultCvParam(xQuant.getAccession(), xQuant.getName())).collect(Collectors.toList()));
 
-            Collection<ProjectSampleCvParam> samples = x.getSamples();
-
-//            solrProject.setSampleAttributes(samples
-//                    .stream()
-//                    .map(xSample -> new Tuple()DefaultCvParam(xSample.getAccession(), xSample.getName())).collect(Collectors.toList()));
             projects.add(solrProject);
         });
         projectService.saveAll(projects);
@@ -163,19 +159,19 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findFacetProjectsByKey(){
         // Search for two keywords, No filter
-        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10), new PageRequest(0, 10));
+        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10), new PageRequest(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10), new PageRequest(0, 10));
+        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10), new PageRequest(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10),new PageRequest(0, 10));
+        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10),new PageRequest(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
         page.forEach(x -> {
             System.out.println(x);
         });
