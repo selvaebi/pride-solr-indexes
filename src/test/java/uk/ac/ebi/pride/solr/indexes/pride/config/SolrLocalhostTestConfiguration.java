@@ -18,6 +18,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 import javax.annotation.PostConstruct;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +37,13 @@ import java.net.URISyntaxException;
  * @author ypriverol
  */
 @Configuration
+@Slf4j
 @EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = false)
 @ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.services")
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired
 	SolrProjectService projectService;
-
-	/** LOGGER to trace all the error and messages **/
-	static Logger LOGGER = LoggerFactory.getLogger(SolrLocalhostTestConfiguration.class);
 
 	@Bean
 	public SolrTemplate solrTemplate() {
@@ -65,7 +64,7 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 				doInitTestData(projectService, filePathOne, filePathTwo, filePathThree);
 			}catch (URISyntaxException e){
 				/** LOGGER to trace all the error and meessages **/
-				LOGGER.error("The provided files for testing are wrong -- " + e.getMessage(), e);
+				log.error("The provided files for testing are wrong -- " + e.getMessage(), e);
 			}
 		}
 	}

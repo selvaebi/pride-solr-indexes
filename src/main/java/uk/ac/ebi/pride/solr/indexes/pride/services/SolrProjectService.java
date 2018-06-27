@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,10 @@ import java.util.*;
  *
  */
 @Service
+@Slf4j
 public class SolrProjectService {
 
     final SolrProjectRepository repository;
-
-    /** Logger use to query and filter the data **/
-    private static final Logger LOGGER = LoggerFactory.getLogger(SolrProjectService.class);
 
     @Autowired
     public SolrProjectService(SolrProjectRepository repository) {
@@ -45,9 +44,9 @@ public class SolrProjectService {
         PrideSolrProject prideSolrProject = repository.findByAccession(project.getAccession());
         if(prideSolrProject == null){
             repository.save(project);
-            LOGGER.info("A new project has been saved in Solr index -- " + project.getAccession());
+            log.info("A new project has been saved in Solr index -- " + project.getAccession());
         }else
-            LOGGER.info("A project with same accession has been found in the Solr index, you MUST use update -- " + project.getAccession());
+            log.info("A project with same accession has been found in the Solr index, you MUST use update -- " + project.getAccession());
         return project;
     }
 

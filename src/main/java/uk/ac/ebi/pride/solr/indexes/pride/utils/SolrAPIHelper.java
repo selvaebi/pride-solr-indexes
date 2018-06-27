@@ -1,6 +1,7 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -8,12 +9,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,11 +24,8 @@ import java.util.List;
  @author ypriverol
  @version $Id$
  **/
-
+@Slf4j
 public class SolrAPIHelper {
-
-    /** Logger **/
-    private static final Logger LOGGER = LoggerFactory.getLogger(SolrAPIHelper.class);
 
     /** config http URL **/
     private SolrConfig config;
@@ -66,12 +62,12 @@ public class SolrAPIHelper {
     public boolean deleteCollection(String collection) throws IOException {
 
         String hostQuery = String.format("%s/solr/admin/collections?action=DELETE&name=%s", config.getHostURL(), collection);
-        LOGGER.debug(hostQuery);
+        log.debug(hostQuery);
 
         CloseableHttpClient client = HttpClientBuilder.create().build(); 
         CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
 
-        LOGGER.warn(response.toString());
+        log.warn(response.toString());
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -83,12 +79,12 @@ public class SolrAPIHelper {
      */
     public boolean deleteConfigSet(String collection) throws IOException{
         String hostQuery = String.format("%s/solr/admin/configs?action=DELETE&name=%s", config.getHostURL(), collection);
-        LOGGER.debug(hostQuery);
+        log.debug(hostQuery);
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
 
-        LOGGER.warn(response.toString());
+        log.warn(response.toString());
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -104,11 +100,11 @@ public class SolrAPIHelper {
     public boolean createCollection(String collection, int numShards, int replicationFactor, int maxShardsPerNode) throws IOException {
 
         String hostQuery = String.format("%s/solr/admin/collections?action=CREATE&name=%s&numShards=%s&replicationFactor=%s&maxShardsPerNode=%s", config.getHostURL(), collection, numShards, replicationFactor, maxShardsPerNode);
-        LOGGER.debug(hostQuery);
+        log.debug(hostQuery);
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
-        LOGGER.warn(response.toString());
+        log.warn(response.toString());
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -124,11 +120,11 @@ public class SolrAPIHelper {
     public boolean createCollection(String collection, int numShards, int replicationFactor, int maxShardsPerNode, String configName) throws IOException {
 
         String hostQuery = String.format("%s/solr/admin/collections?action=CREATE&name=%s&numShards=%s&replicationFactor=%s&maxShardsPerNode=%s&collection.configName=%s", config.getHostURL(), collection, numShards, replicationFactor, maxShardsPerNode, configName);
-        LOGGER.debug(hostQuery);
+        log.debug(hostQuery);
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(new HttpPost(hostQuery));
-        LOGGER.warn(response.toString());
+        log.warn(response.toString());
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -139,11 +135,11 @@ public class SolrAPIHelper {
      */
     public boolean containsConfigSet(String collectionSet) throws IOException {
         String hostQuery = String.format("%s/solr/admin/configs?action=LIST&wt=json", config.getHostURL());
-        LOGGER.debug(hostQuery);
+        log.debug(hostQuery);
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(new HttpGet(hostQuery));
-        LOGGER.warn(response.toString());
+        log.warn(response.toString());
         if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200){
             String jsonString =EntityUtils.toString(response.getEntity());
             return jsonString.toLowerCase().contains(collectionSet.toLowerCase());
@@ -179,7 +175,7 @@ public class SolrAPIHelper {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(httpost);
         String jsonString =EntityUtils.toString(response.getEntity());
-        LOGGER.debug(jsonString);
+        log.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -211,7 +207,7 @@ public class SolrAPIHelper {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(httpost);
         String jsonString =EntityUtils.toString(response.getEntity());
-        LOGGER.debug(jsonString);
+        log.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -243,7 +239,7 @@ public class SolrAPIHelper {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(httpost);
         String jsonString =EntityUtils.toString(response.getEntity());
-        LOGGER.debug(jsonString);
+        log.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -258,7 +254,7 @@ public class SolrAPIHelper {
         String hostQuery = String.format("%s/solr/%s/schema/fields", config.getHostURL(), collection);
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(new HttpGet(hostQuery));
-        LOGGER.warn(response.toString());
+        log.warn(response.toString());
         if(response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200){
             return EntityUtils.toString(response.getEntity());
         }
@@ -291,17 +287,17 @@ public class SolrAPIHelper {
                     boolean dynamic = fieldEnum.getDynamic();
                     if(dynamic){
                         if(addDynamicField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue(), dateFormat)){
-                            LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
+                            log.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
                         }
                     }else{
                         if(addField(collection, fieldEnum.getValue(), fieldType, fieldEnum.getMultiValue(), dateFormat)){
-                            LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
+                            log.debug("The field -- " + fieldEnum.getValue() + " -- has been created");
                         }
                     }
                 }else{
                     boolean currentStatus = updateFieldType(collection, fieldEnum.getValue(), fieldEnum.getType().getType(), fieldEnum.getMultiValue(),dateFormat);
                     if(currentStatus){
-                        LOGGER.debug("The field -- " + fieldEnum.getValue() + " -- has been updated");
+                        log.debug("The field -- " + fieldEnum.getValue() + " -- has been updated");
                     }
                 }
             }
@@ -313,7 +309,7 @@ public class SolrAPIHelper {
             return addFacetToConfig(collection, facetFields);
 
         }catch (IOException e){
-            LOGGER.error(e.getMessage());
+            log.error(e.getMessage());
         }
         return true;
     }
@@ -346,7 +342,7 @@ public class SolrAPIHelper {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(httpost);
         String jsonString =EntityUtils.toString(response.getEntity());
-        LOGGER.debug(jsonString);
+        log.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
     }
 
@@ -372,7 +368,7 @@ public class SolrAPIHelper {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         CloseableHttpResponse response = client.execute(httpost);
         String jsonString =EntityUtils.toString(response.getEntity());
-        LOGGER.debug(jsonString);
+        log.debug(jsonString);
         return response.getStatusLine() != null && response.getStatusLine().getStatusCode() == 200;
 
 

@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
@@ -15,11 +16,8 @@ import java.util.Arrays;
  * @author ypriverol
  * @version $Id$
  */
+@Slf4j
 public class StringUtils {
-
-    /** Logger use to query and filter the data **/
-    private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
-
 
     /**
      * Get convert sentence to Capitalize Style
@@ -62,7 +60,7 @@ public class StringUtils {
                     if(filterString.length == 2)
                         filters.add(filterString[0], filterString[1]);
                     else
-                        LOGGER.debug("The filter provided is not well-formatted, please format the filter in field:value -- " + filter);
+                        log.debug("The filter provided is not well-formatted, please format the filter in field:value -- " + filter);
 
                 });
             }

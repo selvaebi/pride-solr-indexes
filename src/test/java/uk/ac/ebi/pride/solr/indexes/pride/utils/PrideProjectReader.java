@@ -1,5 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
@@ -28,9 +29,9 @@ import java.util.stream.Collectors;
  * @author ypriverol
  * @version $Id$
  */
+@Slf4j
 public class PrideProjectReader {
 
-    static Logger LOGGER = LoggerFactory.getLogger(PrideProjectReader.class);
 
     /**
      * Read a Pride Project from file using Tab delimited system. This function is a helper for testing
@@ -45,7 +46,7 @@ public class PrideProjectReader {
             Submission pxSubmission = SubmissionFileParser.parse(pxSubmissionFile);
             project = convertSubmissionToProject(pxSubmission);
         } catch (SubmissionFileException e) {
-            LOGGER.error("Error in the file provided -- " + pxSubmissionFile, e);
+            log.error("Error in the file provided -- " + pxSubmissionFile, e);
         }
 
         return project;
@@ -116,7 +117,7 @@ public class PrideProjectReader {
             project.setSubmissionDate(new SimpleDateFormat("YY-MM-dd").parse("2012-09-19"));
             project.setUpdatedDate(new SimpleDateFormat("YY-MM-dd").parse("2014-09-19"));
         } catch (ParseException e) {
-            LOGGER.error("Error parsing date -- 2013-09-19 " + e.getMessage());
+            log.error("Error parsing date -- 2013-09-19 " + e.getMessage());
         }
 
 

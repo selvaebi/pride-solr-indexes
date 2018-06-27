@@ -15,6 +15,7 @@
  */
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -27,6 +28,7 @@ import java.io.IOException;
 /**
  * @author ypriverol
  */
+@Slf4j
 public class RequiresSolrServer {
 
 	/** Default entry point to test in Solr **/
@@ -34,9 +36,6 @@ public class RequiresSolrServer {
 
 	/** Localhost URL **/
 	private final String baseUrl;
-
-	/** LOGGER to trace all the error and meessages **/
-	private static final Logger LOGGER = LoggerFactory.getLogger(RequiresSolrServer.class);
 
 	/**
 	 * Private Constructor
@@ -57,7 +56,7 @@ public class RequiresSolrServer {
 		try {
 			solrServer.checkServerRunning();
 		} catch (IOException e) {
-			LOGGER.error(e.getMessage(), e);
+			log.error(e.getMessage(), e);
 		}
 		return solrServer;
 	}
