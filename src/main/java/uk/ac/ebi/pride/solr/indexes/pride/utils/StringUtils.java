@@ -56,7 +56,7 @@ public class StringUtils {
                 Arrays.asList(filtersString).forEach(filter ->{
                     String[] filterString = filter.split("==");
                     if(filterString.length == 2)
-                        filters.add(filterString[0], filterString[1]);
+                        filters.add(filterString[0], StringUtils.convertSentenceStyle(filterString[1]));
                     else
                         log.debug("The filter provided is not well-formatted, please format the filter in field:value -- " + filter);
 
