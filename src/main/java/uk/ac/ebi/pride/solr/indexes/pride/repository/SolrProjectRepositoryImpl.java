@@ -16,8 +16,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.apache.solr.common.params.FacetParams;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -98,7 +96,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
         if( gapConstants != PrideSolrConstants.AllowedDateGapConstants.UNKONWN){
 			Arrays.asList(PrideProjectFieldEnum.values())
 					.stream()
-					.filter(x -> x.getFacet())
+					.filter(PrideProjectFieldEnum::getFacet)
 					.forEach(facetField -> {
 						if(facetField.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE){
 							try {
@@ -118,11 +116,10 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			Arrays.asList(PrideProjectFieldEnum.values())
 					.stream()
 					.filter(PrideProjectFieldEnum::getFacet)
-					.forEach(facetField -> {
-						facetOptions.addFacetOnField(facetField.getValue());
-					});
+					.forEach(facetField -> facetOptions.addFacetOnField(facetField.getValue()));
 			facetOptions.setFacetMinCount(1);
 		}
+
 
         facetQuery.setFacetOptions(facetOptions);
 

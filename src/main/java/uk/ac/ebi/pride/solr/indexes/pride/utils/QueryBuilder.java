@@ -102,10 +102,11 @@ public class QueryBuilder {
                     e.printStackTrace();
                 }
             }else if(field.getValue().equalsIgnoreCase(key)){
+                String[] values = value.split("\\s+");
                 if(conditions == null){
-                    conditions = new Criteria(key).contains(value);
+                    conditions = new Criteria(key).contains(values);
                 }else{
-                    conditions = conditions.and(new Criteria(key).contains(value));
+                    conditions = conditions.and(new Criteria(key).contains(values));
                 }
             }
         }

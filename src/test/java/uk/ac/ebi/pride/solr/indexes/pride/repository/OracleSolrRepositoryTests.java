@@ -17,7 +17,6 @@ import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
 import uk.ac.ebi.pride.archive.repo.repos.project.*;
-import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
@@ -74,8 +73,7 @@ public class OracleSolrRepositoryTests {
 
             // Affiliations
             List<ContactProvider> labHead = new ArrayList<>();
-            x.getLabHeads().forEach(contactX -> {
-                labHead.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", "")); }
+            x.getLabHeads().forEach(contactX -> labHead.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", ""))
             );
             solrProject.setLabPIFromContacts(labHead);
 
@@ -88,9 +86,7 @@ public class OracleSolrRepositoryTests {
 
             // Get Instruments
             List<CvParamProvider> instruments =  new ArrayList<>();
-            x.getInstruments().forEach(instrumet -> {
-                instruments.add(new DefaultCvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue()));
-            });
+            x.getInstruments().forEach(instrumet -> instruments.add(new DefaultCvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue())));
             solrProject.setInstrumentsFromCvParam(instruments);
 
             // References
@@ -137,19 +133,15 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findProjectsByKey(){
         // Search for two keywords, No filter
-        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10));
-        page.forEach(x -> {
-            System.out.println(x);
-        });
+        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10));
+        page.forEach(System.out::println);
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10));
-        page.forEach(x -> {
-            System.out.println(x);
-        });
+        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31",  PageRequest.of(0, 10));
+        page.forEach(System.out::println);
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10));
+        page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31",  PageRequest.of(0, 10));
         page.forEach(x -> {
             System.out.println(x);
         });
@@ -159,19 +151,19 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findFacetProjectsByKey(){
         // Search for two keywords, No filter
-        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", new PageRequest(0, 10), new PageRequest(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
+        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", new PageRequest(0, 10), new PageRequest(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
+        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
         page.forEach(x -> {
             System.out.println(x);
         });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("*:*"), "publication_date==2012-12-31", new PageRequest(0, 10),new PageRequest(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
+        page = projectService.findFacetByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
         page.forEach(x -> {
             System.out.println(x);
         });
@@ -180,7 +172,7 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findProjectsByKeyFacet(){
 
-        Page<PrideSolrProject> page = projectService.findAllIgnoreCase(new PageRequest(0, 10));
+        Page<PrideSolrProject> page = projectService.findAllIgnoreCase( PageRequest.of(0, 10));
 
         // Print all the projects search
         page.forEach( x-> {

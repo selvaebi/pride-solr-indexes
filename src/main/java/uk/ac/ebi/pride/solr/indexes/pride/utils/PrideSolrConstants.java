@@ -1,7 +1,5 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import java.util.Arrays;
-
 /**
  * Solr types definition.
  * @author ypriverol

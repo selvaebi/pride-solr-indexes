@@ -2,8 +2,6 @@ package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

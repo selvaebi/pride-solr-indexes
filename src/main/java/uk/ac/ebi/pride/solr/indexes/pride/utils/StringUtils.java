@@ -1,8 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;

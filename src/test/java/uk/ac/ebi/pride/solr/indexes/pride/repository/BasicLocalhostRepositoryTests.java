@@ -15,7 +15,6 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -52,29 +51,25 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void findProjectsByKey(){
-		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Collections.singletonList("PXD"), new LinkedMultiValueMap<>(), new PageRequest(1, 10));
+		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Collections.singletonList("PXD"), new LinkedMultiValueMap<>(), PageRequest.of(1, 10));
     	page.forEach(System.out::println);
 	}
 
 	@Test
 	public void findProjectsByKeyFacet(){
 
-		FacetPage<PrideSolrProject> page = repository.findAllFacetIgnoreCase(new PageRequest(0, 10));
+		FacetPage<PrideSolrProject> page = repository.findAllFacetIgnoreCase(PageRequest.of(0, 10));
 
 		// Print all the projects search
-		page.forEach( x-> {
-			System.out.println(x.toString());
-		});
+		page.forEach( x-> System.out.println(x.toString()));
 
 		//Print Facets
-		page.getAllFacets().stream().forEach(x -> {
-			System.out.println(x.getContent());
-		});
+		page.getAllFacets().stream().forEach(x -> System.out.println(x.getContent()));
 	}
 
 	@Test
 	public void finadAllAndaFacet(){
-		FacetPage<PrideSolrProject> projects = repository.findAllFacetIgnoreCase(new PageRequest(1, 10));
+		FacetPage<PrideSolrProject> projects = repository.findAllFacetIgnoreCase(PageRequest.of(1, 10));
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_SUBMISSION_DATE).getContent().size(), 1);
 		Assert.assertEquals(projects.getFacetResultPage(PrideProjectField.PROJECT_UPDATED_DATE).getContent().size(), 1);

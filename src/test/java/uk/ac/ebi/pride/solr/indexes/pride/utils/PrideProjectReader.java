@@ -1,8 +1,6 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
 import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
@@ -123,9 +121,7 @@ public class PrideProjectReader {
 
         //Instruments properties
         List<CvParamProvider> instruments = new ArrayList<>();
-        submission.getProjectMetaData().getInstruments().stream().forEach( x-> {
-            instruments.add(new DefaultCvParam(x.getCvLabel(), x.getAccession(), x.getName(), x.getValue()));
-        });
+        submission.getProjectMetaData().getInstruments().stream().forEach( x-> instruments.add(new DefaultCvParam(x.getCvLabel(), x.getAccession(), x.getName(), x.getValue())));
 
         project.setInstrumentsFromCvParam(instruments);
         return project;
