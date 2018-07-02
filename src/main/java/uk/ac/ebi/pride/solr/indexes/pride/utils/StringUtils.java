@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
+import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
 import java.util.Arrays;
@@ -56,7 +57,7 @@ public class StringUtils {
                 Arrays.asList(filtersString).forEach(filter ->{
                     String[] filterString = filter.split("==");
                     if(filterString.length == 2)
-                        filters.add(filterString[0], StringUtils.convertSentenceStyle(filterString[1]));
+                        filters.add(PrideProjectFieldEnum.returnFilterField(filterString[0]), StringUtils.convertSentenceStyle(filterString[1]));
                     else
                         log.debug("The filter provided is not well-formatted, please format the filter in field:value -- " + filter);
 
