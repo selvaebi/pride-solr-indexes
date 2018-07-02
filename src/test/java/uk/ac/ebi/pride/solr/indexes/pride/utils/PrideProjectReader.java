@@ -70,7 +70,7 @@ public class PrideProjectReader {
         project.setProjectTags(new ArrayList<>(submission.getProjectMetaData().getProjectTags()));
 
         //Get the researchers
-        List<String> contacts = new ArrayList<>();
+        Set<String> contacts = new HashSet<>();
         contacts.add(submission.getProjectMetaData().getLabHeadContact().getName());
         project.setLabPIs(contacts);
 
@@ -79,7 +79,7 @@ public class PrideProjectReader {
         project.setSubmittersFromContacts(new DefaultContact(submitterOld.getName(), "", submitterOld.getAffiliation(), ""));
 
         //Get the affiliations
-        List<String> affiliations = new ArrayList<>();
+        Set<String> affiliations = new HashSet<>();
         affiliations.add(submission.getProjectMetaData().getSubmitterContact().getAffiliation());
         affiliations.add(submission.getProjectMetaData().getLabHeadContact().getAffiliation());
         project.setAffiliations(affiliations);

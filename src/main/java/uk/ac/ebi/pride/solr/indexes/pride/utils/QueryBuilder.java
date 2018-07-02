@@ -53,7 +53,8 @@ public class QueryBuilder {
 
         if(!filters.isEmpty()){
             for(String filter: filters.keySet()){
-                filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.getFirst(filter));
+                for(String value: filters.get(filter))
+                    filterCriteria = convertStringToCriteria(filterCriteria, filter, value);
             }
         }
         if(filterCriteria != null)
@@ -102,11 +103,11 @@ public class QueryBuilder {
                     e.printStackTrace();
                 }
             }else if(field.getValue().equalsIgnoreCase(key)){
-                String[] values = value.split("\\s+");
+                value = value.trim();
                 if(conditions == null){
-                    conditions = new Criteria(key).contains(values);
+                    conditions = new Criteria(key).contains(value);
                 }else{
-                    conditions = conditions.and(new Criteria(key).contains(values));
+                    conditions = conditions.and(new Criteria(key).contains(value));
                 }
             }
         }

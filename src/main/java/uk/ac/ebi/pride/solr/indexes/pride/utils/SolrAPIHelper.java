@@ -282,7 +282,7 @@ public class SolrAPIHelper {
             String schemaFields = getSchemaByCollection(collection);
             for(PrideProjectFieldEnum fieldEnum: PrideProjectFieldEnum.values()){
                 String dateFormat = (fieldEnum.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE)?"yyyy-mm-dd":null;
-                if(!schemaFields.contains(fieldEnum.getValue())){
+                if(!schemaFields.contains("\"" + fieldEnum.getValue() + "\"")){
                     String fieldType = fieldEnum.getType().getType();
                     boolean dynamic = fieldEnum.getDynamic();
                     if(dynamic){
