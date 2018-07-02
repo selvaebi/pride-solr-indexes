@@ -14,32 +14,45 @@ public enum PrideProjectFieldEnum {
 
     ACCESSION(PrideProjectField.ACCESSION, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TILE(PrideProjectField.PROJECT_TILE, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
+
     ADDITIONAL_ATTRIBUTES(PrideProjectField.ADDITIONAL_ATTRIBUTES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     ADDITIONAL_ATTRIBUTES_FACET(PrideProjectField.ADDITIONAL_ATTRIBUTES_FACET, true, true, false, false ,ConstantsSolrTypes.STRING),
+
     PROJECT_DESCRIPTION(PrideProjectField.PROJECT_DESCRIPTION, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_SAMPLE_PROTOCOL(PrideProjectField.PROJECT_SAMPLE_PROTOCOL, false ,false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_DATA_PROTOCOL(PrideProjectField.PROJECT_DATA_PROTOCOL, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
+
     PROJECT_TAGS(PrideProjectField.PROJECT_TAGS, false , true, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_TAGS_FACET(PrideProjectField.PROJECT_TAGS_FACET, true , true, false, false, ConstantsSolrTypes.STRING),
+
     PROJECT_KEYWORDS(PrideProjectField.PROJECT_KEYWORDS, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_KEYWORDS_FACET(PrideProjectField.PROJECT_KEYWORDS_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
+
     PROJECT_DOI(PrideProjectField.PROJECT_DOI, false, false, false, false, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_OMICS_LINKS(PrideProjectField.PROJECT_OMICS_LINKS, false, false, false, false, ConstantsSolrTypes.TEXT_GENERAL ),
     PROJECT_SUBMISSION_TYPE(PrideProjectField.PROJECT_SUBMISSION_TYPE, true, false, false, false, ConstantsSolrTypes.TEXT_GENERAL),
+
     PROJECT_SUBMISSION_DATE(PrideProjectField.PROJECT_SUBMISSION_DATE, true, false, false, false, ConstantsSolrTypes.DATE ),
     PROJECT_PUBLICATION_DATE(PrideProjectField.PROJECT_PUBLICATION_DATE, true, false, false, false, ConstantsSolrTypes.DATE ),
     PROJECT_UPDATED_DATE(PrideProjectField.PROJECT_UPDATED_DATE, true, false, false, false, ConstantsSolrTypes.DATE),
+
     PROJECT_SUBMITTER(PrideProjectField.PROJECT_SUBMITTER, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
+
     PROJECT_PI_NAMES(PrideProjectField.PROJECT_PI_NAMES, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_PI_NAMES_FACET(PrideProjectField.PROJECT_PI_NAMES_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
+
     AFFILIATIONS(PrideProjectField.AFFILIATIONS, false ,true, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     AFFILIATIONS_FACET(PrideProjectField.AFFILIATIONS_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
+
     INSTRUMENTS(PrideProjectField.INSTRUMENTS, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     INSTRUMENTS_FACET(PrideProjectField.INSTRUMENTS_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
+
     SOFTWARES(PrideProjectField.SOFTWARES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     SOFTWARES_FACET(PrideProjectField.SOFTWARES_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
+
     QUANTIFICATION_METHOD(PrideProjectField.QUANTIFICATION_METHODS, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     QUANTIFICATION_METHOD_FACET(PrideProjectField.QUANTIFICATION_METHODS_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
+
     COUNTRIES(PrideProjectField.COUNTRIES, false, false, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     COUNTRIES_FACET(PrideProjectField.COUNTRIES_FACET, true, true, false, false, ConstantsSolrTypes.STRING),
 
@@ -48,15 +61,22 @@ public enum PrideProjectFieldEnum {
     EXPERIMENTAL_FACTORS_NAMES(PrideProjectField.EXPERIMENTAL_FACTORS_NAMES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     EXPERIMENTAL_FACTORS_FACET(PrideProjectField.EXPERIMENTAL_FACTORS_FACET, true, true, false, false, ConstantsSolrTypes.STRING ),
 
-    ORGANISM(PrideProjectField.ORGANISMS_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
-    CELL_TYPE(PrideProjectField.ORGANISMS_PART_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
-    DISEASES(PrideProjectField.DISEASES_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
+    ORGANISM_FACET(PrideProjectField.ORGANISMS_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
+    ORGANISM(PrideProjectField.ORGANISM, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
+
+    ORGANISM_PART_FACET(PrideProjectField.ORGANISMS_PART_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
+    ORGANISM_PART(PrideProjectField.ORGANISM_PART,false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
+
+    DISEASES_FACET(PrideProjectField.DISEASES_FACET, true, true, false, true, ConstantsSolrTypes.STRING ),
+    DISEASES(PrideProjectField.DISEASES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
 
     PROJECT_REFERENCES(PrideProjectField.PROJECT_REFERENCES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
+
     PROTEIN_IDENTIFICATIONS(PrideProjectField.PROTEIN_IDENTIFICATIONS, true, true, false, true, ConstantsSolrTypes.TEXT_GENERAL ),
     PROTEIN_IDENTIFICATIONS_FACET(PrideProjectField.PROTEIN_IDENTIFICATIONS_FACET, true, true, false, false, ConstantsSolrTypes.STRING ),
 
     PEPTIDE_SEQUENCES(PrideProjectField.PEPTIDE_SEQUENCES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL),
+
     PROJECT_IDENTIFIED_PTM_STRING(PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL),
     PROJECT_IDENTIFIED_PTM_STRING_FACET(PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING_FACET, true, true, false, false, ConstantsSolrTypes.STRING);
 

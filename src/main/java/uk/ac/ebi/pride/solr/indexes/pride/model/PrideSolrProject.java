@@ -52,7 +52,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     @Indexed(name = ADDITIONAL_ATTRIBUTES, boost = 0.4f)
-    private List<String> additionalAttributes;
+    private Set<String> additionalAttributes;
 
     /** Additional Attributes Identifiers **/
     @Setter(AccessLevel.NONE)
@@ -74,23 +74,23 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** Project Tags **/
     @Indexed(name = PROJECT_TAGS, boost = 0.2f)
-    private List<String> projectTags;
+    private Set<String> projectTags;
 
     /** Project tags facet **/
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
     @Indexed(name = PROJECT_TAGS_FACET, type = "string")
-    private List<String> projectTagsFacets;
+    private Set<String> projectTagsFacets;
 
     /** Keywords **/
     @Indexed(name = PROJECT_KEYWORDS, boost = 0.2f)
-    private List<String> keywords;
+    private Set<String> keywords;
 
     /** Projects keywords facet **/
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
     @Indexed(name = PROJECT_KEYWORDS_FACET, type = "string")
-    private List<String> keywordsFacets;
+    private Set<String> keywordsFacets;
 
 
     /** Original Doi of the dataset. The actual Doi is not needed in the Dataset **/
@@ -99,7 +99,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** otherOmicsLinks **/
     @Indexed(name = PROJECT_OMICS_LINKS, boost = 0.2f)
-    private List<String> otherOmicsLinks;
+    private Set<String> otherOmicsLinks;
 
     /** Submission Type **/
     @Indexed(name = PROJECT_SUBMISSION_TYPE, boost = 0.2f)
@@ -125,17 +125,17 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
     /** List of Lab Head Names **/
     @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f)
-    private List<String> labPIs;
+    private Set<String> labPIs;
 
     /** PI facets **/
     @Indexed(name = PROJECT_PI_NAMES_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> labPIsFacet;
+    private Set<String> labPIsFacet;
 
     /** Affiliations */
     @Indexed(name = AFFILIATIONS, boost = 0.2f)
-    private List<String> affiliations;
+    private Set<String> affiliations;
 
     /** Affiliations facet **/
     @Indexed(name = AFFILIATIONS_FACET)
@@ -147,7 +147,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = INSTRUMENTS, boost = 0.1f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private List<String> instruments;
+    private Set<String> instruments;
 
     @Indexed(name = INSTRUMENTS_FACET)
     @Setter(AccessLevel.NONE)
@@ -158,7 +158,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = SOFTWARES, boost = 0.1f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private List<String> softwares;
+    private Set<String> softwares;
 
     @Indexed(name = SOFTWARES_FACET)
     @Setter(AccessLevel.NONE)
@@ -169,7 +169,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Indexed(name = QUANTIFICATION_METHODS, boost = 0.1f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private List<String> quantificationMethods;
+    private Set<String> quantificationMethods;
 
     @Indexed(name = QUANTIFICATION_METHODS_FACET)
     @Setter(AccessLevel.NONE)
@@ -189,31 +189,46 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Experimental Factor Names **/
     @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
     @Setter(AccessLevel.NONE)
-    private List<String> experimentalFactors;
+    private Set<String> experimentalFactors;
 
     /** All additional experimental factors **/
     @Indexed(name = EXPERIMENTAL_FACTORS_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
-    private List<String> experimentalFactorFacets;
+    private Set<String> experimentalFactorFacets;
 
     /** Sample attributes names **/
     @Indexed(name = SAMPLE_ATTRIBUTES_NAMES, boost = 0.5f)
     @Setter(AccessLevel.NONE)
-    private List<String> sampleAttributes;
+    private Set<String> sampleAttributes;
 
     /** Organisms **/
     @Indexed(name = ORGANISMS_FACET)
     @Setter(AccessLevel.PRIVATE)
-    private Set<String> organisms;
+    private Set<String> organisms_facet;
 
     /** organism parts **/
     @Indexed(name = ORGANISMS_PART_FACET)
     @Setter(AccessLevel.PRIVATE)
-    private Set<String> organismPart;
+    private Set<String> organismPart_facet;
 
     /** diseases **/
     @Indexed(name = DISEASES_FACET)
+    @Setter(AccessLevel.PRIVATE)
+    private Set<String> diseases_facet;
+
+    /** Organisms **/
+    @Indexed(name = ORGANISM)
+    @Setter(AccessLevel.PRIVATE)
+    private Set<String> organisms;
+
+    /** organism parts **/
+    @Indexed(name = ORGANISM_PART)
+    @Setter(AccessLevel.PRIVATE)
+    private Set<String> organismPart;
+
+    /** diseases **/
+    @Indexed(name = DISEASES)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases;
 
@@ -255,7 +270,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param params List of params
      */
     public void setAdditionalAttributesFromCvParams(List<CvParamProvider> params){
-        this.additionalAttributes = params.stream().map(CvParamProvider::getName).collect(Collectors.toList());
+        this.additionalAttributes = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
         this.additionalAttributesFacet = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
     }
 
@@ -265,7 +280,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      */
     public void addAdditionalAttributesFromCvParams(List<CvParamProvider> params){
         if(additionalAttributes == null)
-            additionalAttributes = new ArrayList<>();
+            additionalAttributes = new HashSet<>();
         this.additionalAttributes.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toList()));
         if(additionalAttributesFacet == null)
             additionalAttributesFacet = new HashSet<>();
@@ -278,8 +293,14 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param params List of params
      */
     public void setQuantificationMethodsFromCvParams(List<CvParamProvider> params){
-        this.quantificationMethods = params.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.quantificationMethodsFacet = params.stream().map(CvParamProvider::getName).collect(Collectors.toSet());
+
+        this.quantificationMethods = params
+                .stream()
+                .map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
+        this.quantificationMethodsFacet = params
+                .stream()
+                .map(x -> StringUtils.convertSentenceStyle(x.getName()))
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -287,12 +308,14 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param params List of params
      */
     public void addQuantificationMethodsFromCvParams(List<CvParamProvider> params){
-        if(quantificationMethods == null)
-            quantificationMethods = new ArrayList<>();
-        this.quantificationMethods.addAll(params.stream().map(CvParamProvider::getName).collect(Collectors.toList()));
-        if(quantificationMethodsFacet == null)
+        if(quantificationMethods == null){
+            quantificationMethods = new HashSet<>();
             quantificationMethodsFacet = new HashSet<>();
-        this.quantificationMethodsFacet.addAll(params.stream().map( x-> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet()));
+        }
+        this.quantificationMethods.addAll(params
+                .stream()
+                .map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toList()));
+        this.quantificationMethodsFacet.addAll(this.quantificationMethods);
     }
 
     /**
@@ -300,8 +323,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param projectTags projectsTags
      */
     public void setProjectTags(List<String> projectTags) {
-        this.projectTags = projectTags;
-        this.projectTagsFacets = projectTags.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.projectTags = projectTags.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
+        this.projectTagsFacets = this.projectTags;
     }
 
     /**
@@ -309,8 +332,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param keywords Project Keywords
      */
     public void setKeywords(List<String> keywords) {
-        this.keywords = keywords;
-        this.keywordsFacets = keywords.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.keywords = keywords.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
+        this.keywordsFacets = this.keywords;
     }
 
     /**
@@ -318,8 +341,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param labPIs {@link ContactProvider} of Lab PIs
      */
     public void setLabPIFromContacts(List<ContactProvider> labPIs) {
-        this.labPIs = labPIs.stream().map(ContactProvider::getName).collect(Collectors.toList());
-        this.labPIsFacet = this.labPIs.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toList());
+        this.labPIs = labPIs.stream().map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
+        this.labPIsFacet = this.labPIs;
     }
 
     /**
@@ -327,8 +350,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param affiliations PIs and Submitters affiliations
      */
     public void setAffiliationsFromContacts(List<ContactProvider> affiliations) {
-        this.affiliations = affiliations.stream().map(ContactProvider::getAffiliation).collect(Collectors.toList());
-        this.affiliationsFacet = this.affiliations.stream().map(StringUtils::convertSentenceStyle).collect(Collectors.toSet());
+        this.affiliations = affiliations.stream().map(ContactProvider::getAffiliation).collect(Collectors.toSet());
+        this.affiliationsFacet = this.affiliations.stream().collect(Collectors.toSet());
     }
 
 
@@ -347,8 +370,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param instrumentCvParams
      */
     public void setInstrumentsFromCvParam(List<CvParamProvider> instrumentCvParams) {
-        this.instruments = instrumentCvParams.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.instrumentsFacet = instrumentCvParams.stream().map(x-> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
+        this.instruments = instrumentCvParams.stream().map(x-> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
+        this.instrumentsFacet = this.instruments.stream().collect(Collectors.toSet());
     }
 
     /**
@@ -356,8 +379,8 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param softwares
      */
     public void setSoftwaresFromCvParam(List<CvParamProvider> softwares) {
-        this.softwares = softwares.stream().map(CvParamProvider::getName).collect(Collectors.toList());
-        this.softwaresFacet = softwares.stream().map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
+        this.softwares = softwares.stream().map(x -> StringUtils.convertSentenceStyle(x.getName())).collect(Collectors.toSet());
+        this.softwaresFacet = this.softwares;
     }
 
     /**
@@ -377,7 +400,7 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
      * @param experimentalFactors List of Experimental Factors.
      */
     public void setExperimentalFactors(List<Tuple<CvParamProvider, CvParamProvider>> experimentalFactors) {
-        this.experimentalFactors = experimentalFactors.stream().map(Tuple::getKey).map(CvParamProvider::getName).collect(Collectors.toList());
+        this.experimentalFactors = experimentalFactors.stream().map(Tuple::getKey).map(CvParamProvider::getName).collect(Collectors.toSet());
         experimentalFactorFacets = this.experimentalFactors;
         }
 
@@ -394,28 +417,36 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
                 .flatMap(x -> x.getValue()
                         .stream()
                         .map(ParamProvider::getName))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
+
+        organisms_facet = new HashSet<>();
+        organismPart_facet = new HashSet<>();
+        diseases_facet  = new HashSet<>();
 
         organisms = new HashSet<>();
         organismPart = new HashSet<>();
         diseases  = new HashSet<>();
 
         sampleAttributes.forEach(x -> {
-            if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_ORGANISM))
+            if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_ORGANISM)) {
                 organisms.addAll(x.getValue()
                         .stream()
                         .map(value -> StringUtils.convertSentenceStyle(value.getName()))
                         .collect(Collectors.toList()));
-            else if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_ORGANISM_PART))
+                organisms_facet.addAll(organisms);
+            } else if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_ORGANISM_PART)) {
                 organismPart.addAll(x.getValue()
                         .stream()
                         .map(value -> StringUtils.convertSentenceStyle(value.getName()))
                         .collect(Collectors.toList()));
-            else if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_DISEASE))
+                organismPart_facet.addAll(organismPart);
+            }else if(StringUtils.isCvTerm(x.getKey().getAccession(), CvTermReference.EFO_DISEASE)) {
                 diseases.addAll(x.getValue()
                         .stream()
                         .map(value -> StringUtils.convertSentenceStyle(value.getName()))
                         .collect(Collectors.toList()));
+                diseases_facet.addAll(diseases);
+            }
         });
     }
 

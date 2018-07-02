@@ -94,6 +94,10 @@ public interface PrideProjectField {
     String ORGANISMS_PART_FACET = "organisms_part_facet";
     String DISEASES_FACET  = "diseases_facet";
 
+    String ORGANISM = "organism";
+    String ORGANISM_PART = "organism_part";
+    String DISEASES = "diseases";
+
     /** References related with the project **/
     String PROJECT_REFERENCES = "project_references";
 
@@ -110,5 +114,8 @@ public interface PrideProjectField {
 
     String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
     String PRIDE_PROJECTS_CONFIG_NAME = "_default_pride_projects";
+
+
+
 
 }
