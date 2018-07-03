@@ -72,8 +72,7 @@ public class QueryBuilder {
 
         if(!filters.isEmpty()){
             for(String filter: filters.keySet()){
-                for(String value: filters.get(filter))
-                    filterCriteria = convertStringToCriteria(filterCriteria, filter, value, dateGap);
+                    filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.get(filter), dateGap);
             }
         }
         if(filterCriteria != null)
@@ -104,34 +103,44 @@ public class QueryBuilder {
     /**
      * This function helps to convert filters from dates into proper Date.
      * @param key key of the field
-     * @param value value of the filter
+     * @param values value of the filter
      * @return Object to Filter
      */
-    public static Criteria convertStringToCriteria(Criteria conditions, String key, String value, String dateGap){
-        for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
-            if(field.getValue().equalsIgnoreCase(key) && field.getType().getType().equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.getType())){
-                try {
-                    Date date = parseInitialDate(value, dateGap);
-                    Date endDate = transformEndDate(date, dateGap);
-                    Date startDate = DateUtils.atStartOfDay(date);
-                    if(conditions == null){
-                        conditions = new Criteria(key).between(startDate, endDate);
-                    }else{
-                        conditions = conditions.and(new Criteria(key).between(startDate, endDate));
-                    }
-                } catch (ParseException e) {
-                    log.error("The format provided by the Date filter is not allowed, it should follow the the schema: yyyy-MM-dd");
-                    e.printStackTrace();
+    public static Criteria convertStringToCriteria(Criteria conditions, String key, List<String> values, String dateGap){
 
-                }
-            }else if(field.getValue().equalsIgnoreCase(key)){
-                value = value.trim();
-                if(conditions == null){
-                    conditions = new Criteria(key).contains(value);
-                }else{
-                    conditions = conditions.and(new Criteria(key).contains(value));
+        Criteria currentCriteria = null;
+        for(String value: values){
+            for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
+                if(field.getValue().equalsIgnoreCase(key) && field.getType().getType().equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.getType())){
+                    try {
+                        Date date = parseInitialDate(value, dateGap);
+                        Date endDate = transformEndDate(date, dateGap);
+                        Date startDate = DateUtils.atStartOfDay(date);
+                        if(currentCriteria == null){
+                            currentCriteria = new Criteria(key).between(startDate, endDate);
+                        }else{
+                            currentCriteria = currentCriteria.or(new Criteria(key).between(startDate, endDate));
+                        }
+                    } catch (ParseException e) {
+                        log.error("The format provided by the Date filter is not allowed, it should follow the the schema: yyyy-MM-dd");
+                        e.printStackTrace();
+
+                    }
+                }else if(field.getValue().equalsIgnoreCase(key)){
+                    value = value.trim();
+                    if(currentCriteria == null){
+                        currentCriteria = new Criteria(key).contains(value);
+                    }else{
+                        currentCriteria = conditions.or(new Criteria(key).contains(value));
+                    }
                 }
             }
+        }
+        if(currentCriteria != null){
+            if(conditions == null)
+                conditions = currentCriteria;
+            else
+                conditions.and(currentCriteria);
         }
         return conditions;
     }

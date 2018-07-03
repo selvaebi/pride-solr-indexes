@@ -120,4 +120,19 @@ public class SolrProjectService {
         MultiValueMap<String, String> filters = StringUtils.parseFilterParameters(filterQuery);
         return repository.findFacetByKeyword(keywords, filters, pageRequest, facetPage, gap);
     }
+
+    /**
+     * This file
+     * @param accession
+     * @return
+     */
+    public List<PrideSolrProject> findSimilarProjects(String accession){
+        List<PrideSolrProject> similarDatasets = new ArrayList<>();
+        PrideSolrProject project = findByAccession(accession);
+        if(project != null)
+            similarDatasets = repository.findMoreLikeThis(project.getId().toString());
+        return similarDatasets;
+
+    }
+
 }
