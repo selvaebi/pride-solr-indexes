@@ -133,15 +133,15 @@ public class OracleSolrRepositoryTests {
     @Test
     public void findProjectsByKey(){
         // Search for two keywords, No filter
-        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10));
+        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
         page.forEach(System.out::println);
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31",  PageRequest.of(0, 10));
+        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
         page.forEach(System.out::println);
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31",  PageRequest.of(0, 10));
+        page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
         page.forEach(x -> {
             System.out.println(x);
         });

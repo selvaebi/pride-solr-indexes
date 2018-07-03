@@ -65,9 +65,9 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	 * @return
 	 */
 	@Override
-	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page) {
+	public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, String dateGap) {
 		HighlightQuery highlightQuery = new SimpleHighlightQuery();
-		highlightQuery = (HighlightQuery) QueryBuilder.keywordORQuery(highlightQuery, keywords, filters);
+		highlightQuery = (HighlightQuery) QueryBuilder.keywordORQuery(highlightQuery, keywords, filters, dateGap);
 		highlightQuery.setPageRequest(page);
 
 		HighlightOptions highlightOptions = new HighlightOptions();
@@ -84,15 +84,15 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
     @Override
-    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String gap) {
+    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String dateGap) {
 
 		FacetQuery facetQuery = new SimpleFacetQuery();
-        facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters);
+        facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters, dateGap);
         facetQuery.setPageRequest(page);
 
         FacetOptions facetOptions = new FacetOptions();
         facetOptions.setPageable(facetPage);
-		PrideSolrConstants.AllowedDateGapConstants gapConstants = PrideSolrConstants.AllowedDateGapConstants.findByString(gap);
+		PrideSolrConstants.AllowedDateGapConstants gapConstants = PrideSolrConstants.AllowedDateGapConstants.findByString(dateGap);
         if( gapConstants != PrideSolrConstants.AllowedDateGapConstants.UNKONWN){
 			Arrays.asList(PrideProjectFieldEnum.values())
 					.stream()
@@ -100,7 +100,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 					.forEach(facetField -> {
 						if(facetField.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE){
 							try {
-								Date startDate = new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2004");
+								Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2004-01-01");
 								FacetOptions.FieldWithDateRangeParameters dateRange = new FacetOptions.FieldWithDateRangeParameters(facetField.getValue(), startDate, new Date(), gapConstants.value);
 								dateRange.setHardEnd(true).setInclude(FacetParams.FacetRangeInclude.LOWER).setOther(FacetParams.FacetRangeOther.BEFORE);
 								facetOptions.addFacetByRange(dateRange);

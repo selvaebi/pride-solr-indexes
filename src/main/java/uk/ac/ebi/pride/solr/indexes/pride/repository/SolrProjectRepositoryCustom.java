@@ -42,9 +42,9 @@ interface SolrProjectRepositoryCustom {
 	Cursor<PrideSolrProject> findAllUsingCursor();
 
 	@Highlight(fragsize = 20, snipplets = 3)
-	HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page);
+	HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, String dateGap);
 
-	FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String gap);
+	FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String dateGap);
 
 	/**
 	 * Find all Projects with Facets

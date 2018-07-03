@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 
 import java.util.Collections;
@@ -51,7 +52,7 @@ public class BasicLocalhostRepositoryTests {
 
 	@Test
 	public void findProjectsByKey(){
-		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Collections.singletonList("PXD"), new LinkedMultiValueMap<>(), PageRequest.of(1, 10));
+		HighlightPage<PrideSolrProject> page = repository.findByKeyword(Collections.singletonList("PXD"), new LinkedMultiValueMap<>(), PageRequest.of(1, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
     	page.forEach(System.out::println);
 	}
 

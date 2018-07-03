@@ -1,5 +1,8 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
@@ -8,8 +11,12 @@ import uk.ac.ebi.pride.utilities.util.DateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -17,7 +24,10 @@ import java.util.stream.Collectors;
  *
  * @author ypriverol
  */
+@Slf4j
 public class QueryBuilder {
+
+    private final static SimpleDateFormat dateFormatUTC = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     /**
      *
@@ -25,7 +35,7 @@ public class QueryBuilder {
      * @param filters Key, Value pair Map where the key is the name of the property and the value if the value to filter.
      * @return HighlightQuery
      */
-    public static Query keywordORQuery(Query query, List<String> keywords, MultiValueMap<String, String> filters){
+    public static Query keywordORQuery(Query query, List<String> keywords, MultiValueMap<String, String> filters, String dateGap){
 
         if(query == null)
             query = new SimpleFacetAndHighlightQuery();
@@ -38,11 +48,20 @@ public class QueryBuilder {
         }else {
             for (String word: keywords) {
                 for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
-                    if(conditions == null){
-                        conditions = new Criteria(field.getValue()).contains(word);
-                    }else{
-                        conditions = conditions.or(new Criteria(field.getValue()).contains(word));
+                    if(field.getType() != PrideSolrConstants.ConstantsSolrTypes.DATE){
+                        if(conditions == null){
+                            if(word.contains(" "))
+                                conditions = new Criteria(field.getValue()).expression("\"" + word + "\"");
+                            else
+                                conditions = new Criteria(field.getValue()).contains(word);
+                        }else{
+                            if(word.contains(" "))
+                                conditions = conditions.or(new Criteria(field.getValue()).expression("\"" + word + "\""));
+                            else
+                                conditions = conditions.or(new Criteria(field.getValue()).contains(word));
+                        }
                     }
+
                 }
             }
         }
@@ -54,7 +73,7 @@ public class QueryBuilder {
         if(!filters.isEmpty()){
             for(String filter: filters.keySet()){
                 for(String value: filters.get(filter))
-                    filterCriteria = convertStringToCriteria(filterCriteria, filter, value);
+                    filterCriteria = convertStringToCriteria(filterCriteria, filter, value, dateGap);
             }
         }
         if(filterCriteria != null)
@@ -65,7 +84,7 @@ public class QueryBuilder {
 
     /**
      * This function process all the keywords provided to the service to remove un-wanted characters.
-     * If the keyword containes the following character : we skip the word.
+     * If the keyword contains the following character : we skip the word.
      *
      * @param keywords Keywords List
      * @return Return keyword List
@@ -88,19 +107,22 @@ public class QueryBuilder {
      * @param value value of the filter
      * @return Object to Filter
      */
-    public static Criteria convertStringToCriteria(Criteria conditions, String key, String value){
+    public static Criteria convertStringToCriteria(Criteria conditions, String key, String value, String dateGap){
         for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
             if(field.getValue().equalsIgnoreCase(key) && field.getType().getType().equalsIgnoreCase(PrideSolrConstants.ConstantsSolrTypes.DATE.getType())){
                 try {
-                    Date date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+                    Date date = parseInitialDate(value, dateGap);
+                    Date endDate = transformEndDate(date, dateGap);
                     Date startDate = DateUtils.atStartOfDay(date);
                     if(conditions == null){
-                        conditions = new Criteria(key).is(startDate);
+                        conditions = new Criteria(key).between(startDate, endDate);
                     }else{
-                        conditions = conditions.and(new Criteria(key).between(date, date));
+                        conditions = conditions.and(new Criteria(key).between(startDate, endDate));
                     }
                 } catch (ParseException e) {
+                    log.error("The format provided by the Date filter is not allowed, it should follow the the schema: yyyy-MM-dd");
                     e.printStackTrace();
+
                 }
             }else if(field.getValue().equalsIgnoreCase(key)){
                 value = value.trim();
@@ -112,5 +134,32 @@ public class QueryBuilder {
             }
         }
         return conditions;
+    }
+
+    private static Date parseInitialDate(String value, String dateGap) throws ParseException {
+        Date date;
+        if(PrideSolrConstants.AllowedDateGapConstants.YEARLY.value.equalsIgnoreCase(dateGap)) {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(value.substring(0, 4) + "-" + "01" + "-" + "01");
+        }else if(PrideSolrConstants.AllowedDateGapConstants.MONTHLY.value.equalsIgnoreCase(dateGap)){
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(value.substring(0, 7) + "-" + "01");
+        }else{
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
+        }
+        return dateFormatUTC.parse(dateFormatUTC.format(date));
+
+    }
+
+    private static Date transformEndDate(Date date, String dateGap) throws ParseException {
+        LocalDateTime dateTime = date.toInstant().atZone(TimeZone.getTimeZone("UTC").toZoneId()).toLocalDateTime();
+        if(PrideSolrConstants.AllowedDateGapConstants.DAILY.value.equalsIgnoreCase(dateGap))
+            dateTime = dateTime.plusDays(1);
+        else if(PrideSolrConstants.AllowedDateGapConstants.MONTHLY.value.equalsIgnoreCase(dateGap))
+            dateTime = dateTime.plusMonths(1);
+        else if(PrideSolrConstants.AllowedDateGapConstants.YEARLY.value.equalsIgnoreCase(dateGap))
+            dateTime = dateTime.plusYears(1);
+        date = java.util.Date.from(dateTime
+                .atZone(TimeZone.getTimeZone("UTC").toZoneId())
+                .toInstant());
+        return dateFormatUTC.parse(dateFormatUTC.format(date));
     }
 }

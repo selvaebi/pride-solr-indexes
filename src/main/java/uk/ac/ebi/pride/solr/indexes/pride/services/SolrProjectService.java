@@ -101,10 +101,10 @@ public class SolrProjectService {
      * @param pageRequest Page Request.
      * @return List of datasets Pagination
      */
-    public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, String filterQuery, PageRequest pageRequest) {
+    public HighlightPage<PrideSolrProject> findByKeyword(List<String> keywords, String filterQuery, PageRequest pageRequest, String dateGap) {
 
         MultiValueMap<String, String> filters = StringUtils.parseFilterParameters(filterQuery);
-        return repository.findByKeyword(keywords, filters, pageRequest);
+        return repository.findByKeyword(keywords, filters, pageRequest, dateGap);
     }
 
     public Page<PrideSolrProject> findAllIgnoreCase(PageRequest pageRequest) {

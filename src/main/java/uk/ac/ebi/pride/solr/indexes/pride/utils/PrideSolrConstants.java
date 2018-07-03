@@ -15,6 +15,7 @@ public class PrideSolrConstants{
     public enum AllowedDateGapConstants {
         MONTHLY("+1MONTH"),
         YEARLY("+1YEAR"),
+        DAILY("+1DAY"),
         UNKONWN("");
 
         public String value;
