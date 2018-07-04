@@ -94,8 +94,8 @@ public interface PrideProjectField {
     String ORGANISMS_PART_FACET = "organisms_part_facet";
     String DISEASES_FACET  = "diseases_facet";
 
-    String ORGANISM = "organism";
-    String ORGANISM_PART = "organism_part";
+    String ORGANISM = "organisms";
+    String ORGANISM_PART = "organisms_part";
     String DISEASES = "diseases";
 
     /** References related with the project **/

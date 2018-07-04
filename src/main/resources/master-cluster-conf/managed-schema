@@ -179,11 +179,11 @@
 
    <field name="sample_attributes" type="text_general" indexed="true" stored="true" multiValued="true" />
 
-   <field name="organism" type="text_general" indexed="true" stored="true" multiValued="true"/>
-   <field name="organism_facet" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="organisms" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="organisms_facet" type="string" indexed="true" stored="true" multiValued="true"/>
 
-   <field name="organism_part" type="text_general" indexed="true" stored="true" multiValued="true"/>
-   <field name="organism_part_facet" type="string" indexed="true" stored="true" multiValued="true"/>
+   <field name="organisms_part" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="organisms_part_facet" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <field name="diseases" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="diseases_facet" type="string" indexed="true" stored="true" multiValued="true" />
@@ -224,8 +224,8 @@
    <copyField source="experimental_factors" dest="text"/>
    <copyField source="experimental_factors" dest="text"/>
    <copyField source="sample_attributes" dest="text" />
-   <copyField source="organism" dest="text"/>
-   <copyField source="organism_part" dest="text"/>
+   <copyField source="organisms" dest="text"/>
+   <copyField source="organisms_part" dest="text"/>
    <copyField source="diseases" dest="text" />
    <copyField source="references" dest="text" />
    <copyField source="project_identified_ptms" dest="text" />
