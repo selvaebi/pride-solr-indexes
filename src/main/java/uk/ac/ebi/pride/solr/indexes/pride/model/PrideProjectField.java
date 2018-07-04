@@ -32,7 +32,7 @@ public interface PrideProjectField {
 
     /** Project Tags **/
     String PROJECT_TAGS = "project_tags";
-    String PROJECT_TAGS_FACET = "projects_tags_facet";
+    String PROJECT_TAGS_FACET = "project_tags_facet";
 
     /** Keywords **/
     String PROJECT_KEYWORDS = "project_keywords";
@@ -114,6 +114,8 @@ public interface PrideProjectField {
 
     String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
     String PRIDE_PROJECTS_CONFIG_NAME = "_default_pride_projects";
+
+
 
 
 
