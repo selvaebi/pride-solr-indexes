@@ -136,7 +136,7 @@
       <field name="project_description" type="text_general" indexed="true" stored="true"/>
 
       <field name="additional_attributes" type="text_general" indexed="true" stored="true" multiValued="true"/>
-      <field name="additional_attributes_facet" type="string" indexed="true" sored="true" multiValued="true"/>
+      <field name="additional_attributes_facet" type="string" indexed="true" stored="true" multiValued="true"/>
 
       <field name="project_data_protocol" type="text_general" indexed="true" stored="true"/>
       <field name="project_sample_protocol" type="text_general" indexed="true" stored="true"/>
@@ -144,7 +144,7 @@
       <field name="project_tags" type="text_general" indexed="true" stored="true" multiValued="true"/>
       <field name="project_tags_facet" type="string" indexed="true" stored="true" multiValued="true"/>
 
-      <field name-"project_keywords" type="text_general" indexed="true" stored="true" multiValued="true"/>
+      <field name="project_keywords" type="text_general" indexed="true" stored="true" multiValued="true"/>
       <field name="project_keywords_facet" type="string" indexed="true" stored="true" multiValued="true"/>
 
       <field name="project_doi" type="text_general" indexed="true" stored="true"/>
@@ -160,7 +160,7 @@
       <field name="lab_heads_facet" type="string" indexed="true" stored="true" multiValued="true" />
 
       <field name="affiliations" type="text_general" indexed="true" stored="true" multiValued="true" />
-      <field name="affiliations" type="string" indexed="true" stored="true" multiValued="true" />
+      <field name="affiliations_facet" type="string" indexed="true" stored="true" multiValued="true" />
 
       <field name="instruments" type="text_general" indexed="true" stored="true" multiValued="true"/>
       <field name="instruments_facet" type="string" indexed="true" stored="true" multiValued="true" />
@@ -173,9 +173,6 @@
 
       <field name="countries" type="text_general" indexed="true" stored="true" multiValued="true"/>
       <field name="countries_facet" type="string" indexed="true" stored="true" multiValued="true" />
-
-      <field name="experimental_factors" type="text_general" indexed="true" stored="true" multiValued="true"/>
-      <field name="experimental_factors_facet" type="string" indexed="true" stored="true" multiValued="true" />
 
       <field name="experimental_factors" type="text_general" indexed="true" stored="true" multiValued="true"/>
       <field name="experimental_factors_facet" type="string" indexed="true" stored="true" multiValued="true" />
@@ -233,26 +230,9 @@
       <copyField source="references" dest="text" />
       <copyField source="project_identified_ptms" dest="text" />
 
-   <!-- Main body of document extracted by SolrCell.
-        NOTE: This field is not indexed by default, since it is also copied to "text"
-        using copyField below. This is to save space. Use this field for returning and
-        highlighting document content. Use the "text" field to search the content. -->
-   <field name="content" type="text_general" indexed="false" stored="true" multiValued="true"/>
-   
-
-   <!-- catchall field, containing all other searchable text fields (implemented
-        via copyField further on in this schema  -->
-   <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
-
-   <!-- catchall text field that indexes tokens both normally and in reverse for efficient
-        leading wildcard queries. -->
-   <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
-
    <!-- non-tokenized version of manufacturer to make it easier to sort or group
         results by manufacturer.  copied from "manu" via copyField -->
    <field name="manu_exact" type="string" indexed="true" stored="false" docValues="false" />
-
-   <field name="payloads" type="payloads" indexed="true" stored="true"/>
 
 
    <!-- Dynamic field definitions allow using convention over configuration
