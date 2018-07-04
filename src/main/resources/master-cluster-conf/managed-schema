@@ -148,37 +148,90 @@
    <field name="project_keywords_facet" type="string" indexed="true" stored="true" multiValued="true"/>
 
    <field name="project_doi" type="text_general" indexed="true" stored="true"/>
+   <field name="project_other_omics" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="project_submission_type" type="text_general" indexed="true" stored="true" />
+
+   <field name="publication_date" type="pdate" indexed="true" stored="true"/>
+   <field name="updated_date" type="pdate" indexed="true" stored="true" />
+   <field name="submission_date" type="pdate" indexed="true" stored="true"/>
+
+   <field name="submitters" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="lab_heads" type="text_general"  indexed="true" stored="true" multiValued="true"/>
+   <field name="lab_heads_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="affiliations" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="affiliations" type="string" indexed="true" stored="true" multiValued="true" />
 
    <field name="instruments" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="instruments_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="softwares" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="softwares_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="quantification_methods" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="quantification_methods_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="countries" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="countries_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="experimental_factors" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="experimental_factors_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="experimental_factors" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="experimental_factors_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="sample_attributes" type="text_general" indexed="true" stored="true" multiValued="true" />
+
    <field name="organism" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="organism_facet" type="string" indexed="true" stored="true" multiValued="true"/>
+
    <field name="organism_part" type="text_general" indexed="true" stored="true" multiValued="true"/>
+   <field name="organism_part_facet" type="string" indexed="true" stored="true" multiValued="true"/>
+
    <field name="diseases" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="diseases_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="references" type="text_general" indexed="true" stored="true" multiValued="true" />
+
+   <field name="protein_identifications" type="text_general" indexed="true" stored="true" multiValued="true" />
+   <field name="protein_identifications_facet" type="string" indexed="true" stored="true" multiValued="true" />
+
+   <field name="peptide_sequences" type="text_general" indexed="true" stored="true" multiValued="true" />
+
    <field name="project_identified_ptms" type="text_general" indexed="true" stored="true" multiValued="true" />
-
-
-
-   <field name="weight" type="pfloat" indexed="true" stored="true"/>
-   <field name="inStock" type="boolean" indexed="true" stored="true" />
-   <field name="title" type="text_general" indexed="true" stored="true" multiValued="true"/>
-   <field name="subject" type="text_general" indexed="true" stored="true"/>
-   <field name="description" type="text_general" indexed="true" stored="true"/>
-   <field name="comments" type="text_general" indexed="true" stored="true"/>
-   <field name="author" type="text_general" indexed="true" stored="true"/>
-   <field name="keywords" type="text_general" indexed="true" stored="true"/>
-   <field name="category" type="text_general" indexed="true" stored="true"/>
-   <field name="resourcename" type="text_general" indexed="true" stored="true"/>
-   <field name="publication_date" type="pdate" indexed="true" stored="true"/>
-   <field name="updated_date" type="pdate" indexed="true" stored="true" /> 
-   <field name="submission_date" type="pdate" indexed="true" stored="true" /> 
-
-   <!-- Main body of document extracted by SolrCell.
-        NOTE: This field is not indexed by default, since it is also copied to "text"
-        using copyField below. This is to save space. Use this field for returning and
-        highlighting document content. Use the "text" field to search the content. -->   
+   <field name="project_identified_ptms_facet" type="string" indexed="true" stored="true" multiValued="true" />
 
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+
+
+   <copyField source="accession" dest="text"/>
+   <copyField source="project_title" dest="text"/>
+   <copyField source="project_description" dest="text"/>
+   <copyField source="additional_attributes" dest="text"/>
+   <copyField source="project_data_protocol" dest="text"/>
+   <copyField source="project_sample_protocol" dest="text"/>
+   <copyField source="project_tags" dest="text"/>
+   <copyField source="project_keywords" dest="text"/>
+   <copyField source="project_doi" dest="text"/>
+   <copyField source="project_other_omics" dest="text"/>
+   <copyField source="project_submission_type" dest="text"/>
+   <copyField source="submitters" dest="text"/>
+   <copyField source="lab_heads"  dest="text"/>
+   <copyField source="affiliations" dest="text" />
+   <copyField source="instruments" dest="text"/>
+   <copyField source="softwares" dest="text"/>
+   <copyField source="quantification_methods" dest="text"/>
+   <copyField source="countries" dest="text" />
+   <copyField source="experimental_factors" dest="text"/>
+   <copyField source="experimental_factors" dest="text"/>
+   <copyField source="sample_attributes" dest="text" />
+   <copyField source="organism" dest="text"/>
+   <copyField source="organism_part" dest="text"/>
+   <copyField source="diseases" dest="text" />
+   <copyField source="references" dest="text" />
+   <copyField source="project_identified_ptms" dest="text" />
 
    <!-- catchall text field that indexes tokens both normally and in reverse for efficient
         leading wildcard queries. -->
@@ -235,25 +288,7 @@
         or to add multiple fields to the same field for easier/faster searching.  -->
 
   
-   
-   <!-- Copy the price into a currency enabled field (default USD) -->
-  
-   <!-- Text fields from SolrCell to search by default in our catch-all field -->
-   
-   <!-- Create a string version of author for faceting -->
-   
-   <!-- Above, multiple source fields are copied to the [text] field. 
-    Another way to map multiple source fields to the same 
-    destination field is to use the dynamic field syntax. 
-    copyField also supports a maxChars to copy setting.  -->
-     
-   <!-- <copyField source="*_t" dest="text" maxChars="3000"/> -->
-
-   <!-- copy name to alphaNameSort, a field designed for sorting by name -->
-   <!-- <copyField source="name" dest="alphaNameSort"/> -->
- 
-  
-    <!-- field type definitions. The "name" attribute is
+  <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"
        attribute and any other attributes determine the real
        behavior of the fieldType.

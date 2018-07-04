@@ -1633,13 +1633,28 @@
       
    <requestHandler name="/mlt" class="solr.MoreLikeThisHandler">
         <lst name="defaults">
-            <str name="mlt.fl">accession,project_title,project_description,project_data_protocol,instrument,organism,organism_part,diseases,project_identified_ptms</str>
-            <str name="mlt.qf">accession^10 project_title^9 project_description^8</str>
+            <str name="mlt.fl">accession,project_title,project_description,project_data_protocol,instrument,organism,organism_part,diseases,project_identified_ptms, text</str>
+            <str name="mlt.qf">accession^10 project_title^9 project_description^8 text^6</str>
             <str name="mlt.mintf">1</str>
             <str name="mlt.mindf">2</str>
             <str name="mlt.boost">true</str>
         </lst>
-    </requestHandler>
+   </requestHandler>
+
+
+  <searchComponent name="suggest" class="solr.SuggestComponent">
+    <lst name="suggester">
+      <str name="name">textSuggester</str>
+      <str name="lookupImpl">AnalyzingInfixLookupFactory</str>
+      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+      <str name="field">text</str>
+      <str name="suggestAnalyzerFieldType">text_en</str>
+      <str name="queryAnalyzerFieldType">text_en</str>
+      <str name="buildOnStartup">false</str>
+    </lst>
+  </searchComponent>
+
+
 
 
 
