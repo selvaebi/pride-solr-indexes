@@ -18,6 +18,8 @@ package uk.ac.ebi.pride.solr.indexes.pride.repository;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.FacetParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.util.MultiValueMap;
+import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -37,10 +40,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Implementation of {@link SolrProjectRepositoryCustom}.
@@ -146,20 +146,29 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
 	@Override
-	public List<PrideSolrProject> findMoreLikeThis(String accession) {
-		List<PrideSolrProject> solrProjects = new ArrayList<>();
+	public List<Tuple<String,Double>> findMoreLikeThisIds(String accession, Integer pageSize, Integer page) {
+		List<Tuple<String, Double>> solrProjectIds = new ArrayList<>();
 		SolrQuery queryParams = new SolrQuery();
-		queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.ACCESSION, PrideProjectField.INSTRUMENTS, PrideProjectField.ORGANISM, PrideProjectField.DISEASES,
-				PrideProjectField.ORGANISM_PART, PrideProjectField.PROJECT_DATA_PROTOCOL, PrideProjectField.PROJECT_DESCRIPTION);
+		queryParams.setRows(pageSize);
+		queryParams.setStart(page*pageSize);
+		queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.PROJECT_DESCRIPTION);
 		queryParams.setQuery(PrideProjectField.ACCESSION + ":" + accession);
 		try {
 			QueryResponse q = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, queryParams);
-			solrProjects = solrTemplate.convertQueryResponseToBeans(q, PrideSolrProject.class);
+			q.getMoreLikeThis().asShallowMap().values()
+					.stream()
+					.forEach(x -> {
+						Iterator<SolrDocument> it = x.iterator();
+						while(it.hasNext()){
+							SolrDocument doc = it.next();
+							solrProjectIds.add(new Tuple<String, Double>((String)doc.getFirstValue(PrideProjectField.ID), ((Float)doc.getFirstValue("score")).doubleValue()));
+						}
+					});
 		} catch (SolrServerException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return solrProjects;
+		return solrProjectIds;
 	}
 }

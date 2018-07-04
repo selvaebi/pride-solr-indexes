@@ -50,4 +50,7 @@ public interface SolrProjectRepository extends SolrProjectRepositoryCustom, Crud
 
 
 
+
+
+
 }

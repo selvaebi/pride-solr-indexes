@@ -75,7 +75,7 @@ public interface PrideProjectField {
     String SOFTWARES_FACET = "softwares_facet";
 
     String QUANTIFICATION_METHODS = "quantification_methods";
-    String QUANTIFICATION_METHODS_FACET = "quatification_methods_facet";
+    String QUANTIFICATION_METHODS_FACET = "quantification_methods_facet";
 
 
     /** This field store all the countries associated with the experiment **/

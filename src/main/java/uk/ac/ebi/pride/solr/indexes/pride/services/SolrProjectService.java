@@ -9,6 +9,7 @@ import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
+import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
@@ -128,8 +129,9 @@ public class SolrProjectService {
      * @param accession Project Accession
      * @return List of Similar projects.
      */
-    public List<PrideSolrProject> findSimilarProjects(String accession){
-        List<PrideSolrProject> similarDatasets = repository.findMoreLikeThis(accession);
+    public List<PrideSolrProject> findSimilarProjects(String accession, Integer pageSize, Integer page ){
+        List<Tuple<String, Double>> ids = repository.findMoreLikeThisIds(accession, pageSize, page);
+        List<PrideSolrProject> similarDatasets = (List<PrideSolrProject>) repository.findAllById(ids.stream().map(x -> x.getKey()).collect(Collectors.toSet()));
         if(similarDatasets == null)
             similarDatasets = new ArrayList<>();
         else

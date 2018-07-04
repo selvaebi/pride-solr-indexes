@@ -23,6 +23,7 @@ import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import org.springframework.data.solr.repository.Query;
 import org.springframework.util.MultiValueMap;
+import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.util.List;
@@ -59,6 +60,6 @@ interface SolrProjectRepositoryCustom {
 	 * @param accession Project Accession
 	 * @return List of {@link PrideSolrProject}
 	 */
-	List<PrideSolrProject> findMoreLikeThis(String accession);
+	List<Tuple<String, Double>> findMoreLikeThisIds(String accession, Integer pageSize, Integer page );
 
 }

@@ -1,8 +1,7 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
-import lombok.extern.log4j.Log4j;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.data.solr.core.query.*;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
@@ -12,8 +11,6 @@ import uk.ac.ebi.pride.utilities.util.DateUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
