@@ -14,6 +14,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This service allows to make updates and save of the Pride Projects and should be used instead of pure repository.
@@ -122,15 +123,17 @@ public class SolrProjectService {
     }
 
     /**
-     * This file
-     * @param accession
-     * @return
+     * This method retrieve a datasets that are similar to an specific dataset. The method remove the requested dataset
+     * from the list.
+     * @param accession Project Accession
+     * @return List of Similar projects.
      */
     public List<PrideSolrProject> findSimilarProjects(String accession){
-        List<PrideSolrProject> similarDatasets = new ArrayList<>();
-        PrideSolrProject project = findByAccession(accession);
-        if(project != null)
-            similarDatasets = repository.findMoreLikeThis(project.getId().toString());
+        List<PrideSolrProject> similarDatasets = repository.findMoreLikeThis(accession);
+        if(similarDatasets == null)
+            similarDatasets = new ArrayList<>();
+        else
+            similarDatasets = similarDatasets.stream().filter(x -> !x.getAccession().equalsIgnoreCase(accession)).collect(Collectors.toList());
         return similarDatasets;
 
     }

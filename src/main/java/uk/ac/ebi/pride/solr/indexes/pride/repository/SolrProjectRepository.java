@@ -48,9 +48,6 @@ public interface SolrProjectRepository extends SolrProjectRepositoryCustom, Crud
     @Query(value = "*:*")
     Page<PrideSolrProject> findAllIgnoreCase(Pageable pageable);
 
-    @Query(value = "id:?0", requestHandler = "/mlt", filters = {"doctype:post"})
-    List<PrideSolrProject> findMoreLikeThis(String id);
-
 
 
 }

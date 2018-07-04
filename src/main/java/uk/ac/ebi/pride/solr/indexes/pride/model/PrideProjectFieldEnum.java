@@ -103,7 +103,7 @@ public enum PrideProjectFieldEnum {
      * from facet fields into TEXT fields.
      *
      * @param filterField filter Field
-     * @return Filter Field.
+     * @return Filter Field
      */
     public static String returnFilterField(String filterField) {
         for(PrideProjectFieldEnum enumField: values()){

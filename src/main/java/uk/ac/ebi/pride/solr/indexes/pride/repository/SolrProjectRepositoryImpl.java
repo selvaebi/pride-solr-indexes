@@ -15,6 +15,9 @@
  */
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.FacetParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -31,8 +34,10 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -138,5 +143,23 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 				facets.addFacetOnField(field.getValue());
 		FacetQuery query = new SimpleFacetQuery(new SimpleStringCriteria("*:*")).setFacetOptions(facets);
 		return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, query, PrideSolrProject.class);
+	}
+
+	@Override
+	public List<PrideSolrProject> findMoreLikeThis(String accession) {
+		List<PrideSolrProject> solrProjects = new ArrayList<>();
+		SolrQuery queryParams = new SolrQuery();
+		queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.ACCESSION, PrideProjectField.INSTRUMENTS, PrideProjectField.ORGANISM, PrideProjectField.DISEASES,
+				PrideProjectField.ORGANISM_PART, PrideProjectField.PROJECT_DATA_PROTOCOL, PrideProjectField.PROJECT_DESCRIPTION);
+		queryParams.setQuery(PrideProjectField.ACCESSION + ":" + accession);
+		try {
+			QueryResponse q = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, queryParams);
+			solrProjects = solrTemplate.convertQueryResponseToBeans(q, PrideSolrProject.class);
+		} catch (SolrServerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return solrProjects;
 	}
 }

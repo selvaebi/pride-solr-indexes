@@ -54,4 +54,11 @@ interface SolrProjectRepositoryCustom {
 	 */
 	FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest);
 
+	/**
+	 * This methods helps to retrieve all the datatasets/Projects similar for an specific project accession
+	 * @param accession Project Accession
+	 * @return List of {@link PrideSolrProject}
+	 */
+	List<PrideSolrProject> findMoreLikeThis(String accession);
+
 }
