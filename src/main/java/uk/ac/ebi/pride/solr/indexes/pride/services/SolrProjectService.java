@@ -131,11 +131,15 @@ public class SolrProjectService {
      */
     public List<PrideSolrProject> findSimilarProjects(String accession, Integer pageSize, Integer page ){
         List<Tuple<String, Double>> ids = repository.findMoreLikeThisIds(accession, pageSize, page);
-        List<PrideSolrProject> similarDatasets = (List<PrideSolrProject>) repository.findAllById(ids.stream().map(x -> x.getKey()).collect(Collectors.toSet()));
-        if(similarDatasets == null)
-            similarDatasets = new ArrayList<>();
-        else
-            similarDatasets = similarDatasets.stream().filter(x -> !x.getAccession().equalsIgnoreCase(accession)).collect(Collectors.toList());
+        List<PrideSolrProject> similarDatasets = new ArrayList<>();
+        Iterable<PrideSolrProject> itDatasets = repository.findAllById(ids.stream().map(x -> x.getKey()).collect(Collectors.toSet()));
+        if(itDatasets != null){
+            itDatasets.forEach(x -> {
+                if(!x.getAccession().equalsIgnoreCase(accession)){
+                   similarDatasets.add(x);
+                }
+            });
+        }
         return similarDatasets;
 
     }
