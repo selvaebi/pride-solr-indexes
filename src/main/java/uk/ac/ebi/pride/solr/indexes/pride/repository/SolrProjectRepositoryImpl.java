@@ -18,6 +18,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.repository;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SuggesterResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.params.FacetParams;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,5 +169,24 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			e.printStackTrace();
 		}
 		return solrProjectIds;
+	}
+
+	@Override
+	public Map<String, List<String>> findAutoComplete(String keyword){
+		SolrQuery solrQuery = new SolrQuery();
+		solrQuery.setRequestHandler("/suggest");
+		solrQuery.setRows(10);
+		solrQuery.set("suggest", "true");
+		solrQuery.set("suggest.dictionary", "textSuggester");
+		solrQuery.set("suggest.q", keyword);
+
+		try {
+			QueryResponse re = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery);
+			SuggesterResponse sr = re.getSuggesterResponse();
+			return sr.getSuggestedTerms();
+		} catch (SolrServerException | IOException e) {
+			e.printStackTrace();
+		}
+		return Collections.emptySortedMap();
 	}
 }

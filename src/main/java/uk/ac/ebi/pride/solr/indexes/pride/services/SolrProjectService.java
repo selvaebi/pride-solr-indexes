@@ -144,4 +144,12 @@ public class SolrProjectService {
         return similarDatasets;
     }
 
+    /**
+     * Find the Autocomplete values for an specific query.
+     * @param keyword
+     * @return
+     */
+    public Map<String, List<String>> findAutoComplete(String keyword){
+        return repository.findAutoComplete(keyword);
+    }
 }

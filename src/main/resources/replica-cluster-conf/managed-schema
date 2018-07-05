@@ -188,7 +188,7 @@
       <field name="diseases" type="text_general" indexed="true" stored="true" multiValued="true" />
       <field name="diseases_facet" type="string" indexed="true" stored="true" multiValued="true" />
 
-      <field name="references" type="text_general" indexed="true" stored="true" multiValued="true" />
+      <field name="project_references" type="text_general" indexed="true" stored="true" multiValued="true" />
 
       <field name="protein_identifications" type="text_general" indexed="true" stored="true" multiValued="true" />
       <field name="protein_identifications_facet" type="string" indexed="true" stored="true" multiValued="true" />
@@ -200,35 +200,35 @@
 
       <!-- catchall field, containing all other searchable text fields (implemented
            via copyField further on in this schema  -->
-      <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+   <field name="suggest_field" type="textSuggest" indexed="true" stored="true" multiValued="true"/>
+   <field name="text" type="text_general" indexed="true" stored="true" multiValued="true"/>
 
-
-      <copyField source="accession" dest="text"/>
-      <copyField source="project_title" dest="text"/>
-      <copyField source="project_description" dest="text"/>
-      <copyField source="additional_attributes" dest="text"/>
-      <copyField source="project_data_protocol" dest="text"/>
-      <copyField source="project_sample_protocol" dest="text"/>
-      <copyField source="project_tags" dest="text"/>
-      <copyField source="project_keywords" dest="text"/>
-      <copyField source="project_doi" dest="text"/>
-      <copyField source="project_other_omics" dest="text"/>
-      <copyField source="project_submission_type" dest="text"/>
-      <copyField source="submitters" dest="text"/>
-      <copyField source="lab_heads"  dest="text"/>
-      <copyField source="affiliations" dest="text" />
-      <copyField source="instruments" dest="text"/>
-      <copyField source="softwares" dest="text"/>
-      <copyField source="quantification_methods" dest="text"/>
-      <copyField source="countries" dest="text" />
-      <copyField source="experimental_factors" dest="text"/>
-      <copyField source="experimental_factors" dest="text"/>
-      <copyField source="sample_attributes" dest="text" />
-      <copyField source="organisms" dest="text"/>
-      <copyField source="organisms_part" dest="text"/>
-      <copyField source="diseases" dest="text" />
-      <copyField source="references" dest="text" />
-      <copyField source="project_identified_ptms" dest="text" />
+   <copyField source="accession" dest="suggest_field"/>
+   <copyField source="project_title" dest="suggest_field"/>
+   <copyField source="project_description" dest="suggest_field"/>
+   <copyField source="additional_attributes" dest="suggest_field"/>
+   <copyField source="project_data_protocol" dest="suggest_field"/>
+   <copyField source="project_sample_protocol" dest="suggest_field"/>
+   <copyField source="project_tags" dest="suggest_field"/>
+   <copyField source="project_keywords" dest="suggest_field"/>
+   <copyField source="project_doi" dest="suggest_field"/>
+   <copyField source="project_other_omics" dest="suggest_field"/>
+   <copyField source="project_submission_type" dest="suggest_field"/>
+   <copyField source="submitters" dest="suggest_field"/>
+   <copyField source="lab_heads"  dest="suggest_field"/>
+   <copyField source="affiliations" dest="suggest_field" />
+   <copyField source="instruments" dest="suggest_field"/>
+   <copyField source="softwares" dest="suggest_field"/>
+   <copyField source="quantification_methods" dest="suggest_field"/>
+   <copyField source="countries" dest="suggest_field" />
+   <copyField source="experimental_factors" dest="suggest_field"/>
+   <copyField source="experimental_factors" dest="suggest_field"/>
+   <copyField source="sample_attributes" dest="suggest_field" />
+   <copyField source="organisms" dest="suggest_field"/>
+   <copyField source="organisms_part" dest="suggest_field"/>
+   <copyField source="diseases" dest="suggest_field" />
+   <copyField source="project_references" dest="suggest_field" />
+   <copyField source="project_identified_ptms" dest="suggest_field" />
 
    <!-- non-tokenized version of manufacturer to make it easier to sort or group
         results by manufacturer.  copied from "manu" via copyField -->
@@ -336,6 +336,14 @@
     <fieldType name="pfloats" class="solr.FloatPointField" docValues="true" multiValued="true"/>
     <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
     <fieldType name="pdoubles" class="solr.DoublePointField" docValues="true" multiValued="true"/>
+
+    <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
          is a more restricted form of the canonical representation of dateTime
