@@ -130,18 +130,18 @@ public class SolrProjectService {
      * @return List of Similar projects.
      */
     public List<PrideSolrProject> findSimilarProjects(String accession, Integer pageSize, Integer page ){
-        List<Tuple<String, Double>> ids = repository.findMoreLikeThisIds(accession, pageSize, page);
+        Map<String, Double> ids = repository.findMoreLikeThisIds(accession, pageSize, page);
         List<PrideSolrProject> similarDatasets = new ArrayList<>();
-        Iterable<PrideSolrProject> itDatasets = repository.findAllById(ids.stream().map(x -> x.getKey()).collect(Collectors.toSet()));
+        Iterable<PrideSolrProject> itDatasets = repository.findAllById(ids.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toSet()));
         if(itDatasets != null){
             itDatasets.forEach(x -> {
                 if(!x.getAccession().equalsIgnoreCase(accession)){
-                   similarDatasets.add(x);
+                    x.setScore(new Float(ids.get(x.getId())));
+                    similarDatasets.add(x);
                 }
             });
         }
         return similarDatasets;
-
     }
 
 }

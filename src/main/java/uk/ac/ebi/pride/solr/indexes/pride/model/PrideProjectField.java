@@ -115,9 +115,6 @@ public interface PrideProjectField {
     String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
     String PRIDE_PROJECTS_CONFIG_NAME = "_default_pride_projects";
 
-
-
-
-
-
+    /** Pride Field text **/
+    String TEXT = "text";
 }

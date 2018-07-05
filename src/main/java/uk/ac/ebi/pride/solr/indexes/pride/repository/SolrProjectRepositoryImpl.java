@@ -19,7 +19,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.FacetParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +29,6 @@ import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -146,12 +144,14 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
 	@Override
-	public List<Tuple<String,Double>> findMoreLikeThisIds(String accession, Integer pageSize, Integer page) {
-		List<Tuple<String, Double>> solrProjectIds = new ArrayList<>();
+	public Map<String,Double> findMoreLikeThisIds(String accession, Integer pageSize, Integer page) {
+		Map<String, Double> solrProjectIds = new HashMap<>();
 		SolrQuery queryParams = new SolrQuery();
 		queryParams.setRows(pageSize);
 		queryParams.setStart(page*pageSize);
-		queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.PROJECT_DESCRIPTION);
+     	queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.PROJECT_DESCRIPTION, PrideProjectField.INSTRUMENTS, PrideProjectField.ORGANISM,
+				PrideProjectField.ORGANISM_PART, PrideProjectField.DISEASES, PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING, PrideProjectField.PROJECT_DATA_PROTOCOL,
+				PrideProjectField.PROJECT_SAMPLE_PROTOCOL, PrideProjectField.TEXT);
 		queryParams.setQuery(PrideProjectField.ACCESSION + ":" + accession);
 		try {
 			QueryResponse q = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, queryParams);
@@ -161,12 +161,10 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 						Iterator<SolrDocument> it = x.iterator();
 						while(it.hasNext()){
 							SolrDocument doc = it.next();
-							solrProjectIds.add(new Tuple<String, Double>((String)doc.getFirstValue(PrideProjectField.ID), ((Float)doc.getFirstValue("score")).doubleValue()));
+							solrProjectIds.put((String)doc.getFirstValue(PrideProjectField.ID), ((Float)doc.getFirstValue("score")).doubleValue());
 						}
 					});
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
 		}
 		return solrProjectIds;

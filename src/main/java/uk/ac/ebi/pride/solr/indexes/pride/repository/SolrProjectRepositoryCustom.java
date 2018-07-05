@@ -27,6 +27,7 @@ import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Custom repository implementation to show special solr functions without {@link Repository} abstraction.
@@ -60,6 +61,6 @@ interface SolrProjectRepositoryCustom {
 	 * @param accession Project Accession
 	 * @return List of {@link PrideSolrProject}
 	 */
-	List<Tuple<String, Double>> findMoreLikeThisIds(String accession, Integer pageSize, Integer page );
+	Map<String, Double> findMoreLikeThisIds(String accession, Integer pageSize, Integer page );
 
 }
