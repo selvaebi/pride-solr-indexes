@@ -58,9 +58,7 @@ public class SolrProjectService {
      * @return
      */
     public PrideSolrProject update(PrideSolrProject project){
-        PrideSolrProject prideSolrProject = repository.findByAccession(project.getAccession());
-        if(prideSolrProject == null)
-            repository.save(project);
+        project = repository.save(project);
         return project;
     }
 
