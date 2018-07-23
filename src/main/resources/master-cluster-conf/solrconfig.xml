@@ -1668,6 +1668,28 @@
     </lst>
   </searchComponent>
 
+  <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+    <lst name="spellchecker">
+      <str name="name">suggest</str>
+      <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+      <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookupFactory</str>
+      <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
+      <str name="field">suggest_field</str>
+      <str name="accuracy">0.7</str>
+      <float name="thresholdTokenFrequency">.0001</float>
+    </lst>
+  </searchComponent>
+
+  <requestHandler name="/spellcheck" class="solr.SearchHandler" startup="lazy">
+    <lst name="defaults">
+      <str name="suggest">true</str>
+      <str name="suggest.count">30</str>
+    </lst>
+    <arr name="components">
+      <str>spellcheck</str>
+    </arr>
+  </requestHandler>
+
   <requestHandler name="/suggest" class="solr.SearchHandler" startup="lazy">
     <lst name="defaults">
       <str name="suggest">true</str>

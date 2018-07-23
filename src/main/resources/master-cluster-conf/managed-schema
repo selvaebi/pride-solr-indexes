@@ -198,6 +198,8 @@
    <field name="project_identified_ptms" type="text_general" indexed="true" stored="true" multiValued="true" />
    <field name="project_identified_ptms_facet" type="string" indexed="true" stored="true" multiValued="true" />
 
+   <field name="project_file_names" type="text_general" indexed="true" stored="true" multiValued="true" />
+
    <!-- catchall field, containing all other searchable text fields (implemented
         via copyField further on in this schema  -->
    <field name="suggest_field" type="textSuggest" indexed="true" stored="true" multiValued="true"/>

@@ -258,6 +258,10 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Setter(AccessLevel.PRIVATE)
     private Set<String> identifiedPTMStringsFacet;
 
+
+    @Indexed( name = PROJECT_FILE_NAMES)
+    private Set<String> projectFileNames;
+
     /** Score for the search results **/
     @Score
     private Float score;

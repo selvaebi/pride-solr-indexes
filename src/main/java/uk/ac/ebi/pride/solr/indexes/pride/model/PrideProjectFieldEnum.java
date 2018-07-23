@@ -77,6 +77,8 @@ public enum PrideProjectFieldEnum {
 
     PEPTIDE_SEQUENCES(PrideProjectField.PEPTIDE_SEQUENCES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL, PrideProjectField.PEPTIDE_SEQUENCES),
 
+    PROJECT_FILE_NAMES(PrideProjectField.PROJECT_FILE_NAMES, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL, PrideProjectField.PROJECT_FILE_NAMES),
+
     PROJECT_IDENTIFIED_PTM_STRING(PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING, false, true, false, true, ConstantsSolrTypes.TEXT_GENERAL, PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING),
     PROJECT_IDENTIFIED_PTM_STRING_FACET(PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING_FACET, true, true, false, false, ConstantsSolrTypes.STRING, PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING);
 

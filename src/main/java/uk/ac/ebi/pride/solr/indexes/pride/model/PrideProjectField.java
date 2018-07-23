@@ -111,6 +111,7 @@ public interface PrideProjectField {
     /** Identified PTMs in the Project**/
     String PROJECT_IDENTIFIED_PTM_STRING = "project_identified_ptms";
     String PROJECT_IDENTIFIED_PTM_STRING_FACET = "project_identified_ptms_facet";
+    String PROJECT_FILE_NAMES = "project_file_names";
 
     String PRIDE_PROJECTS_COLLECTION_NAME = "pride_projects";
     String PRIDE_PROJECTS_CONFIG_NAME = "_default_pride_projects";
