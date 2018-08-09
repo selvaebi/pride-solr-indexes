@@ -9,7 +9,6 @@ import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.archive.dataprovider.utils.Tuple;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
