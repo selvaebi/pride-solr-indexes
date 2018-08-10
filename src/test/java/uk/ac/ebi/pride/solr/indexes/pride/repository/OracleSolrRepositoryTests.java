@@ -1,10 +1,12 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
@@ -16,7 +18,11 @@ import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
-import uk.ac.ebi.pride.archive.repo.repos.project.*;
+
+import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
+import uk.ac.ebi.pride.archive.repo.repos.project.ProjectSoftwareCvParam;
+import uk.ac.ebi.pride.archive.repo.repos.project.ProjectTag;
+import uk.ac.ebi.pride.archive.repo.repos.project.Reference;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
@@ -24,8 +30,10 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,16 +44,16 @@ import java.util.stream.Collectors;
 @SpringBootTest(classes = {SolrLocalhostTestConfiguration.class, ArchiveOracleConfig.class})
 public class OracleSolrRepositoryTests {
 
-    public static RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
-
     @Autowired
     SolrProjectService projectService;
+
 
     @Autowired
     ProjectRepository oracleRepository;
 
     @PostConstruct
-    public void setTest(){
+    public void setTest() throws IOException {
+
         if(projectService.findAll().iterator().hasNext()){
             //projectService.deleteAll();
             insertDatasetsFromOracle();
@@ -57,6 +65,7 @@ public class OracleSolrRepositoryTests {
         oracleRepository.findAll().forEach(x -> {
             PrideSolrProject solrProject = new PrideSolrProject();
             solrProject.setAccession(x.getAccession());
+            solrProject.setId(x.getAccession());
             solrProject.setTitle(x.getTitle());
             solrProject.setProjectDescription(x.getProjectDescription());
             solrProject.setDataProcessingProtocol(x.getDataProcessingProtocol());
@@ -112,9 +121,7 @@ public class OracleSolrRepositoryTests {
     /** Finds all entries using a single request. */
     @Test
     public void findAll() {
-        projectService.findAll().forEach(x -> {
-            System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
-        });
+        projectService.findAll().forEach(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
     }
 
     /** Finds all entries using a single request by Cursor */
@@ -142,9 +149,7 @@ public class OracleSolrRepositoryTests {
 
         // Search for two keywords, filter date
         page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
-        page.forEach(x -> {
-            System.out.println(x);
-        });
+        page.forEach(System.out::println);
     }
 
 
@@ -182,7 +187,7 @@ public class OracleSolrRepositoryTests {
 
     @Test
     public void finadAllAndaFacet(){
-        Page<PrideSolrProject> projects = projectService.findAllIgnoreCase(new PageRequest(1, 10));
+        Page<PrideSolrProject> projects = projectService.findAllIgnoreCase(PageRequest.of(1, 10));
         Assert.assertEquals(((FacetAndHighlightPage) projects).getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
     }
 }

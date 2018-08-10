@@ -60,6 +60,7 @@ public class PrideProjectReader {
 
         //Get accession, title, keywords, Data and Sample protocols
         project.setAccession(submission.getProjectMetaData().getResubmissionPxAccession());
+        project.setId(submission.getProjectMetaData().getResubmissionPxAccession());
         project.setTitle(submission.getProjectMetaData().getProjectTitle());
         project.setKeywords(Arrays.asList(submission.getProjectMetaData().getKeywords().split(",")).stream().map(String::trim).collect(Collectors.toList()));
         project.setDataProcessingProtocol(submission.getProjectMetaData().getDataProcessingProtocol());

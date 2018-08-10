@@ -35,12 +35,15 @@ public class RequiresSolrServer {
 	/** Localhost URL **/
 	private final String baseUrl;
 
+	private final String solrURL;
+
 	/**
 	 * Private Constructor
 	 * @param baseUrl baseURL
 	 */
 	private RequiresSolrServer(String baseUrl) {
 		this.baseUrl = baseUrl;
+		this.solrURL = baseUrl + "/solr";
 	}
 
 	/**
@@ -50,7 +53,7 @@ public class RequiresSolrServer {
 	 * @return RequiresSolrServer
 	 */
 	public static RequiresSolrServer onLocalhost(){
-		RequiresSolrServer solrServer = new RequiresSolrServer("http://localhost:8983/solr");
+		RequiresSolrServer solrServer = new RequiresSolrServer("http://localhost:8983");
 		try {
 			solrServer.checkServerRunning();
 		} catch (IOException e) {
@@ -68,7 +71,7 @@ public class RequiresSolrServer {
 	private void checkServerRunning() throws IOException {
 
 		try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-			CloseableHttpResponse response = client.execute(new HttpGet(baseUrl + PING_PATH));
+			CloseableHttpResponse response = client.execute(new HttpGet(solrURL + PING_PATH));
 			if (response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() != 200) {
 				throw new IOException("The SolrServer in localhost does not seem to be running");
 			}
@@ -77,4 +80,11 @@ public class RequiresSolrServer {
 		}
 	}
 
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public String getSolrURL() {
+		return solrURL;
+	}
 }

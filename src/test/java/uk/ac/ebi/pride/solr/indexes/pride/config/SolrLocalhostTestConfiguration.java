@@ -27,6 +27,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
+import uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -45,7 +47,15 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Bean
 	public SolrTemplate solrTemplate() {
-		return new SolrTemplate(new HttpSolrClient.Builder().withBaseSolrUrl("http://localhost:8983/solr").build());
+		solrTemplate =  new SolrTemplate(new HttpSolrClient.Builder().withBaseSolrUrl("http://localhost:8983/solr").build());
+		SolrAPIHelper solrAPIHelper = SolrAPIHelper.getInstance("http://localhost:8983/");
+
+		String collection = "pride_projects";
+		if(solrAPIHelper.refinePrideSolrProjectsSchema(collection)){
+			System.out.println("Collection -- pride_projects has been refined -- ");
+		}
+		return solrTemplate;
+
 	}
 
 	/**

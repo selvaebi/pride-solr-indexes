@@ -3,13 +3,16 @@ package uk.ac.ebi.pride.solr.indexes.pride.config;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate5.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,20 +23,23 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * Class Configuration to
  */
-@SpringBootApplication
+@Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = {"uk.ac.ebi.pride.archive.repo.repos"})
+@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = {"uk.ac.ebi.pride.archive.repo.repos"},
+        entityManagerFactoryRef = "oracleEntityManagerFactory", transactionManagerRef = "oracleTransactionManager")
 @ComponentScan(basePackages = "uk.ac.ebi.pride.archive.repo.services")
-@TestPropertySource(locations = "classpath:application.properties")
+@Slf4j
 public class ArchiveOracleConfig {
+
 
     @Bean(name = "dataSourceOracle")
     @ConfigurationProperties(prefix = "spring.datasource.oracle")
-    public DataSource dataSource() {
+    public DataSource archiveDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "entityManagerFactory")
+    @Bean(name = "oracleEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, @Qualifier("dataSourceOracle") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
@@ -41,9 +47,9 @@ public class ArchiveOracleConfig {
                 .build();
     }
 
-    @Bean(name = "transactionManager")
+    @Bean(name = "oracleTransactionManager")
     public JpaTransactionManager jpaTransactionManager(
-            @Qualifier("entityManagerFactory") EntityManagerFactory entityManagerFactory) {
+            @Qualifier("oracleEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 
