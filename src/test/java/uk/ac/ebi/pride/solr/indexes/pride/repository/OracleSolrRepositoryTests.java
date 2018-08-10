@@ -118,76 +118,73 @@ public class OracleSolrRepositoryTests {
         projectService.saveAll(projects);
     }
 
-    /** Finds all entries using a single request. */
+    /**
+     *  This Test contains all the test in a big test method.
+     */
     @Test
     public void findAll() {
+
+        // Find all Accessions
         projectService.findAll().forEach(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
-    }
 
-    /** Finds all entries using a single request by Cursor */
-    @Test
-    public void findCursorAll() {
+
+        // Fill all cursor
         projectService.findAllUsingCursor().forEachRemaining(x -> System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle()));
-    }
 
-    /** Find the dataset for specific accession **/
-    @Test
-    public void findByAccession(){
-        PrideSolrProject x = projectService.findByAccession("PXD000001");
-        System.out.println("Accession: " + x.getAccession() + " -- Title: " + x.getTitle());
-    }
+        // Find by Accession
+        PrideSolrProject project = projectService.findByAccession("PXD000001");
+        Assert.assertTrue("Accession has been found -- ", project.getAccession().equalsIgnoreCase("PXD000001"));
+        System.out.println("Accession: " + project.getAccession() + " -- Title: " + project.getTitle());
 
-    @Test
-    public void findProjectsByKey(){
-        // Search for two keywords, No filter
-        HighlightPage<PrideSolrProject> page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
+
+        /*** Find by keyword **/
+        HighlightPage<PrideSolrProject> page = projectService
+                .findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
+
         page.forEach(System.out::println);
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
+        page = projectService
+                .findByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
         page.forEach(System.out::println);
 
         // Search for two keywords, filter date
-        page = projectService.findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
+        page = projectService
+                .findByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31",  PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
         page.forEach(System.out::println);
-    }
 
 
-    @Test
-    public void findFacetProjectsByKey(){
-        // Search for two keywords, No filter
-        FacetPage<PrideSolrProject> page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
-        page.forEach(x -> {
-            System.out.println(x);
-        });
+        FacetPage<PrideSolrProject> pageFacet = projectService
+                .findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
+
+        pageFacet.forEach(x -> { System.out.println(x); });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
-        page.forEach(x -> {
-            System.out.println(x);
-        });
+        pageFacet = projectService
+                .findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
+
+        pageFacet.forEach(x -> { System.out.println(x); });
 
         // Search for two keywords, filter date
-        page = projectService.findFacetByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
-        page.forEach(x -> {
+        pageFacet = projectService.findFacetByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
+        pageFacet.forEach(x -> {
             System.out.println(x);
         });
-    }
 
-    @Test
-    public void findProjectsByKeyFacet(){
 
-        Page<PrideSolrProject> page = projectService.findAllIgnoreCase( PageRequest.of(0, 10));
+        Page<PrideSolrProject> page2 = projectService.findAllIgnoreCase( PageRequest.of(0, 10));
 
         // Print all the projects search
-        page.forEach( x-> {
+        page2.forEach( x-> {
             System.out.println(x.toString());
         });
-    }
 
-    @Test
-    public void finadAllAndaFacet(){
         Page<PrideSolrProject> projects = projectService.findAllIgnoreCase(PageRequest.of(1, 10));
         Assert.assertEquals(((FacetAndHighlightPage) projects).getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
+
+
     }
+
+
+
 }
