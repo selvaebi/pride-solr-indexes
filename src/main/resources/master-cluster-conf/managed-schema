@@ -304,10 +304,18 @@
      <fieldType class="solr.TextField" name="textSuggest" positionIncrementGap="100">
           <analyzer>
             <tokenizer class="solr.StandardTokenizerFactory"/>
-            <filter class="solr.StandardFilterFactory"/>
             <filter class="solr.LowerCaseFilterFactory"/>
           </analyzer>
-        </fieldType>
+      </fieldType>
+
+      <fieldType class="solr.TextField" name="querySuggest" positionIncrementGap="100">
+          <analyzer>
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+            <filter class="solr.ASCIIFoldingFilterFactory"/>
+            <filter class="solr.EnglishPossessiveFilterFactory"/>
+      	  </analyzer>
+       </fieldType>
 
     <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
          currently supported on types that are sorted internally as strings
