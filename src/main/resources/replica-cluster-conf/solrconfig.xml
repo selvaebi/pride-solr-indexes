@@ -1648,7 +1648,7 @@
       <str name="dictionaryImpl">DocumentDictionaryFactory</str>
       <str name="field">suggest_field</str>
       <str name="suggestAnalyzerFieldType">textSuggest</str>
-      <str name="queryAnalyzerFieldType">text</str>
+      <str name="queryAnalyzerFieldType">querySuggest</str>
       <str name="buildOnStartup">false</str>
       <str name="buildOnCommit">true</str>
     </lst>
