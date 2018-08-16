@@ -28,6 +28,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Custom repository implementation to show special solr functions without {@link Repository} abstraction.
@@ -63,6 +64,6 @@ interface SolrProjectRepositoryCustom {
 	 */
 	Map<String, Double> findMoreLikeThisIds(String accession, Integer pageSize, Integer page );
 
-	Map<String, List<String>> findAutoComplete(String keyword);
+	Set<String> findAutoComplete(String keyword);
 
 }
