@@ -146,7 +146,7 @@ public class SolrProjectService {
      * @param keyword
      * @return
      */
-    public Map<String, List<String>> findAutoComplete(String keyword){
+    public Set<String> findAutoComplete(String keyword){
         return repository.findAutoComplete(keyword);
     }
 }

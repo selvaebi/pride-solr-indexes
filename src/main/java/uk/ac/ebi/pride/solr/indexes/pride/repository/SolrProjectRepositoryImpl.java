@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link SolrProjectRepositoryCustom}.
@@ -170,7 +171,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
 	@Override
-	public Map<String, List<String>> findAutoComplete(String keyword){
+	public Set<String> findAutoComplete(String keyword){
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setRequestHandler("/suggest");
 		solrQuery.setRows(10);
@@ -178,13 +179,40 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		solrQuery.set("suggest.dictionary", "textSuggester");
 		solrQuery.set("suggest.q", keyword);
 
+		/*solrQuery.setRequestHandler("/suggestone");
+		solrQuery.setRows(10);
+		solrQuery.set("suggest", "true");
+		solrQuery.set("suggest.dictionary", "textSuggesterone");
+		solrQuery.set("suggest.q", keyword);*/
+
 		try {
 			QueryResponse re = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery);
 			SuggesterResponse sr = re.getSuggesterResponse();
-			return sr.getSuggestedTerms();
+			//return sr.getSuggestedTerms();
+
+
+			Map<String, List<String>> autocompleValues = sr.getSuggestedTerms();
+			List<String> terms = autocompleValues.entrySet().stream()
+					.flatMap(x->x.getValue().stream())
+					.collect(Collectors.toList());
+
+			/*Split the scentence into words
+			  Extract the Highlighted(...<b>...</b>...) words
+			  add words to a set to eliminate dupes
+			 */
+
+			Set<String> suggestionsSet = terms.stream().map(x ->
+					Arrays.asList(x.split(" "))
+							.stream().filter( word -> word.contains("<b>") && word.contains("</b>"))
+							.map(word -> word.replace("<b>","").replace("</b>","").replaceAll("[^a-zA-Z0-9-]+","").toLowerCase())
+							.collect(Collectors.toSet()).stream().collect(Collectors.joining(" "))
+			).collect(Collectors.toSet());
+
+			return suggestionsSet;
+
 		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
 		}
-		return Collections.emptySortedMap();
+		return Collections.emptySet();
 	}
 }
