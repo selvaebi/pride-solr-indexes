@@ -128,7 +128,7 @@ public class QueryBuilder {
                     if(currentCriteria == null){
                         currentCriteria = new Criteria(key).contains(value);
                     }else{
-                        currentCriteria = conditions.or(new Criteria(key).contains(value));
+                        currentCriteria = currentCriteria.or(new Criteria(key).contains(value));
                     }
                 }
             }

@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  *
@@ -41,7 +42,7 @@ public class SolrEmbeddedTestConfiguration extends AbstractSolrConfiguration {
     @Bean
     public EmbeddedSolrServer solrServerEmbedded() throws IOException, SAXException, ParserConfigurationException, URISyntaxException {
         Path solrTempDirectory = Files.createTempDirectory("");
-        String testURL = new File(SolrEmbeddedTestConfiguration.class.getClassLoader().getResource(solrConfDir).toURI()).getAbsolutePath();
+        String testURL = new File(Objects.requireNonNull(SolrEmbeddedTestConfiguration.class.getClassLoader().getResource(solrConfDir)).toURI()).getAbsolutePath();
         FileUtils.copyDirectory(new File(testURL), solrTempDirectory.toFile());
         final EmbeddedSolrServerFactory embeddedSolrServerFactory = new EmbeddedSolrServerFactory(solrTempDirectory.toString());
         return embeddedSolrServerFactory.getSolrClient();

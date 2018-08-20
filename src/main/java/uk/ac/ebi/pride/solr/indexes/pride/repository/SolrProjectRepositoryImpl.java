@@ -159,10 +159,8 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			q.getMoreLikeThis().asShallowMap().values()
 					.stream()
 					.forEach(x -> {
-						Iterator<SolrDocument> it = x.iterator();
-						while(it.hasNext()){
-							SolrDocument doc = it.next();
-							solrProjectIds.put((String)doc.getFirstValue(PrideProjectField.ID), ((Float)doc.getFirstValue("score")).doubleValue());
+						for (SolrDocument doc : x) {
+							solrProjectIds.put((String) doc.getFirstValue(PrideProjectField.ID), ((Float) doc.getFirstValue("score")).doubleValue());
 						}
 					});
 		} catch (SolrServerException | IOException e) {

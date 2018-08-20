@@ -27,11 +27,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 /**
  * @author ypriverol
@@ -66,7 +66,7 @@ public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 		if(!projectService.findAll().iterator().hasNext()){
 			projectService.deleteAll(); // This needs to be added here to avoid
 			try{
-				String filePathOne = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-one.px").toURI()).getAbsolutePath();
+				String filePathOne = new File(Objects.requireNonNull(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-one.px")).toURI()).getAbsolutePath();
 				String filePathTwo = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-two.px").toURI()).getAbsolutePath();
 				String filePathThree = new File(SolrLocalhostTestConfiguration.class.getClassLoader().getResource("submissions/pride-submission-three.px").toURI()).getAbsolutePath();
 				doInitTestData(projectService, filePathOne, filePathTwo, filePathThree);

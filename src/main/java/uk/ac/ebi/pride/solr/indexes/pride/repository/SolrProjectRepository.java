@@ -8,8 +8,6 @@ import org.springframework.data.solr.repository.Query;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
-import java.util.List;
-
 
 /**
  * Solr Crud Repository is helping the implementation to handle the {@link PrideSolrProject} with the basics functions suchs as

@@ -1,12 +1,10 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
@@ -29,8 +27,6 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -89,9 +85,8 @@ public class OracleSolrRepositoryTests {
             ContactProvider submitter = new DefaultContact(TitleConstants.fromString(x.getSubmitter().getTitle().getTitle()), x.getSubmitter().getFirstName(), x.getSubmitter().getLastName(), x.getSubmitter().getId().toString(), x.getSubmitter().getAffiliation(),x.getSubmitter().getEmail(), "US", "");
             solrProject.setSubmittersFromContacts(submitter);
 
-            List<ContactProvider> contacts= labHead;
-            contacts.add(submitter);
-            solrProject.setAffiliationsFromContacts(contacts);
+            labHead.add(submitter);
+            solrProject.setAffiliationsFromContacts(labHead);
 
             // Get Instruments
             List<CvParamProvider> instruments =  new ArrayList<>();
@@ -157,13 +152,13 @@ public class OracleSolrRepositoryTests {
         FacetPage<PrideSolrProject> pageFacet = projectService
                 .findFacetByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
 
-        pageFacet.forEach(x -> { System.out.println(x); });
+        pageFacet.forEach(System.out::println);
 
         // Search for two keywords, filter date
         pageFacet = projectService
                 .findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
 
-        pageFacet.forEach(x -> { System.out.println(x); });
+        pageFacet.forEach(x -> System.out.println(x));
 
         // Search for two keywords, filter date
         pageFacet = projectService.findFacetByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
