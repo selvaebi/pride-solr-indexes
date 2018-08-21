@@ -15,6 +15,15 @@
  */
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.parser.lexparser.Item;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.CoreDocument;
+import edu.stanford.nlp.pipeline.CoreSentence;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.simple.Sentence;
+import edu.stanford.nlp.util.CoreMap;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -30,6 +39,7 @@ import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.util.MultiValueMap;
+import uk.ac.ebi.pride.solr.indexes.pride.model.DataPair;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
@@ -103,6 +113,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 					.stream()
 					.filter(PrideProjectFieldEnum::getFacet)
 					.forEach(facetField -> {
+						System.out.println("~~~~~~~~~~~~"+facetField+"~~~~~~~~~~~~");
 						if(facetField.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE){
 							try {
 								Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2004-01-01");
@@ -160,8 +171,10 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			q.getMoreLikeThis().asShallowMap().values()
 					.stream()
 					.forEach(x -> {
-						for (SolrDocument doc : x) {
-							solrProjectIds.put((String) doc.getFirstValue(PrideProjectField.ID), ((Float) doc.getFirstValue("score")).doubleValue());
+						Iterator<SolrDocument> it = x.iterator();
+						while(it.hasNext()){
+							SolrDocument doc = it.next();
+							solrProjectIds.put((String)doc.getFirstValue(PrideProjectField.ID), ((Float)doc.getFirstValue("score")).doubleValue());
 						}
 					});
 		} catch (SolrServerException | IOException e) {
@@ -171,7 +184,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 	}
 
 	@Override
-	public Set<String> findAutoComplete(String keyword){
+	public List<String> findAutoComplete(String keyword){
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setRequestHandler("/suggest");
 		solrQuery.setRows(10);
@@ -190,29 +203,120 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			SuggesterResponse sr = re.getSuggesterResponse();
 			//return sr.getSuggestedTerms();
 
-
+			//Get Suggestions from Solr
 			Map<String, List<String>> autocompleValues = sr.getSuggestedTerms();
 			List<String> terms = autocompleValues.entrySet().stream()
 					.flatMap(x->x.getValue().stream())
 					.collect(Collectors.toList());
 
-			/*Split the scentence into words
-			  Extract the Highlighted(...<b>...</b>...) words
-			  add words to a set to eliminate dupes
+			/*Lemmatize the keywords to reduce them to base forms.
+			This helps in eliminating duplicate results like "proteome","proteomes" etc
 			 */
+			String[] keywordsArr = keyword.split(" ");
+			int index=0;
+			for(String word : keywordsArr){
+				keywordsArr[index++] = new Sentence(word).lemma(0);
+			}
 
-			Set<String> suggestionsSet = terms.stream().map(x ->
-					Arrays.asList(x.split(" "))
-							.stream().filter( word -> word.contains("<b>") && word.contains("</b>"))
-							.map(word -> word.replace("<b>","").replace("</b>","").replaceAll("[^a-zA-Z0-9-]+","").toLowerCase())
-							.collect(Collectors.toSet()).stream().collect(Collectors.joining(" "))
-			).collect(Collectors.toSet());
+			//This tree provides sorting is based on sentence/string length
+			Set<String> finalSuggestionsSet = new TreeSet<String>(new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					int diff = o1.length()-o2.length();
+					if(diff==0){
+						return o1.compareTo(o2);
+					}else {
+						return o1.length() - o2.length();
+					}
+				}
+			});
 
-			return suggestionsSet;
+			//NLP code for POS tagging and extracting required words from solr suggestion texts
+			List<String> partsOfSpeechTagsList = Arrays.asList("NN","NNS","NNP","NNPS","JJ");
+			HashMap<String,Integer> suggestPOSWordsMap = new HashMap<String, Integer>();
+			Properties props = new Properties();
+			// set the list of annotators to run
+			props.setProperty("annotators", "tokenize,ssplit,pos,lemma");
+			// build pipeline
+			StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+			for(String suggestionText : terms){
+				suggestPOSWordsMap = new HashMap<String, Integer>();
+				//Remove the highlighting provided by solr.
+				String plainText = suggestionText.replace("<b>","").replace("</b>","").toLowerCase();
+				// create a document object
+				CoreDocument document = new CoreDocument(plainText);
+				// annnotate the document
+				pipeline.annotate(document);
+				//Build a map with suggestion words and their count of occurence in the text.
+				for(CoreSentence sentence : document.sentences()){
+					for(CoreLabel token : sentence.tokens()){
+						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>2) {
+							if(suggestPOSWordsMap.containsKey(token.value())){
+								suggestPOSWordsMap.put(token.value(),suggestPOSWordsMap.get(token.value())+1);
+							}else{
+								suggestPOSWordsMap.put(token.value(),1);
+							}
+						}
+					}
+				}
+
+				/*Sort the suggestions according to their frequency
+				DataPair class is "comparable"
+				*/
+				TreeSet<DataPair> orderedSuggestionsPOSSet = new TreeSet<DataPair>();
+				for(String key:suggestPOSWordsMap.keySet()){
+					orderedSuggestionsPOSSet.add(new DataPair(suggestPOSWordsMap.get(key),key));
+				}
+
+
+				/*Split the scentence into words
+				  Extract the Highlighted(...<b>...</b>...) words
+				  add words to a set to eliminate dupes
+				 */
+
+				Set<String> suggestionsSet = Arrays.asList(suggestionText.split(" "))
+								.stream().filter( word -> word.contains("<b>") && word.contains("</b>"))
+								.map(word -> {
+									word = word.replace("<b>","").replace("</b>","").replaceAll("[^a-zA-Z0-9-]+","").toLowerCase();
+									return new Sentence(word).lemma(0);
+								})
+								.collect(Collectors.toSet());
+
+					int count=0;
+					//to order words in suggestion based on their positions in the user provided search text;
+					List<String> orderedList = new LinkedList<String>();
+					for(String word:keywordsArr){
+						Iterator<String> iterator = suggestionsSet.iterator();
+						while(iterator.hasNext()){
+							String item = iterator.next();
+							if(item.contains(word)){
+								orderedList.add(item);
+								iterator.remove();
+							}
+						}
+					}
+					//add all reamining items at the end of the ordered list
+					if(suggestionsSet.size()>0){
+						orderedList.addAll(suggestionsSet);
+					}
+
+					for(DataPair suggestionDataPair : orderedSuggestionsPOSSet){
+						//Build suggestions by merging the keywords and the identified POS-tagged word
+						//Each scentence will have atmost count(3) number of entries
+						if(!orderedList.contains(suggestionDataPair.getName()) && count<3){
+							finalSuggestionsSet.add(orderedList.stream().collect(Collectors.joining(" "))+" "+suggestionDataPair.getName());
+							count++;
+						}
+					}
+			}
+
+			//limit results to 10
+			return finalSuggestionsSet.stream().limit(10).collect(Collectors.toList());
 
 		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
 		}
-		return Collections.emptySet();
+		return Collections.emptyList();
 	}
+
 }

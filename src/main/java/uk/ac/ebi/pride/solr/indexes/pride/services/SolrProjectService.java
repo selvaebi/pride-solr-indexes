@@ -129,7 +129,7 @@ public class SolrProjectService {
     public List<PrideSolrProject> findSimilarProjects(String accession, Integer pageSize, Integer page ){
         Map<String, Double> ids = repository.findMoreLikeThisIds(accession, pageSize, page);
         List<PrideSolrProject> similarDatasets = new ArrayList<>();
-        Iterable<PrideSolrProject> itDatasets = repository.findAllById(ids.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet()));
+        Iterable<PrideSolrProject> itDatasets = repository.findAllById(ids.entrySet().stream().map(x -> x.getKey()).collect(Collectors.toSet()));
         if(itDatasets != null){
             itDatasets.forEach(x -> {
                 if(!x.getAccession().equalsIgnoreCase(accession)){
@@ -146,7 +146,7 @@ public class SolrProjectService {
      * @param keyword
      * @return
      */
-    public Set<String> findAutoComplete(String keyword){
+    public List<String> findAutoComplete(String keyword){
         return repository.findAutoComplete(keyword);
     }
 }
