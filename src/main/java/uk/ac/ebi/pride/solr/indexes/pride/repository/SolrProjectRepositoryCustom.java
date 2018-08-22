@@ -62,6 +62,6 @@ interface SolrProjectRepositoryCustom {
 	 */
 	Map<String, Double> findMoreLikeThisIds(String accession, Integer pageSize, Integer page );
 
-	Set<String> findAutoComplete(String keyword);
+	List<String> findAutoComplete(String keyword);
 
 }
