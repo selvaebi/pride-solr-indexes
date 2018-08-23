@@ -86,34 +86,33 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		highlightQuery.setPageRequest(page);
 
 		HighlightOptions highlightOptions = new HighlightOptions();
-        Arrays.stream(PrideProjectFieldEnum.values()).filter(PrideProjectFieldEnum::getHighlight).forEach(x-> highlightOptions.addField(x.getValue()));
+		Arrays.stream(PrideProjectFieldEnum.values()).filter(PrideProjectFieldEnum::getHighlight).forEach(x-> highlightOptions.addField(x.getValue()));
 		highlightOptions.setFragsize(PrideSolrConstants.DEFAULT_FRAGMENT_SIZE);
 		highlightOptions.setNrSnipplets(PrideSolrConstants.DEFAULT_NRSNIPPLETS_SIZE);
-        highlightQuery.setHighlightOptions(highlightOptions);
+		highlightQuery.setHighlightOptions(highlightOptions);
 
 
-        if(highlightQuery.getSort() == null)
-		    highlightQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
+		if(highlightQuery.getSort() == null)
+			highlightQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
 
 		return solrTemplate.queryForHighlightPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, highlightQuery , PrideSolrProject.class);
 	}
 
-    @Override
-    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String dateGap) {
+	@Override
+	public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, MultiValueMap<String, String> filters, Pageable page, Pageable facetPage, String dateGap) {
 
 		FacetQuery facetQuery = new SimpleFacetQuery();
-        facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters, dateGap);
-        facetQuery.setPageRequest(page);
+		facetQuery = (FacetQuery) QueryBuilder.keywordORQuery(facetQuery, keywords, filters, dateGap);
+		facetQuery.setPageRequest(page);
 
-        FacetOptions facetOptions = new FacetOptions();
-        facetOptions.setPageable(facetPage);
+		FacetOptions facetOptions = new FacetOptions();
+		facetOptions.setPageable(facetPage);
 		PrideSolrConstants.AllowedDateGapConstants gapConstants = PrideSolrConstants.AllowedDateGapConstants.findByString(dateGap);
-        if( gapConstants != PrideSolrConstants.AllowedDateGapConstants.UNKONWN){
+		if( gapConstants != PrideSolrConstants.AllowedDateGapConstants.UNKONWN){
 			Arrays.asList(PrideProjectFieldEnum.values())
 					.stream()
 					.filter(PrideProjectFieldEnum::getFacet)
 					.forEach(facetField -> {
-						System.out.println("~~~~~~~~~~~~"+facetField+"~~~~~~~~~~~~");
 						if(facetField.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE){
 							try {
 								Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2004-01-01");
@@ -137,16 +136,16 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		}
 
 
-        facetQuery.setFacetOptions(facetOptions);
+		facetQuery.setFacetOptions(facetOptions);
 
 
-        if(facetQuery.getSort() == null)
-            facetQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
+		if(facetQuery.getSort() == null)
+			facetQuery.addSort(new Sort(Sort.Direction.DESC, PrideProjectFieldEnum.ACCESSION.getValue()));
 
-        return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, facetQuery , PrideSolrProject.class);
-    }
+		return solrTemplate.queryForFacetPage(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, facetQuery , PrideSolrProject.class);
+	}
 
-    @Override
+	@Override
 	public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest) {
 		FacetOptions facets = new FacetOptions().setPageable(pageRequest);
 		for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values())
@@ -162,7 +161,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		SolrQuery queryParams = new SolrQuery();
 		queryParams.setRows(pageSize);
 		queryParams.setStart(page*pageSize);
-     	queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.PROJECT_DESCRIPTION, PrideProjectField.INSTRUMENTS, PrideProjectField.ORGANISM,
+		queryParams.setMoreLikeThisFields(PrideProjectField.PROJECT_TILE, PrideProjectField.PROJECT_DESCRIPTION, PrideProjectField.INSTRUMENTS, PrideProjectField.ORGANISM,
 				PrideProjectField.ORGANISM_PART, PrideProjectField.DISEASES, PrideProjectField.PROJECT_IDENTIFIED_PTM_STRING, PrideProjectField.PROJECT_DATA_PROTOCOL,
 				PrideProjectField.PROJECT_SAMPLE_PROTOCOL, PrideProjectField.TEXT);
 		queryParams.setQuery(PrideProjectField.ACCESSION + ":" + accession);
@@ -171,10 +170,8 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			q.getMoreLikeThis().asShallowMap().values()
 					.stream()
 					.forEach(x -> {
-						Iterator<SolrDocument> it = x.iterator();
-						while(it.hasNext()){
-							SolrDocument doc = it.next();
-							solrProjectIds.put((String)doc.getFirstValue(PrideProjectField.ID), ((Float)doc.getFirstValue("score")).doubleValue());
+						for (SolrDocument doc : x) {
+							solrProjectIds.put((String) doc.getFirstValue(PrideProjectField.ID), ((Float) doc.getFirstValue("score")).doubleValue());
 						}
 					});
 		} catch (SolrServerException | IOException e) {
@@ -250,7 +247,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 				//Build a map with suggestion words and their count of occurence in the text.
 				for(CoreSentence sentence : document.sentences()){
 					for(CoreLabel token : sentence.tokens()){
-						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>2) {
+						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>3) {
 							if(suggestPOSWordsMap.containsKey(token.value())){
 								suggestPOSWordsMap.put(token.value(),suggestPOSWordsMap.get(token.value())+1);
 							}else{
@@ -275,39 +272,39 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 				 */
 
 				Set<String> suggestionsSet = Arrays.asList(suggestionText.split(" "))
-								.stream().filter( word -> word.contains("<b>") && word.contains("</b>"))
-								.map(word -> {
-									word = word.replace("<b>","").replace("</b>","").replaceAll("[^a-zA-Z0-9-]+","").toLowerCase();
-									return new Sentence(word).lemma(0);
-								})
-								.collect(Collectors.toSet());
+						.stream().filter( word -> word.contains("<b>") && word.contains("</b>"))
+						.map(word -> {
+							word = word.replace("<b>","").replace("</b>","").replaceAll("[^a-zA-Z0-9-]+","").toLowerCase();
+							return new Sentence(word).lemma(0);
+						})
+						.collect(Collectors.toSet());
 
-					int count=0;
-					//to order words in suggestion based on their positions in the user provided search text;
-					List<String> orderedList = new LinkedList<String>();
-					for(String word:keywordsArr){
-						Iterator<String> iterator = suggestionsSet.iterator();
-						while(iterator.hasNext()){
-							String item = iterator.next();
-							if(item.contains(word)){
-								orderedList.add(item);
-								iterator.remove();
-							}
+				int count=0;
+				//to order words in suggestion based on their positions in the user provided search text;
+				List<String> orderedList = new LinkedList<String>();
+				for(String word:keywordsArr){
+					Iterator<String> iterator = suggestionsSet.iterator();
+					while(iterator.hasNext()){
+						String item = iterator.next();
+						if(item.contains(word)){
+							orderedList.add(item);
+							iterator.remove();
 						}
 					}
-					//add all reamining items at the end of the ordered list
-					if(suggestionsSet.size()>0){
-						orderedList.addAll(suggestionsSet);
-					}
+				}
+				//add all reamining items at the end of the ordered list
+				if(suggestionsSet.size()>0){
+					orderedList.addAll(suggestionsSet);
+				}
 
-					for(DataPair suggestionDataPair : orderedSuggestionsPOSSet){
-						//Build suggestions by merging the keywords and the identified POS-tagged word
-						//Each scentence will have atmost count(3) number of entries
-						if(!orderedList.contains(suggestionDataPair.getName()) && count<3){
-							finalSuggestionsSet.add(orderedList.stream().collect(Collectors.joining(" "))+" "+suggestionDataPair.getName());
-							count++;
-						}
+				for(DataPair suggestionDataPair : orderedSuggestionsPOSSet){
+					//Build suggestions by merging the keywords and the identified POS-tagged word
+					//Each scentence will have atmost count(3) number of entries
+					if(!orderedList.contains(suggestionDataPair.getName()) && count<3){
+						finalSuggestionsSet.add(orderedList.stream().collect(Collectors.joining(" "))+" "+suggestionDataPair.getName());
+						count++;
 					}
+				}
 			}
 
 			//limit results to 10
@@ -318,5 +315,4 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		}
 		return Collections.emptyList();
 	}
-
 }
