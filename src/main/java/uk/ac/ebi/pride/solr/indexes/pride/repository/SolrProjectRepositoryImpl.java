@@ -247,7 +247,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 				//Build a map with suggestion words and their count of occurence in the text.
 				for(CoreSentence sentence : document.sentences()){
 					for(CoreLabel token : sentence.tokens()){
-						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>3 && token.value().length()<20) {
+						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>3) {
 							if(suggestPOSWordsMap.containsKey(token.value())){
 								suggestPOSWordsMap.put(token.value(),suggestPOSWordsMap.get(token.value())+1);
 							}else{
@@ -308,7 +308,11 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			}
 
 			//limit results to 10
-			return finalSuggestionsSet.stream().limit(10).collect(Collectors.toList());
+			return finalSuggestionsSet.stream().filter(scentence -> {
+				if(scentence.contains("http") || scentence.contains("ftp") || scentence.contains("href") || scentence.length()>40)
+					return false;
+				return  true;
+			}).limit(10).collect(Collectors.toList());
 
 		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
