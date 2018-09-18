@@ -247,7 +247,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 				//Build a map with suggestion words and their count of occurence in the text.
 				for(CoreSentence sentence : document.sentences()){
 					for(CoreLabel token : sentence.tokens()){
-						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>3) {
+						if( partsOfSpeechTagsList.contains(token.tag()) && token.value().length()>3 && token.value().length()<20) {
 							if(suggestPOSWordsMap.containsKey(token.value())){
 								suggestPOSWordsMap.put(token.value(),suggestPOSWordsMap.get(token.value())+1);
 							}else{
