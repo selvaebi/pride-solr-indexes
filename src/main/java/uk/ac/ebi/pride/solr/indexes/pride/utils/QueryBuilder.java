@@ -141,7 +141,7 @@ public class QueryBuilder {
                     if(currentCriteria == null){
                         currentCriteria = new Criteria(key).contains(value);
                     }else{
-                        currentCriteria = conditions.or(new Criteria(key).contains(value));
+                        currentCriteria = currentCriteria.or(new Criteria(key).contains(value));
                     }
                 }
             }
@@ -150,7 +150,7 @@ public class QueryBuilder {
             if(conditions == null)
                 conditions = currentCriteria;
             else
-                conditions.and(currentCriteria);
+                conditions = conditions.and(currentCriteria);
         }
         return conditions;
     }
@@ -179,6 +179,6 @@ public class QueryBuilder {
         date = java.util.Date.from(dateTime
                 .atZone(TimeZone.getTimeZone("UTC").toZoneId())
                 .toInstant());
-        return dateFormatUTC.parse(dateFormatUTC.format(date));
+        return DateUtils.atEndOfDay(dateFormatUTC.parse(dateFormatUTC.format(date)));
     }
 }

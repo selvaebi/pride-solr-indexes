@@ -52,7 +52,7 @@ public class StringUtils {
     public static MultiValueMap<String, String> parseFilterParameters(String filterQuery){
         MultiValueMap<String, String> filters = new LinkedMultiValueMap<>();
         if(filterQuery != null && !filterQuery.trim().isEmpty()){
-            String[] filtersString = (filterQuery + ",").split(",");
+            String[] filtersString = (filterQuery).split(",");
             if(filtersString.length > 0){
                 Arrays.asList(filtersString).forEach(filter ->{
                     String[] filterString = filter.split("==");
