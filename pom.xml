@@ -200,6 +200,10 @@
                         <id>install-external</id>
                         <phase>clean</phase>
                         <configuration>
+                            <!--
+                              We need to include this library in lib because is to big as a package.
+                             It was modified internally by PRIDE Team
+                            -->
                             <file>${basedir}/lib/stanford-corenlp-3.9.1-models.jar</file>
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>edu.stanford.nlp</groupId>
