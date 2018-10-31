@@ -38,7 +38,7 @@ public class QueryBuilder {
             query = new SimpleFacetAndHighlightQuery();
 
         keywords =  processKeywords(keywords);
-
+        boolean isAndConditionRequired=false;
         Criteria conditions = null;
         if(keywords.contains("*")){
             conditions = new SimpleStringCriteria("*:*");
@@ -47,13 +47,17 @@ public class QueryBuilder {
                 for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
                     if(field.getType() != PrideSolrConstants.ConstantsSolrTypes.DATE){
                         if(conditions == null){
-                            if(word.contains(" "))
-                                conditions = new Criteria(field.getValue()).expression("\"" + word + "\"");
+                            if(word.contains(" ")) {
+                                conditions = new Criteria(field.getValue()).contains(word.split(" "));
+                                isAndConditionRequired=true;
+                            }
                             else
                                 conditions = new Criteria(field.getValue()).contains(word);
                         }else{
-                            if(word.contains(" "))
-                                conditions = conditions.or(new Criteria(field.getValue()).expression("\"" + word + "\""));
+                            if(word.contains(" ")) {
+                                conditions = conditions.or(new Criteria(field.getValue()).contains(word.split(" ")));
+                                isAndConditionRequired=true;
+                            }
                             else
                                 conditions = conditions.or(new Criteria(field.getValue()).contains(word));
                         }
@@ -62,14 +66,23 @@ public class QueryBuilder {
                 }
             }
         }
-        if(conditions != null)
+        if(conditions != null) {
+            /*
+                Default solr operation is OR.
+                Example => field:(a b) translates into field:(a OR b)
+                we need to make this  field:(a AND b)
+             */
+            if (isAndConditionRequired)
+                query.setDefaultOperator(Query.Operator.AND);
+
             query.addCriteria(conditions);
+        }
 
         Criteria filterCriteria = null;
 
         if(!filters.isEmpty()){
             for(String filter: filters.keySet()){
-                    filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.get(filter), dateGap);
+                filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.get(filter), dateGap);
             }
         }
         if(filterCriteria != null)
@@ -137,7 +150,7 @@ public class QueryBuilder {
             if(conditions == null)
                 conditions = currentCriteria;
             else
-                conditions.and(currentCriteria);
+                conditions = conditions.and(currentCriteria);
         }
         return conditions;
     }
@@ -166,6 +179,6 @@ public class QueryBuilder {
         date = java.util.Date.from(dateTime
                 .atZone(TimeZone.getTimeZone("UTC").toZoneId())
                 .toInstant());
-        return dateFormatUTC.parse(dateFormatUTC.format(date));
+        return DateUtils.atEndOfDay(dateFormatUTC.parse(dateFormatUTC.format(date)));
     }
 }

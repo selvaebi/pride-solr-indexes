@@ -308,7 +308,11 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			}
 
 			//limit results to 10
-			return finalSuggestionsSet.stream().limit(10).collect(Collectors.toList());
+			return finalSuggestionsSet.stream().filter(scentence -> {
+				if(scentence.contains("http") || scentence.contains("ftp") || scentence.contains("href") || scentence.length()>40)
+					return false;
+				return  true;
+			}).limit(10).collect(Collectors.toList());
 
 		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();
