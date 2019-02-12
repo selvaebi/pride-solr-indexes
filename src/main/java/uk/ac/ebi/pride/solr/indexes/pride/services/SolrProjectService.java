@@ -69,6 +69,13 @@ public class SolrProjectService {
         return repository.findAll();
     }
 
+    /*
+    * Delete a particular project from solr
+    * */
+    public  void deleteProjectById(String id){
+        repository.deleteById(id);
+    }
+
     /**
      * Delete all the Projects in the Repository.
      */
