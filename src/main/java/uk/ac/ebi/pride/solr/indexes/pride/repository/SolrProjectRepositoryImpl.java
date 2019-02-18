@@ -15,15 +15,11 @@
  */
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
-import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.parser.lexparser.Item;
-import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.simple.Sentence;
-import edu.stanford.nlp.util.CoreMap;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -216,15 +212,12 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			}
 
 			//This tree provides sorting is based on sentence/string length
-			Set<String> finalSuggestionsSet = new TreeSet<String>(new Comparator<String>() {
-				@Override
-				public int compare(String o1, String o2) {
-					int diff = o1.length()-o2.length();
-					if(diff==0){
-						return o1.compareTo(o2);
-					}else {
-						return o1.length() - o2.length();
-					}
+			Set<String> finalSuggestionsSet = new TreeSet<String>((o1, o2) -> {
+				int diff = o1.length()-o2.length();
+				if(diff==0){
+					return o1.compareTo(o2);
+				}else {
+					return o1.length() - o2.length();
 				}
 			});
 
@@ -308,11 +301,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 			}
 
 			//limit results to 10
-			return finalSuggestionsSet.stream().filter(scentence -> {
-				if(scentence.contains("http") || scentence.contains("ftp") || scentence.contains("href") || scentence.length()>40)
-					return false;
-				return  true;
-			}).limit(10).collect(Collectors.toList());
+			return finalSuggestionsSet.stream().filter(scentence -> !scentence.contains("http") && !scentence.contains("ftp") && !scentence.contains("href") && scentence.length() <= 40).limit(10).collect(Collectors.toList());
 
 		} catch (SolrServerException | IOException e) {
 			e.printStackTrace();

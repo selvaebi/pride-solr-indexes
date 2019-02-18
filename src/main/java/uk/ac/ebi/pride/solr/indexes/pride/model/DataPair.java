@@ -1,5 +1,7 @@
 package uk.ac.ebi.pride.solr.indexes.pride.model;
 
+import java.util.Objects;
+
 public class DataPair implements Comparable{
 
     private int count;
@@ -33,6 +35,6 @@ public class DataPair implements Comparable{
     @Override
     public boolean equals(Object O) {
         DataPair obj = (DataPair)O;
-        return name==obj.name;
+        return Objects.equals(name, obj.name);
     }
 }

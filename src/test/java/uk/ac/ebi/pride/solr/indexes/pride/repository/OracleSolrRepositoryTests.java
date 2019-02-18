@@ -158,21 +158,17 @@ public class OracleSolrRepositoryTests {
         pageFacet = projectService
                 .findFacetByKeyword(Arrays.asList("PRD", "PXD"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10),PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
 
-        pageFacet.forEach(x -> System.out.println(x));
+        pageFacet.forEach(System.out::println);
 
         // Search for two keywords, filter date
         pageFacet = projectService.findFacetByKeyword(Collections.singletonList("*:*"), "publication_date==2012-12-31", PageRequest.of(0, 10), PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.YEARLY.value);
-        pageFacet.forEach(x -> {
-            System.out.println(x);
-        });
+        pageFacet.forEach(System.out::println);
 
 
         Page<PrideSolrProject> page2 = projectService.findAllIgnoreCase( PageRequest.of(0, 10));
 
         // Print all the projects search
-        page2.forEach( x-> {
-            System.out.println(x.toString());
-        });
+        page2.forEach( x-> System.out.println(x.toString()));
 
         Page<PrideSolrProject> projects = projectService.findAllIgnoreCase(PageRequest.of(1, 10));
         Assert.assertEquals(((FacetAndHighlightPage) projects).getFacetResultPage(PrideProjectField.PROJECT_PUBLICATION_DATE).getContent().size(), 1);
