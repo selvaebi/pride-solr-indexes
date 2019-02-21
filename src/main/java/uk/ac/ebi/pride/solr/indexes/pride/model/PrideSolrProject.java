@@ -469,6 +469,11 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         return id;
     }
 
+    @Override
+    public String getAccession() {
+        return accession;
+    }
+
     /** Get the title of the project **/
     @Override
     public String getTitle() {
@@ -549,6 +554,11 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     }
 
     @Override
+    public Collection<? extends String> getReferences() {
+        return (references != null)?references:Collections.EMPTY_LIST;
+    }
+
+    @Override
     public Optional<String> getDoi() {
         return Optional.ofNullable(doi);
     }
@@ -601,6 +611,11 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Override
     public Collection<String> getAllAffiliations() {
         return null;
+    }
+
+    @Override
+    public Collection<? extends String> getSampleAttributes() {
+        return (sampleAttributes != null)?sampleAttributes:Collections.EMPTY_LIST;
     }
 
     public Set<String> getProteinIdentifications() {
