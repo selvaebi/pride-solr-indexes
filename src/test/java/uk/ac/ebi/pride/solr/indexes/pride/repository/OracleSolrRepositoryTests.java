@@ -68,7 +68,11 @@ public class OracleSolrRepositoryTests {
             solrProject.setSampleProcessingProtocol(x.getSampleProcessingProtocol());
 
             //Capture keywords
-            solrProject.setKeywords(Arrays.asList(x.getKeywords().split(",")));
+            String keywords="";
+            if(x.getKeywords()!=null){
+                keywords = x.getKeywords().stream().collect(Collectors.joining());
+            }
+            solrProject.setKeywords(Arrays.asList(keywords.split(",")));
             solrProject.setProjectTags(x.getProjectTags().stream().map(ProjectTag::getTag).collect(Collectors.toList()));
 
             //Capture datasets

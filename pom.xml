@@ -28,7 +28,7 @@
         <uk.ac.ebi.pride.architectural-pride-spring.version>1.0.0-SNAPSHOT</uk.ac.ebi.pride.architectural-pride-spring.version>
         <uk.ac.ebi.pride.px-submission-core.version>2.0.18</uk.ac.ebi.pride.px-submission-core.version>
         <uk.ac.ebi.pride.utilities.pride-utilities.version>2.0.19-SNAPSHOT</uk.ac.ebi.pride.utilities.pride-utilities.version>
-        <archive.repo.version>1.0.2-springboot-SNAPSHOT</archive.repo.version>
+        <archive.repo.version>1.0.3-SNAPSHOT</archive.repo.version>
         <stanford.corenlp.version>3.9.1</stanford.corenlp.version>
     </properties>
 
@@ -81,6 +81,12 @@
             <artifactId>px-submission-core</artifactId>
             <version>${uk.ac.ebi.pride.px-submission-core.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>uk.ac.ebi.pride.archive</groupId>
+                    <artifactId>archive-data-provider-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- tested with the previous ORACLE DB -->
