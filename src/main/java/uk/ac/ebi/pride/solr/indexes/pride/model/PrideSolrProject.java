@@ -626,6 +626,18 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.proteinIdentifications = proteinIdentifications;
     }
 
+    public void addProteinIdentifications(Set<String> proteinIdentifications){
+        if(this.proteinIdentifications == null)
+            this.proteinIdentifications = new HashSet<>();
+        this.proteinIdentifications.addAll(proteinIdentifications);
+    }
+
+    public void addPeptideSequences(Set<String> peptideSequences){
+        if(this.peptideSequences == null)
+            this.peptideSequences = new HashSet<>();
+        this.peptideSequences.addAll(peptideSequences);
+    }
+
     public Set<String> getPeptideSequences() {
         return peptideSequences;
     }

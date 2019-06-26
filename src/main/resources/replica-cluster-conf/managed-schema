@@ -190,10 +190,10 @@
 
       <field name="project_references" type="text_general" indexed="true" stored="true" multiValued="true" />
 
-      <field name="protein_identifications" type="text_general" indexed="true" stored="true" multiValued="true" />
-      <field name="protein_identifications_facet" type="string" indexed="true" stored="true" multiValued="true" />
+      <field name="protein_identifications" type="text_general" indexed="true" stored="false" multiValued="true" />
+      <field name="protein_identifications_facet" type="string" indexed="true" stored="false" multiValued="true" />
 
-      <field name="peptide_sequences" type="text_general" indexed="true" stored="true" multiValued="true" />
+      <field name="peptide_sequences" type="text_general" indexed="true" stored="false" multiValued="true" />
 
       <field name="project_identified_ptms" type="text_general" indexed="true" stored="true" multiValued="true" />
       <field name="project_identified_ptms_facet" type="string" indexed="true" stored="true" multiValued="true" />
