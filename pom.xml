@@ -11,7 +11,7 @@
 
     <groupId>uk.ac.ebi.pride.archive</groupId>
     <artifactId>pride-solr-indexes</artifactId>
-    <version>1.0.2-springboot-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>PRIDE Solr Indexes</name>
 
     <!-- This project requires several maven profiles to build and run correctly.
@@ -23,8 +23,8 @@
       -->
 
     <properties>
-        <archive.data.provider.api.version>1.0.0-SNAPSHOT</archive.data.provider.api.version>
-        <uk.ac.ebi.pride.architectural-pride-tdd.version>1.0.3</uk.ac.ebi.pride.architectural-pride-tdd.version>
+        <archive.data.provider.api.version>1.0.1-SNAPSHOT</archive.data.provider.api.version>
+        <uk.ac.ebi.pride.architectural-pride-tdd.version>1.0.4-SNAPSHOT</uk.ac.ebi.pride.architectural-pride-tdd.version>
         <uk.ac.ebi.pride.architectural-pride-spring.version>1.0.0-SNAPSHOT</uk.ac.ebi.pride.architectural-pride-spring.version>
         <uk.ac.ebi.pride.px-submission-core.version>2.0.18</uk.ac.ebi.pride.px-submission-core.version>
         <uk.ac.ebi.pride.utilities.pride-utilities.version>2.0.19-SNAPSHOT</uk.ac.ebi.pride.utilities.pride-utilities.version>
@@ -276,6 +276,27 @@
             </build>
         </profile>
     </profiles>
+
+    <repositories>
+        <repository>
+            <id>nexus-ebi-release-repo</id>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
+        </repository>
+        <repository>
+            <id>nexus-ebi-snapshot-repo</id>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
+        </repository>
+        <repository>
+            <id>pst-release</id>
+            <name>EBI Nexus Repository</name>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-release</url>
+        </repository>
+        <repository>
+            <id>pst-snapshots</id>
+            <name>EBI Nexus Snapshots Repository</name>
+            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/repositories/pst-snapshots</url>
+        </repository>
+    </repositories>
 
 
     <scm>
