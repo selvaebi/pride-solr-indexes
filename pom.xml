@@ -156,20 +156,11 @@
             </testResource>
         </testResources>
         <plugins>
-            <!-- We are disabling by default the site -->
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                    <skipDeploy>true</skipDeploy>
-                </configuration>
             </plugin>
-            <!-- We are disabling by default the deploy -->
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
