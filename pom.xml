@@ -107,12 +107,6 @@
             <version>${archive.repo.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>oracle-thin</artifactId>
-            <version>11.2.0.1.0</version>
-            <scope>test</scope>
-        </dependency>
         <!--NLP Dependencies Start-->
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
