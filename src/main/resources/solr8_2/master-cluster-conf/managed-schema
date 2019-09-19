@@ -65,10 +65,10 @@
      -->
 
 
-   <!-- Valid attributes for fields:
+    <!-- Valid attributes for fields:
      name: mandatory - the name for the field
      type: mandatory - the name of a field type from the 
-       fieldTypes
+       fieldTypes section
      indexed: true if this field should be indexed (searchable or sortable)
      stored: true if this field should be retrievable
      docValues: true if this field should have doc values. Doc values are
@@ -94,13 +94,11 @@
        This will increase storage costs.
      termOffsets: Store offset information with the term vector. This 
        will increase storage costs.
-     termPayloads: Store payload information with the term vector. This
-       will increase storage costs.
      required: The field is required.  It will throw an error if the
        value does not exist
      default: a value that should be used if no value is specified
        when adding a document.
-   -->
+    -->
 
    <!-- field names should consist of alphanumeric or underscore characters only and
       not start with a digit.  This is not currently strictly enforced,
@@ -112,22 +110,16 @@
    <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
       or Solr won't start. _version_ and update log are required for SolrCloud
    --> 
-   <!-- doc values are enabled by default for primitive types such as long so we don't index the version field  -->
-   <field name="_version_" type="plong" indexed="false" stored="false"/>
+   <field name="_version_" type="plong" indexed="true" stored="true"/>
    
    <!-- points to the root document of a block of nested documents. Required for nested
       document support, may be removed otherwise
    -->
-   <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
+   <field name="_root_" type="string" indexed="true" stored="false"/>
 
    <!-- Only remove the "id" field if you have a very good reason to. While not strictly
      required, it is highly recommended. A <uniqueKey> is present in almost all Solr 
      installations. See the <uniqueKey> declaration below where <uniqueKey> is set to "id".
-     Do NOT change the type and apply index-time analysis to the <uniqueKey> as it will likely 
-     make routing in SolrCloud and document replacement in general fail. Limited _query_ time
-     analysis is possible as long as the indexing process is guaranteed to index the term
-     in a compatible way. Any analysis applied to the <uniqueKey> should _not_ produce multiple
-     tokens
    -->   
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> 
 
@@ -236,7 +228,7 @@
         leading wildcard queries. -->
 
    <!-- Dynamic field definitions allow using convention over configuration
-       for fields via the specification of patterns to match field names. 
+       for fields via the specification of patterns to match field names.
        EXAMPLE:  name="*_i" will match any field ending in _i (like myid_i, z_i)
        RESTRICTION: the glob-like pattern in the name attribute must have
        a "*" only at the start or the end.  -->
@@ -320,7 +312,7 @@
     <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
          currently supported on types that are sorted internally as strings
          and on numeric types.
-       This includes "string", "boolean", "pint", "pfloat", "plong", "pdate", "pdouble".
+	     This includes "string", "boolean", "pint", "pfloat", "plong", "pdate", "pdouble".
        - If sortMissingLast="true", then a sort on this field will cause documents
          without the field to come after documents with the field,
          regardless of the requested sort order (asc or desc).
@@ -330,7 +322,7 @@
        - If sortMissingLast="false" and sortMissingFirst="false" (the default),
          then default lucene sorting will be used which places docs without the
          field first in an ascending sort and last in a descending sort.
-    -->    
+    -->
 
     <!--
       Numeric field types that index values using KD-trees.
@@ -366,11 +358,10 @@
                       
          Consult the DatePointField javadocs for more information.
       -->
-      
     <!-- KD-tree versions of date fields -->
     <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
     <fieldType name="pdates" class="solr.DatePointField" docValues="true" multiValued="true"/>
-
+    
     <!--Binary data type. The data should be sent/retrieved in as Base64 encoded Strings -->
     <fieldType name="binary" class="solr.BinaryField"/>
 
@@ -702,8 +693,8 @@
      -->
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
 
-    <!-- A specialized field for geospatial search filters and distance sorting. -->
-    <fieldType name="location" class="solr.LatLonPointSpatialField" docValues="true"/>
+    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
+    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
 
     <!-- An alternative geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
       For more information about this and other Spatial fields new to Solr 4, see:
@@ -711,12 +702,6 @@
     -->
     <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType"
         geo="true" distErrPct="0.025" maxDistErr="0.001" distanceUnits="kilometers" />
-
-    <!-- Spatial rectangle (bounding box) field. It supports most spatial predicates, and has
-     special relevancy modes: score=overlapRatio|area|area2D (local-param to the query).  DocValues is recommended for
-     relevancy. -->
-    <fieldType name="bbox" class="solr.BBoxField"
-               geo="true" distanceUnits="kilometers" numberType="pdouble" />
 
    <!-- Money/currency field type. See http://wiki.apache.org/solr/MoneyFieldType
         Parameters:
@@ -1038,6 +1023,40 @@
       </analyzer>
     </fieldType>
     
+    <!-- Korean morphological analysis -->
+    <dynamicField name="*_txt_ko" type="text_ko"  indexed="true"  stored="true"/>
+    <fieldType name="text_ko" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <!-- Nori Korean morphological analyzer/tokenizer (KoreanTokenizer)
+          The Korean (nori) analyzer integrates Lucene nori analysis module into Solr.
+          It uses the mecab-ko-dic dictionary to perform morphological analysis of Korean texts.
+
+          This dictionary was built with MeCab, it defines a format for the features adapted
+          for the Korean language.
+          
+          Nori also has a convenient user dictionary feature that allows overriding the statistical
+          model with your own entries for segmentation, part-of-speech tags and readings without a need
+          to specify weights. Notice that user dictionaries have not been subject to extensive testing.
+
+          The tokenizer supports multiple schema attributes:
+            * userDictionary: User dictionary path.
+            * userDictionaryEncoding: User dictionary encoding.
+            * decompoundMode: Decompound mode. Either 'none', 'discard', 'mixed'. Default is 'discard'.
+            * outputUnknownUnigrams: If true outputs unigrams for unknown words.
+        -->
+        <tokenizer class="solr.KoreanTokenizerFactory" decompoundMode="discard" outputUnknownUnigrams="false"/>
+        <!-- Removes some part of speech stuff like EOMI (Pos.E), you can add a parameter 'tags',
+          listing the tags to remove. By default it removes: 
+          E, IC, J, MAG, MAJ, MM, SP, SSC, SSO, SC, SE, XPN, XSA, XSN, XSV, UNA, NA, VSV
+          This is basically an equivalent to stemming.
+        -->
+        <filter class="solr.KoreanPartOfSpeechStopFilterFactory" />
+        <!-- Replaces term text with the Hangul transcription of Hanja characters, if applicable: -->
+        <filter class="solr.KoreanReadingFormFilterFactory" />
+        <filter class="solr.LowerCaseFilterFactory" />
+      </analyzer>
+    </fieldType>
+
     <!-- Latvian -->
     <fieldType name="text_lv" class="solr.TextField" positionIncrementGap="100">
       <analyzer> 
