@@ -11,10 +11,10 @@ import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.ac.ebi.pride.archive.dataprovider.param.CvParam;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
-import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
+import uk.ac.ebi.pride.archive.dataprovider.user.Contact;
 import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
-import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
 import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
 
 import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
@@ -82,11 +82,11 @@ public class OracleSolrRepositoryTests {
 
             // Affiliations
             List<ContactProvider> labHead = new ArrayList<>();
-            x.getLabHeads().forEach(contactX -> labHead.add(new DefaultContact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", ""))
+            x.getLabHeads().forEach(contactX -> labHead.add(new Contact(TitleConstants.fromString(contactX.getTitle().getTitle()), contactX.getFirstName(), contactX.getLastName(), contactX.getId().toString(), contactX.getAffiliation(),contactX.getEmail(), "US", ""))
             );
             solrProject.setLabPIFromContacts(labHead);
 
-            ContactProvider submitter = new DefaultContact(TitleConstants.fromString(x.getSubmitter().getTitle().getTitle()), x.getSubmitter().getFirstName(), x.getSubmitter().getLastName(), x.getSubmitter().getId().toString(), x.getSubmitter().getAffiliation(),x.getSubmitter().getEmail(), "US", "");
+            ContactProvider submitter = new Contact(TitleConstants.fromString(x.getSubmitter().getTitle().getTitle()), x.getSubmitter().getFirstName(), x.getSubmitter().getLastName(), x.getSubmitter().getId().toString(), x.getSubmitter().getAffiliation(),x.getSubmitter().getEmail(), "US", "");
             solrProject.setSubmittersFromContacts(submitter);
 
             labHead.add(submitter);
@@ -94,7 +94,7 @@ public class OracleSolrRepositoryTests {
 
             // Get Instruments
             List<CvParamProvider> instruments =  new ArrayList<>();
-            x.getInstruments().forEach(instrumet -> instruments.add(new DefaultCvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue())));
+            x.getInstruments().forEach(instrumet -> instruments.add(new CvParam(instrumet.getCvLabel(), instrumet.getAccession(), instrumet.getName(), instrumet.getValue())));
             solrProject.setInstrumentsFromCvParam(instruments);
 
             // References
@@ -102,15 +102,15 @@ public class OracleSolrRepositoryTests {
             solrProject.setReferences(new HashSet<>(references));
 
             //Modifications
-            solrProject.setIdentifiedPTMStringsFromCvParam(x.getPtms().stream().map(xPTM -> new DefaultCvParam(xPTM.getCvLabel(), xPTM.getAccession(), xPTM.getName(), xPTM.getValue())).collect(Collectors.toList()));
+            solrProject.setIdentifiedPTMStringsFromCvParam(x.getPtms().stream().map(xPTM -> new CvParam(xPTM.getCvLabel(), xPTM.getAccession(), xPTM.getName(), xPTM.getValue())).collect(Collectors.toList()));
 
             //Get software information
             Collection<ProjectSoftwareCvParam> softwaresOld = x.getSoftware();
-            solrProject.setSoftwaresFromCvParam(softwaresOld.stream().map(xSoft -> new DefaultCvParam(xSoft.getAccession(), xSoft.getName())).collect(Collectors.toList()));
+            solrProject.setSoftwaresFromCvParam(softwaresOld.stream().map(xSoft -> new CvParam(xSoft.getAccession(), xSoft.getName())).collect(Collectors.toList()));
 
             //Add Additional Attributes
-            solrProject.addAdditionalAttributesFromCvParams(x.getExperimentTypes().stream().map(xType -> new DefaultCvParam(xType.getAccession(), xType.getName())).collect(Collectors.toList()));
-            solrProject.addQuantificationMethodsFromCvParams(x.getQuantificationMethods().stream().map(xQuant -> new DefaultCvParam(xQuant.getAccession(), xQuant.getName())).collect(Collectors.toList()));
+            solrProject.addAdditionalAttributesFromCvParams(x.getExperimentTypes().stream().map(xType -> new CvParam(xType.getAccession(), xType.getName())).collect(Collectors.toList()));
+            solrProject.addQuantificationMethodsFromCvParams(x.getQuantificationMethods().stream().map(xQuant -> new CvParam(xQuant.getAccession(), xQuant.getName())).collect(Collectors.toList()));
 
             projects.add(solrProject);
         });

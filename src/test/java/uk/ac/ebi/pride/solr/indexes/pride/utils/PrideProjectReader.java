@@ -1,13 +1,11 @@
 package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import uk.ac.ebi.pride.archive.dataprovider.param.CvParam;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
-import uk.ac.ebi.pride.archive.dataprovider.param.DefaultCvParam;
-import uk.ac.ebi.pride.archive.dataprovider.user.DefaultContact;
+import uk.ac.ebi.pride.archive.dataprovider.user.Contact;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
-import uk.ac.ebi.pride.data.model.Contact;
-import uk.ac.ebi.pride.data.model.CvParam;
 import uk.ac.ebi.pride.data.model.Submission;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
@@ -76,8 +74,8 @@ public class PrideProjectReader {
         project.setLabPIs(contacts);
 
         //Get the submitters information
-        Contact submitterOld = submission.getProjectMetaData().getSubmitterContact();
-        project.setSubmittersFromContacts(new DefaultContact(submitterOld.getName(), "", submitterOld.getAffiliation(), ""));
+        uk.ac.ebi.pride.data.model.Contact submitterOld = submission.getProjectMetaData().getSubmitterContact();
+        project.setSubmittersFromContacts(new Contact(submitterOld.getName(), "", submitterOld.getAffiliation(), ""));
 
         //Get the affiliations
         Set<String> affiliations = new HashSet<>();
@@ -101,7 +99,7 @@ public class PrideProjectReader {
 //        project.setExperimentalFactors(factors);
 
         //PTMs
-        project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(CvParam::getName).collect(Collectors.toSet()));
+        project.setIdentifiedPTMStrings(submission.getProjectMetaData().getModifications().stream().map(uk.ac.ebi.pride.data.model.CvParam::getName).collect(Collectors.toSet()));
 
         /** Set Country **/
         String[] countryCodes = Locale.getISOCountries();
@@ -122,7 +120,7 @@ public class PrideProjectReader {
 
         //Instruments properties
         List<CvParamProvider> instruments = new ArrayList<>();
-        submission.getProjectMetaData().getInstruments().stream().forEach( x-> instruments.add(new DefaultCvParam(x.getCvLabel(), x.getAccession(), x.getName(), x.getValue())));
+        submission.getProjectMetaData().getInstruments().stream().forEach( x-> instruments.add(new CvParam(x.getCvLabel(), x.getAccession(), x.getName(), x.getValue())));
 
         project.setInstrumentsFromCvParam(instruments);
         return project;
@@ -136,9 +134,9 @@ public class PrideProjectReader {
      * @param cvParam values of experimental factor
      * @return factors values List
      */
-    private static List<Tuple<CvParamProvider, CvParamProvider>> addValue(CvTermReference key, List<Tuple<CvParamProvider, CvParamProvider>> factors, CvParam cvParam){
-        Tuple<CvParamProvider, CvParamProvider> param = new Tuple<>(new DefaultCvParam(key.getAccession(), key.getName()),
-                new DefaultCvParam(cvParam.getAccession(),cvParam.getName()));
+    private static List<Tuple<CvParamProvider, CvParamProvider>> addValue(CvTermReference key, List<Tuple<CvParamProvider, CvParamProvider>> factors, uk.ac.ebi.pride.data.model.CvParam cvParam){
+        Tuple<CvParamProvider, CvParamProvider> param = new Tuple<>(new CvParam(key.getAccession(), key.getName()),
+                new CvParam(cvParam.getAccession(),cvParam.getName()));
         if (!factors.contains(param))
             factors.add(param);
         return factors;
