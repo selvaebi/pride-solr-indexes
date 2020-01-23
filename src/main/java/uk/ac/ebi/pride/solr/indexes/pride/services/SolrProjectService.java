@@ -1,6 +1,7 @@
 package uk.ac.ebi.pride.solr.indexes.pride.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -155,5 +157,13 @@ public class SolrProjectService {
      */
     public List<String> findAutoComplete(String keyword){
         return repository.findAutoComplete(keyword);
+    }
+
+    public Set<String> findProjectAccessionsWithEmptyPeptideSequencesOrProteinIdentifications() throws IOException, SolrServerException {
+        return repository.findProjectAccessionsWithEmptyPeptideSequencesOrProteinIdentifications();
+    }
+
+    public Set<String> findProjectAccessionsWithEmptyFileNames() throws IOException, SolrServerException {
+        return repository.findProjectAccessionsWithEmptyFileNames();
     }
 }

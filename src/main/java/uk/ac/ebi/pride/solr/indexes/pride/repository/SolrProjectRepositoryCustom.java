@@ -15,6 +15,7 @@
  */
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
+import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.solr.core.query.result.Cursor;
@@ -24,8 +25,10 @@ import org.springframework.data.solr.repository.Highlight;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Custom repository implementation to show special solr functions without {@link Repository} abstraction.
@@ -63,4 +66,7 @@ interface SolrProjectRepositoryCustom {
 
 	List<String> findAutoComplete(String keyword);
 
+	Set<String> findProjectAccessionsWithEmptyPeptideSequencesOrProteinIdentifications() throws IOException, SolrServerException;
+
+	Set<String> findProjectAccessionsWithEmptyFileNames() throws IOException, SolrServerException;
 }

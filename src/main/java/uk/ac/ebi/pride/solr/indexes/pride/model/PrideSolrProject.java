@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.solr.core.mapping.Indexed;
 import org.springframework.data.solr.core.mapping.SolrDocument;
@@ -41,136 +42,164 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Getter(AccessLevel.NONE)
     String id;
 
+    @Field(ACCESSION)
     @Indexed(name = ACCESSION, boost = 1.0f, required = true)
     private String accession;
 
     /** Experiment Title **/
+    @Field(PROJECT_TILE)
     @Indexed(name = PROJECT_TILE, boost = 0.8f)
     private String title;
 
     /** Additional Attributes Identifiers **/
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
+//    @Field(ADDITIONAL_ATTRIBUTES)
     @Indexed(name = ADDITIONAL_ATTRIBUTES, boost = 0.4f)
     private Set<String> additionalAttributes;
 
     /** Additional Attributes Identifiers **/
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
+//    @Field(ADDITIONAL_ATTRIBUTES_FACET)
     @Indexed(name = ADDITIONAL_ATTRIBUTES_FACET, boost = 0.4f)
     private Set<String> additionalAttributesFacet;
 
     /** Project Description **/
+//    @Field(PROJECT_DESCRIPTION)
     @Indexed(name = PROJECT_DESCRIPTION, boost = 0.7f)
     private String projectDescription;
 
     /** Sample Protocol **/
+//    @Field(PROJECT_SAMPLE_PROTOCOL)
     @Indexed(name = PROJECT_SAMPLE_PROTOCOL, boost = 0.6f)
     private String sampleProcessingProtocol;
 
     /** Data Processing Protocol **/
+//    @Field(PROJECT_DATA_PROTOCOL)
     @Indexed(name = PROJECT_DATA_PROTOCOL, boost = 0.6f)
     private String dataProcessingProtocol;
 
     /** Project Tags **/
+//    @Field(PROJECT_TAGS)
     @Indexed(name = PROJECT_TAGS, boost = 0.2f)
     private Set<String> projectTags;
 
     /** Project tags facet **/
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
+//    @Field(PROJECT_TAGS_FACET)
     @Indexed(name = PROJECT_TAGS_FACET, type = "string")
     private Set<String> projectTagsFacets;
 
     /** Keywords **/
+//    @Field(PROJECT_KEYWORDS)
     @Indexed(name = PROJECT_KEYWORDS, boost = 0.2f)
     private Set<String> keywords;
 
     /** Projects keywords facet **/
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
+//    @Field(PROJECT_KEYWORDS_FACET)
     @Indexed(name = PROJECT_KEYWORDS_FACET, type = "string")
     private Set<String> keywordsFacets;
 
 
     /** Original Doi of the dataset. The actual Doi is not needed in the Dataset **/
+//    @Field(PROJECT_DOI)
     @Indexed(name = PROJECT_DOI, boost = 0.2f)
     private String doi;
 
     /** otherOmicsLinks **/
+//    @Field(PROJECT_OMICS_LINKS)
     @Indexed(name = PROJECT_OMICS_LINKS, boost = 0.2f)
     private Set<String> otherOmicsLinks;
 
     /** Submission Type **/
+//    @Field(PROJECT_SUBMISSION_TYPE)
     @Indexed(name = PROJECT_SUBMISSION_TYPE, boost = 0.2f)
     private String submissionType;
 
     /** Submission Date **/
+//    @Field(PROJECT_SUBMISSION_DATE)
     @Indexed(name = PROJECT_SUBMISSION_DATE, boost = 0.2f)
     private Date submissionDate;
 
     /** Publication Date **/
+//    @Field(PROJECT_PUBLICATION_DATE)
     @Indexed(name = PROJECT_PUBLICATION_DATE, boost = 0.2f)
     private Date publicationDate;
 
     /** Updated Date **/
+//    @Field(PROJECT_UPDATED_DATE)
     @Indexed(name = PROJECT_UPDATED_DATE, boost = 0.2f)
     private Date updatedDate;
 
     /** Submitter FirstName **/
+//    @Field(PROJECT_SUBMITTER)
     @Indexed(name = PROJECT_SUBMITTER, boost = 0.2f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> submitters;
 
     /** List of Lab Head Names **/
+//    @Field(PROJECT_PI_NAMES)
     @Indexed(name = PROJECT_PI_NAMES, boost = 0.2f)
     private Set<String> labPIs;
 
     /** PI facets **/
+//    @Field(PROJECT_PI_NAMES_FACET)
     @Indexed(name = PROJECT_PI_NAMES_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> labPIsFacet;
 
     /** Affiliations */
+//    @Field(AFFILIATIONS)
     @Indexed(name = AFFILIATIONS, boost = 0.2f)
     private Set<String> affiliations;
 
     /** Affiliations facet **/
+//    @Field(AFFILIATIONS_FACET)
     @Indexed(name = AFFILIATIONS_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> affiliationsFacet;
 
     /** List of instruments as key value pair*/
+//    @Field(INSTRUMENTS)
     @Indexed(name = INSTRUMENTS, boost = 0.1f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> instruments;
 
+//    @Field(INSTRUMENTS_FACET)
     @Indexed(name = INSTRUMENTS_FACET)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> instrumentsFacet;
 
     /** List of softwares as key value pair*/
+//    @Field(SOFTWARES)
     @Indexed(name = SOFTWARES, boost = 0.1f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> softwares;
 
+//    @Field(SOFTWARES_FACET)
     @Indexed(name = SOFTWARES_FACET)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> softwaresFacet;
 
     /** List of quantification methods as key value pair*/
+//    @Field(QUANTIFICATION_METHODS)
     @Indexed(name = QUANTIFICATION_METHODS, boost = 0.1f)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private Set<String> quantificationMethods;
 
+//    @Field(QUANTIFICATION_METHODS_FACET)
     @Indexed(name = QUANTIFICATION_METHODS_FACET)
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
@@ -178,87 +207,105 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
 
 
     /** This field store all the countries associated with the experiment **/
+//    @Field(COUNTRIES)
     @Indexed(name = COUNTRIES, boost = 0.4f)
     private Set<String> allCountries;
 
+//    @Field(COUNTRIES_FACET)
     @Indexed(name = COUNTRIES_FACET)
     @Setter(AccessLevel.PRIVATE)
     @Getter(AccessLevel.PRIVATE)
     private Set<String> allCountriesFacet;
 
     /** Experimental Factor Names **/
+//    @Field(EXPERIMENTAL_FACTORS_NAMES)
     @Indexed(name = EXPERIMENTAL_FACTORS_NAMES, boost = 0.5f)
     @Setter(AccessLevel.NONE)
     private Set<String> experimentalFactors;
 
     /** All additional experimental factors **/
+//    @Field(EXPERIMENTAL_FACTORS_FACET)
     @Indexed(name = EXPERIMENTAL_FACTORS_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> experimentalFactorFacets;
 
     /** Sample attributes names **/
+//    @Field(SAMPLE_ATTRIBUTES_NAMES)
     @Indexed(name = SAMPLE_ATTRIBUTES_NAMES, boost = 0.5f)
     @Setter(AccessLevel.NONE)
     private Set<String> sampleAttributes;
 
     /** Organisms **/
+//    @Field(ORGANISMS_FACET)
     @Indexed(name = ORGANISMS_FACET)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organisms_facet;
 
     /** organism parts **/
+//    @Field(ORGANISMS_PART_FACET)
     @Indexed(name = ORGANISMS_PART_FACET)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organismPart_facet;
 
     /** diseases **/
+//    @Field(DISEASES_FACET)
     @Indexed(name = DISEASES_FACET)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases_facet;
 
     /** Organisms **/
+//    @Field(ORGANISM)
     @Indexed(name = ORGANISM)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organisms;
 
     /** organism parts **/
+//    @Field(ORGANISM_PART)
     @Indexed(name = ORGANISM_PART)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> organismPart;
 
     /** diseases **/
+//    @Field(DISEASES)
     @Indexed(name = DISEASES)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases;
 
     /** References related with the project **/
+//    @Field(PROJECT_REFERENCES)
     @Indexed(name = PROJECT_REFERENCES, boost = 0.7f)
     private Set<String> references;
 
     /* This field is not store, so when you retrieve the value from solr is always null */
+//    @Field(PROTEIN_IDENTIFICATIONS)
     @Indexed(name = PROTEIN_IDENTIFICATIONS, boost = 0.6f, stored = false)
     private Set<String> proteinIdentifications;
 
+//    @Field(PROTEIN_IDENTIFICATIONS_FACET)
     @Indexed(name = PROTEIN_IDENTIFICATIONS_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> proteinIdentificationFacets;
 
     /** This field is not store, so when you retrieve the value from solr is always null  **/
+//    @Field(PEPTIDE_SEQUENCES)
     @Indexed(name = PEPTIDE_SEQUENCES, boost = 0.6f, stored = false)
     private Set<String> peptideSequences;
 
     /** Highlights of values that has been found for the Solr Search **/
+//    @Field(PROJECT_IDENTIFIED_PTM_STRING)
     @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING, boost = 0.6f)
     private Set<String> identifiedPTMStrings;
 
+//    @Field(PROJECT_IDENTIFIED_PTM_STRING_FACET)
     @Indexed(name = PROJECT_IDENTIFIED_PTM_STRING_FACET)
     @Getter(AccessLevel.PRIVATE)
     @Setter(AccessLevel.PRIVATE)
     private Set<String> identifiedPTMStringsFacet;
 
 
+//    @Field(PROJECT_FILE_NAMES)
     @Indexed( name = PROJECT_FILE_NAMES)
     private Set<String> projectFileNames;
 

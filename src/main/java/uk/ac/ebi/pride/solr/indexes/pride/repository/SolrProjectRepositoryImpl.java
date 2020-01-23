@@ -308,4 +308,55 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 		}
 		return Collections.emptyList();
 	}
+
+	@Override
+	public Set<String> findProjectAccessionsWithEmptyPeptideSequencesOrProteinIdentifications() throws IOException, SolrServerException {
+		SolrQuery solrQuery = new SolrQuery();
+		Set<String> prjs = new HashSet<>();
+		int start = 0;
+		int cnt = 1000;
+
+		solrQuery.setRows(cnt);
+		solrQuery.setQuery("-" + PrideProjectField.PROTEIN_IDENTIFICATIONS + ":[\"\" TO *]");
+		solrQuery.setQuery("-" + PrideProjectField.PEPTIDE_SEQUENCES + ":[\"\" TO *]");
+
+		while (true) {
+			solrQuery.setStart(start);
+			QueryResponse re = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery);
+			List<PrideSolrProject> beans = re.getBeans(PrideSolrProject.class);
+			if(beans.size() == 0) {
+				break;
+			}
+			for (PrideSolrProject b : beans){
+				prjs.add(b.getAccession());
+			}
+			start += cnt;
+		}
+		return prjs;
+	}
+
+	public Set<String> findProjectAccessionsWithEmptyFileNames() throws IOException, SolrServerException {
+		SolrQuery solrQuery = new SolrQuery();
+		Set<String> prjs = new HashSet<>();
+		int start = 0;
+		int cnt = 1000;
+
+		solrQuery.setRows(cnt);
+		solrQuery.setQuery("-" + PrideProjectField.PROJECT_FILE_NAMES + ":[\"\" TO *]");
+
+		while (true) {
+			solrQuery.setStart(start);
+			QueryResponse re = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery);
+			List<PrideSolrProject> beans = re.getBeans(PrideSolrProject.class);
+			if(beans.size() == 0) {
+				break;
+			}
+			for (PrideSolrProject b : beans){
+				prjs.add(b.getAccession());
+			}
+			start += cnt;
+		}
+		return prjs;
+	}
+
 }
