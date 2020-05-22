@@ -18,6 +18,8 @@ import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -789,9 +791,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
                 Objects.equals(doi, that.doi) &&
                 Objects.equals(otherOmicsLinks, that.otherOmicsLinks) &&
                 Objects.equals(submissionType, that.submissionType) &&
-                equalsDate(publicationDate, that.publicationDate) &&
-                equalsDate(submissionDate, that.submissionDate) &&
-                equalsDate(updatedDate, that.updatedDate) &&
+                equalsDatePartOnly(publicationDate, that.publicationDate) &&
+                equalsDatePartOnly(submissionDate, that.submissionDate) &&
+                equalsDatePartOnly(updatedDate, that.updatedDate) &&
                 Objects.equals(submitters, that.submitters) &&
                 Objects.equals(labPIs, that.labPIs) &&
                 Objects.equals(labPIsFacet, that.labPIsFacet) &&
@@ -823,7 +825,15 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         return Objects.hash(accession, title, additionalAttributes, additionalAttributesFacet, projectDescription, sampleProcessingProtocol, dataProcessingProtocol, projectTags, projectTagsFacets, keywords, keywordsFacets, doi, otherOmicsLinks, submissionType, submissionDate, publicationDate, updatedDate, submitters, labPIs, labPIsFacet, affiliations, affiliationsFacet, instruments, instrumentsFacet, softwares, softwaresFacet, quantificationMethods, quantificationMethodsFacet, allCountries, allCountriesFacet, experimentalFactors, experimentalFactorFacets, sampleAttributes, organisms_facet, organismPart_facet, diseases_facet, organisms, organismPart, diseases, references, projectFileNames);
     }
 
-    private boolean equalsDate(Date a, Date b) {
-        return  ((a == b) || (a != null && b != null && a.getTime() == b.getTime()));
+    private static final DateFormat DATE_FORMAT_DATE_PART = new SimpleDateFormat("yyyy-mm-dd");
+
+//    public static boolean equalsDate(Date a, Date b) {
+//        return  ((a == b) || (a != null && b != null && a.getTime() == b.getTime()));
+//    }
+
+    public static boolean equalsDatePartOnly(Date a, Date b) {
+        String aStr = DATE_FORMAT_DATE_PART.format(a);
+        String bStr = DATE_FORMAT_DATE_PART.format(b);
+        return  ((a == b) || (a != null && b != null && aStr.equals(bStr)));
     }
 }
