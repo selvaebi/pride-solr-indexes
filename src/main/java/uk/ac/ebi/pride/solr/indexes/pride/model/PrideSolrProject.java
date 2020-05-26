@@ -18,6 +18,8 @@ import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -239,37 +241,37 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     /** Organisms **/
 //    @Field(ORGANISMS_FACET)
     @Indexed(name = ORGANISMS_FACET)
-    @Setter(AccessLevel.PRIVATE)
+//    @Setter(AccessLevel.PRIVATE)
     private Set<String> organisms_facet;
 
     /** organism parts **/
 //    @Field(ORGANISMS_PART_FACET)
     @Indexed(name = ORGANISMS_PART_FACET)
-    @Setter(AccessLevel.PRIVATE)
+//    @Setter(AccessLevel.PRIVATE)
     private Set<String> organismPart_facet;
 
     /** diseases **/
 //    @Field(DISEASES_FACET)
     @Indexed(name = DISEASES_FACET)
-    @Setter(AccessLevel.PRIVATE)
+//    @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases_facet;
 
     /** Organisms **/
 //    @Field(ORGANISM)
     @Indexed(name = ORGANISM)
-    @Setter(AccessLevel.PRIVATE)
+//    @Setter(AccessLevel.PRIVATE)
     private Set<String> organisms;
 
     /** organism parts **/
 //    @Field(ORGANISM_PART)
     @Indexed(name = ORGANISM_PART)
-    @Setter(AccessLevel.PRIVATE)
+//    @Setter(AccessLevel.PRIVATE)
     private Set<String> organismPart;
 
     /** diseases **/
 //    @Field(DISEASES)
     @Indexed(name = DISEASES)
-    @Setter(AccessLevel.PRIVATE)
+//    @Setter(AccessLevel.PRIVATE)
     private Set<String> diseases;
 
     /** References related with the project **/
@@ -701,29 +703,6 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         this.highlights = highlights;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PrideSolrProject that = (PrideSolrProject) o;
-
-        return accession != null ? accession.equals(that.accession) : that.accession == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return accession != null ? accession.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return "PrideSolrProject{" +
-                "accession='" + accession + '\'' +
-                ", title='" + title + '\'' +
-                '}';
-    }
-
     /**
      * Set the submitters to a new submitters value. This function create a new Set and
      * add the submitter.
@@ -742,5 +721,119 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
         if(this.submitters == null)
             this.submitters = new HashSet<>();
         submitters.add(submitter.getName());
+    }
+
+    @Override
+    public String toString() {
+        return "PrideSolrProject{" +
+                "accession='" + accession + '\'' +
+                ", title='" + title + '\'' +
+                ", additionalAttributes=" + additionalAttributes +
+                ", additionalAttributesFacet=" + additionalAttributesFacet +
+                ", projectDescription='" + projectDescription + '\'' +
+                ", sampleProcessingProtocol='" + sampleProcessingProtocol + '\'' +
+                ", dataProcessingProtocol='" + dataProcessingProtocol + '\'' +
+                ", projectTags=" + projectTags +
+                ", projectTagsFacets=" + projectTagsFacets +
+                ", keywords=" + keywords +
+                ", keywordsFacets=" + keywordsFacets +
+                ", doi='" + doi + '\'' +
+                ", otherOmicsLinks=" + otherOmicsLinks +
+                ", submissionType='" + submissionType + '\'' +
+                ", submissionDate=" + submissionDate +
+                ", publicationDate=" + publicationDate +
+                ", updatedDate=" + updatedDate +
+                ", submitters=" + submitters +
+                ", labPIs=" + labPIs +
+                ", labPIsFacet=" + labPIsFacet +
+                ", affiliations=" + affiliations +
+                ", affiliationsFacet=" + affiliationsFacet +
+                ", instruments=" + instruments +
+                ", instrumentsFacet=" + instrumentsFacet +
+                ", softwares=" + softwares +
+                ", softwaresFacet=" + softwaresFacet +
+                ", quantificationMethods=" + quantificationMethods +
+                ", quantificationMethodsFacet=" + quantificationMethodsFacet +
+                ", allCountries=" + allCountries +
+                ", allCountriesFacet=" + allCountriesFacet +
+                ", experimentalFactors=" + experimentalFactors +
+                ", experimentalFactorFacets=" + experimentalFactorFacets +
+                ", sampleAttributes=" + sampleAttributes +
+                ", organisms_facet=" + organisms_facet +
+                ", organismPart_facet=" + organismPart_facet +
+                ", diseases_facet=" + diseases_facet +
+                ", organisms=" + organisms +
+                ", organismPart=" + organismPart +
+                ", diseases=" + diseases +
+                ", references=" + references +
+                ", projectFileNames=" + projectFileNames +
+                ", score=" + score +
+                ", highlights=" + highlights +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PrideSolrProject that = (PrideSolrProject) o;
+        return Objects.equals(accession, that.accession) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(additionalAttributes, that.additionalAttributes) &&
+                Objects.equals(additionalAttributesFacet, that.additionalAttributesFacet) &&
+                Objects.equals(projectDescription, that.projectDescription) &&
+                Objects.equals(sampleProcessingProtocol, that.sampleProcessingProtocol) &&
+                Objects.equals(dataProcessingProtocol, that.dataProcessingProtocol) &&
+                Objects.equals(projectTags, that.projectTags) &&
+                Objects.equals(projectTagsFacets, that.projectTagsFacets) &&
+                Objects.equals(keywords, that.keywords) &&
+                Objects.equals(keywordsFacets, that.keywordsFacets) &&
+                Objects.equals(doi, that.doi) &&
+                Objects.equals(otherOmicsLinks, that.otherOmicsLinks) &&
+                Objects.equals(submissionType, that.submissionType) &&
+                equalsDatePartOnly(publicationDate, that.publicationDate) &&
+                equalsDatePartOnly(submissionDate, that.submissionDate) &&
+                equalsDatePartOnly(updatedDate, that.updatedDate) &&
+                Objects.equals(submitters, that.submitters) &&
+                Objects.equals(labPIs, that.labPIs) &&
+                Objects.equals(labPIsFacet, that.labPIsFacet) &&
+                Objects.equals(affiliations, that.affiliations) &&
+                Objects.equals(affiliationsFacet, that.affiliationsFacet) &&
+                Objects.equals(instruments, that.instruments) &&
+                Objects.equals(instrumentsFacet, that.instrumentsFacet) &&
+                Objects.equals(softwares, that.softwares) &&
+                Objects.equals(softwaresFacet, that.softwaresFacet) &&
+                Objects.equals(quantificationMethods, that.quantificationMethods) &&
+                Objects.equals(quantificationMethodsFacet, that.quantificationMethodsFacet) &&
+                Objects.equals(allCountries, that.allCountries) &&
+                Objects.equals(allCountriesFacet, that.allCountriesFacet) &&
+                Objects.equals(experimentalFactors, that.experimentalFactors) &&
+                Objects.equals(experimentalFactorFacets, that.experimentalFactorFacets) &&
+                Objects.equals(sampleAttributes, that.sampleAttributes) &&
+                Objects.equals(organisms_facet, that.organisms_facet) &&
+                Objects.equals(organismPart_facet, that.organismPart_facet) &&
+                Objects.equals(diseases_facet, that.diseases_facet) &&
+                Objects.equals(organisms, that.organisms) &&
+                Objects.equals(organismPart, that.organismPart) &&
+                Objects.equals(diseases, that.diseases) &&
+                Objects.equals(references, that.references) &&
+                Objects.equals(projectFileNames, that.projectFileNames);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accession, title, additionalAttributes, additionalAttributesFacet, projectDescription, sampleProcessingProtocol, dataProcessingProtocol, projectTags, projectTagsFacets, keywords, keywordsFacets, doi, otherOmicsLinks, submissionType, submissionDate, publicationDate, updatedDate, submitters, labPIs, labPIsFacet, affiliations, affiliationsFacet, instruments, instrumentsFacet, softwares, softwaresFacet, quantificationMethods, quantificationMethodsFacet, allCountries, allCountriesFacet, experimentalFactors, experimentalFactorFacets, sampleAttributes, organisms_facet, organismPart_facet, diseases_facet, organisms, organismPart, diseases, references, projectFileNames);
+    }
+
+    private static final DateFormat DATE_FORMAT_DATE_PART = new SimpleDateFormat("yyyy-mm-dd");
+
+//    public static boolean equalsDate(Date a, Date b) {
+//        return  ((a == b) || (a != null && b != null && a.getTime() == b.getTime()));
+//    }
+
+    public static boolean equalsDatePartOnly(Date a, Date b) {
+        String aStr = DATE_FORMAT_DATE_PART.format(a);
+        String bStr = DATE_FORMAT_DATE_PART.format(b);
+        return  ((a == b) || (a != null && b != null && aStr.equals(bStr)));
     }
 }
