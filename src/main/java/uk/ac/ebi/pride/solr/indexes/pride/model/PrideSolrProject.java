@@ -791,9 +791,9 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
                 Objects.equals(doi, that.doi) &&
                 Objects.equals(otherOmicsLinks, that.otherOmicsLinks) &&
                 Objects.equals(submissionType, that.submissionType) &&
-                equalsDatePartOnly(publicationDate, that.publicationDate) &&
-                equalsDatePartOnly(submissionDate, that.submissionDate) &&
-                equalsDatePartOnly(updatedDate, that.updatedDate) &&
+                Objects.equals(publicationDate, that.publicationDate) &&
+                Objects.equals(submissionDate, that.submissionDate) &&
+                Objects.equals(updatedDate, that.updatedDate) &&
                 Objects.equals(submitters, that.submitters) &&
                 Objects.equals(labPIs, that.labPIs) &&
                 Objects.equals(labPIsFacet, that.labPIsFacet) &&
@@ -823,17 +823,5 @@ public class PrideSolrProject implements ProjectProvider, PrideProjectField {
     @Override
     public int hashCode() {
         return Objects.hash(accession, title, additionalAttributes, additionalAttributesFacet, projectDescription, sampleProcessingProtocol, dataProcessingProtocol, projectTags, projectTagsFacets, keywords, keywordsFacets, doi, otherOmicsLinks, submissionType, submissionDate, publicationDate, updatedDate, submitters, labPIs, labPIsFacet, affiliations, affiliationsFacet, instruments, instrumentsFacet, softwares, softwaresFacet, quantificationMethods, quantificationMethodsFacet, allCountries, allCountriesFacet, experimentalFactors, experimentalFactorFacets, sampleAttributes, organisms_facet, organismPart_facet, diseases_facet, organisms, organismPart, diseases, references, projectFileNames);
-    }
-
-    private static final DateFormat DATE_FORMAT_DATE_PART = new SimpleDateFormat("yyyy-mm-dd");
-
-//    public static boolean equalsDate(Date a, Date b) {
-//        return  ((a == b) || (a != null && b != null && a.getTime() == b.getTime()));
-//    }
-
-    public static boolean equalsDatePartOnly(Date a, Date b) {
-        String aStr = DATE_FORMAT_DATE_PART.format(a);
-        String bStr = DATE_FORMAT_DATE_PART.format(b);
-        return  ((a == b) || (a != null && b != null && aStr.equals(bStr)));
     }
 }
