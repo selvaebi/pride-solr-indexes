@@ -2,11 +2,14 @@ package uk.ac.ebi.pride.solr.indexes.pride.utils;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.solr.core.query.*;
+import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleFacetAndHighlightQuery;
+import org.springframework.data.solr.core.query.SimpleFilterQuery;
+import org.springframework.data.solr.core.query.SimpleStringCriteria;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.utilities.util.DateUtils;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,21 +47,25 @@ public class QueryBuilder {
             conditions = new SimpleStringCriteria("*:*");
         }else {
             for (String word: keywords) {
-                for(PrideProjectFieldEnum field: PrideProjectFieldEnum.values()){
-                    if(field.getType() != PrideSolrConstants.ConstantsSolrTypes.DATE){
-                        if(conditions == null){
-                            if(word.contains(" ")) {
+                for (PrideProjectFieldEnum field : PrideProjectFieldEnum.values()) {
+                    if (field.getType() != PrideSolrConstants.ConstantsSolrTypes.DATE) {
+                        if (conditions == null) {
+                            if (word.contains("-") && !field.getType().equals(PrideSolrConstants.ConstantsSolrTypes.STRING)) {
+                                conditions = getCriteriaForHyphenatedWords(field.getValue(), word);
+                                isAndConditionRequired = true;
+                            } else if (word.contains(" ")) {
                                 conditions = new Criteria(field.getValue()).contains(word.split(" "));
-                                isAndConditionRequired=true;
-                            }
-                            else
+                                isAndConditionRequired = true;
+                            } else
                                 conditions = new Criteria(field.getValue()).contains(word);
-                        }else{
-                            if(word.contains(" ")) {
+                        } else {
+                            if (word.contains("-") && !field.getType().equals(PrideSolrConstants.ConstantsSolrTypes.STRING)) {
+                                conditions = conditions.or(getCriteriaForHyphenatedWords(field.getValue(), word));
+                                isAndConditionRequired = true;
+                            } else if (word.contains(" ")) {
                                 conditions = conditions.or(new Criteria(field.getValue()).contains(word.split(" ")));
-                                isAndConditionRequired=true;
-                            }
-                            else
+                                isAndConditionRequired = true;
+                            } else
                                 conditions = conditions.or(new Criteria(field.getValue()).contains(word));
                         }
                     }
@@ -80,15 +87,19 @@ public class QueryBuilder {
 
         Criteria filterCriteria = null;
 
-        if(!filters.isEmpty()){
-            for(String filter: filters.keySet()){
+        if (!filters.isEmpty()) {
+            for (String filter : filters.keySet()) {
                 filterCriteria = convertStringToCriteria(filterCriteria, filter, filters.get(filter), dateGap);
             }
         }
-        if(filterCriteria != null)
+        if (filterCriteria != null)
             query.addFilterQuery(new SimpleFilterQuery(filterCriteria));
 
         return query;
+    }
+
+    private static Criteria getCriteriaForHyphenatedWords(String key, String value) {
+        return new Criteria(key).is("\"" + value.replaceAll("-", " ") + "\"");
     }
 
     /**
@@ -99,7 +110,7 @@ public class QueryBuilder {
      * @return Return keyword List
      */
     private static List<String> processKeywords(List<String> keywords) {
-        keywords = keywords.stream().map( x-> {
+        keywords = keywords.stream().map(x -> {
             String[] keywordValues = x.split(":");
             if(keywordValues.length == 2){
                 return keywordValues[1];
@@ -126,9 +137,9 @@ public class QueryBuilder {
                         Date date = parseInitialDate(value, dateGap);
                         Date endDate = transformEndDate(date, dateGap);
                         Date startDate = DateUtils.atStartOfDay(date);
-                        if(currentCriteria == null){
+                        if (currentCriteria == null) {
                             currentCriteria = new Criteria(key).between(startDate, endDate);
-                        }else{
+                        } else {
                             currentCriteria = currentCriteria.or(new Criteria(key).between(startDate, endDate));
                         }
                     } catch (ParseException e) {
@@ -136,18 +147,18 @@ public class QueryBuilder {
                         e.printStackTrace();
 
                     }
-                }else if(field.getValue().equalsIgnoreCase(key)){
+                } else if (field.getValue().equalsIgnoreCase(key)) {
                     value = value.trim();
-                    if(currentCriteria == null){
-                        currentCriteria = new Criteria(key).contains(value);
-                    }else{
-                        currentCriteria = currentCriteria.or(new Criteria(key).contains(value));
+                    if (currentCriteria == null) {
+                        currentCriteria = createCriteria(field, value);
+                    } else {
+                        currentCriteria = currentCriteria.or(createCriteria(field, value));
                     }
                 }
             }
         }
-        if(currentCriteria != null){
-            if(conditions == null)
+        if (currentCriteria != null) {
+            if (conditions == null)
                 conditions = currentCriteria;
             else
                 conditions = conditions.and(currentCriteria);
@@ -155,13 +166,20 @@ public class QueryBuilder {
         return conditions;
     }
 
+    private static Criteria createCriteria(PrideProjectFieldEnum key, String value) {
+        if (value.contains("-") && !key.getType().equals(PrideSolrConstants.ConstantsSolrTypes.STRING)) {
+            return getCriteriaForHyphenatedWords(key.getValue(),value);
+        }
+        return new Criteria(key.getValue()).contains(value);
+    }
+
     private static Date parseInitialDate(String value, String dateGap) throws ParseException {
         Date date;
-        if(PrideSolrConstants.AllowedDateGapConstants.YEARLY.value.equalsIgnoreCase(dateGap)) {
+        if (PrideSolrConstants.AllowedDateGapConstants.YEARLY.value.equalsIgnoreCase(dateGap)) {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(value.substring(0, 4) + "-" + "01" + "-" + "01");
-        }else if(PrideSolrConstants.AllowedDateGapConstants.MONTHLY.value.equalsIgnoreCase(dateGap)){
+        } else if (PrideSolrConstants.AllowedDateGapConstants.MONTHLY.value.equalsIgnoreCase(dateGap)) {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(value.substring(0, 7) + "-" + "01");
-        }else{
+        } else {
             date = new SimpleDateFormat("yyyy-MM-dd").parse(value);
         }
         return dateFormatUTC.parse(dateFormatUTC.format(date));
