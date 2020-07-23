@@ -39,6 +39,7 @@ public enum ConstantsSolrTypes {
 
     STRING("string"),
     TEXT_GENERAL("text_general"),
+    TEXT_GENERAL_HYPHEN("text_general_hyphen"),
     DATE("pdate"),
     DEFAULT("text_general");
 
