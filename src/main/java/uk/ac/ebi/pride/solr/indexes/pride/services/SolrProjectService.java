@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 /**
  * This service allows to make updates and save of the Pride Projects and should be used instead of pure repository.
- *
  */
 @Service
 @Slf4j
@@ -38,15 +37,16 @@ public class SolrProjectService {
      * This method check first that not project with same accession is in the collection and then insert it the new
      * project. If the project is in Solr then service do not save it. For updating the project please check the following
      * method
+     *
      * @param project
      * @return
      */
-    public PrideSolrProject save(PrideSolrProject project){
+    public PrideSolrProject save(PrideSolrProject project) {
         PrideSolrProject prideSolrProject = repository.findByAccession(project.getAccession());
-        if(prideSolrProject == null){
+        if (prideSolrProject == null) {
             repository.save(project);
             log.info("A new project has been saved in Solr index -- " + project.getAccession());
-        }else
+        } else
             log.info("A project with same accession has been found in the Solr index, you MUST use update -- " + project.getAccession());
         return project;
     }
@@ -55,16 +55,37 @@ public class SolrProjectService {
      * This method check first that not project with same accession is in the collection and then insert it the new
      * project. If the project is in Solr then service do not save it. For updating the project please check the following
      * method
+     *
      * @param project
      * @return
      */
-    public PrideSolrProject update(PrideSolrProject project){
+    public PrideSolrProject update(PrideSolrProject project) {
         project = repository.save(project);
         return project;
     }
 
     /**
+     * This function inserts a project in the Solr Database but if the project already exist in the database, it will update the record
+     *
+     * @param project {@link PrideSolrProject}
+     * @return PrideSolrProject
+     */
+    public PrideSolrProject upsert(PrideSolrProject project) {
+        PrideSolrProject solrProject = repository.findByAccession(project.getAccession());
+        if (solrProject == null) {
+            project = repository.save(project);
+            log.info("A new project has been saved in Solr index -- " + project.getAccession());
+        } else {
+            project.setId((String) solrProject.getId());
+            project = repository.save(project);
+            log.info("project has been Inserted or updated in MongoDB with accession -- " + project.getAccession());
+        }
+        return project;
+    }
+
+    /**
      * Find all the Projects in the Repository
+     *
      * @return
      */
     public Iterable<PrideSolrProject> findAll() {
@@ -72,9 +93,9 @@ public class SolrProjectService {
     }
 
     /*
-    * Delete a particular project from solr
-    * */
-    public  void deleteProjectById(String id){
+     * Delete a particular project from solr
+     * */
+    public void deleteProjectById(String id) {
         repository.deleteById(id);
     }
 
@@ -87,10 +108,11 @@ public class SolrProjectService {
 
     /**
      * Parallel save of the projects in the collection. This needs to be tested
+     *
      * @param projects
      */
     public void saveAll(List<PrideSolrProject> projects) {
-         projects.forEach(this::save);
+        projects.forEach(this::save);
     }
 
     public Iterator<PrideSolrProject> findAllUsingCursor() {
@@ -104,7 +126,8 @@ public class SolrProjectService {
     /**
      * The keywords are all the words we would like to find datasets for them into the Solr index. Filter Query should have the following structure:
      * field1==queryValue, field1==QueryValue
-     * @param keywords List of keywords to be found in the search
+     *
+     * @param keywords    List of keywords to be found in the search
      * @param filterQuery filter Query in the following format ield1:queryValue, field1:QueryValue
      * @param pageRequest Page Request.
      * @return List of datasets Pagination
@@ -120,11 +143,11 @@ public class SolrProjectService {
 
     }
 
-    public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest){
+    public FacetPage<PrideSolrProject> findAllFacetIgnoreCase(Pageable pageRequest) {
         return repository.findAllFacetIgnoreCase(pageRequest);
     }
 
-    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, String filterQuery, PageRequest pageRequest, PageRequest facetPage, String gap){
+    public FacetPage<PrideSolrProject> findFacetByKeyword(List<String> keywords, String filterQuery, PageRequest pageRequest, PageRequest facetPage, String gap) {
         MultiValueMap<String, String> filters = StringUtils.parseFilterParameters(filterQuery);
         return repository.findFacetByKeyword(keywords, filters, pageRequest, facetPage, gap);
     }
@@ -132,16 +155,17 @@ public class SolrProjectService {
     /**
      * This method retrieve a datasets that are similar to an specific dataset. The method remove the requested dataset
      * from the list.
+     *
      * @param accession Project Accession
      * @return List of Similar projects.
      */
-    public List<PrideSolrProject> findSimilarProjects(String accession, Integer pageSize, Integer page ){
+    public List<PrideSolrProject> findSimilarProjects(String accession, Integer pageSize, Integer page) {
         Map<String, Double> ids = repository.findMoreLikeThisIds(accession, pageSize, page);
         List<PrideSolrProject> similarDatasets = new ArrayList<>();
         Iterable<PrideSolrProject> itDatasets = repository.findAllById(ids.entrySet().stream().map(Map.Entry::getKey).collect(Collectors.toSet()));
-        if(itDatasets != null){
+        if (itDatasets != null) {
             itDatasets.forEach(x -> {
-                if(!x.getAccession().equalsIgnoreCase(accession)){
+                if (!x.getAccession().equalsIgnoreCase(accession)) {
                     x.setScore(new Float(ids.get(x.getId())));
                     similarDatasets.add(x);
                 }
@@ -152,10 +176,11 @@ public class SolrProjectService {
 
     /**
      * Find the Autocomplete values for an specific query.
+     *
      * @param keyword
      * @return
      */
-    public List<String> findAutoComplete(String keyword){
+    public List<String> findAutoComplete(String keyword) {
         return repository.findAutoComplete(keyword);
     }
 
