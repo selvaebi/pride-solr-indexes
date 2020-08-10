@@ -57,9 +57,8 @@ public class StringUtils {
                 Arrays.asList(filtersString).forEach(filter ->{
                     String[] filterString = filter.split("==");
                     if(filterString.length == 2){
-                        String[] values = StringUtils.convertSentenceStyle(filterString[1]).split("\\s+");
-                        for(String value:values)
-                            filters.add(PrideProjectFieldEnum.returnFilterField(filterString[0]), value);
+                        String value = StringUtils.convertSentenceStyle(filterString[1]);
+                        filters.add(PrideProjectFieldEnum.returnFilterField(filterString[0]), value);
                     }else
                         log.debug("The filter provided is not well-formatted, please format the filter in field:value -- " + filter);
 

@@ -98,10 +98,6 @@ public class QueryBuilder {
         return query;
     }
 
-    private static Criteria getCriteriaForHyphenatedWords(String key, String value) {
-        return new Criteria(key).is("\"" + value.replaceAll("-", " ") + "\"");
-    }
-
     /**
      * This function process all the keywords provided to the service to remove un-wanted characters.
      * If the keyword contains the following character : we skip the word.
@@ -170,7 +166,11 @@ public class QueryBuilder {
         if (value.contains("-") && !key.getType().equals(PrideSolrConstants.ConstantsSolrTypes.STRING)) {
             return getCriteriaForHyphenatedWords(key.getValue(),value);
         }
-        return new Criteria(key.getValue()).contains(value);
+        return new Criteria(key.getValue()).is(value);
+    }
+
+    private static Criteria getCriteriaForHyphenatedWords(String key, String value) {
+        return new Criteria(key).is(value.replaceAll("-", " "));
     }
 
     private static Date parseInitialDate(String value, String dateGap) throws ParseException {
