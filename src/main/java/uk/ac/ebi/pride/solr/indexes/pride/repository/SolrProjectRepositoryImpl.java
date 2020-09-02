@@ -293,12 +293,15 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 				for(DataPair suggestionDataPair : orderedSuggestionsPOSSet){
 					//Build suggestions by merging the keywords and the identified POS-tagged word
 					//Each scentence will have atmost count(3) number of entries
-					if(!orderedList.contains(suggestionDataPair.getName()) && count<3){
-						finalSuggestionsSet.add(orderedList.stream().collect(Collectors.joining(" "))+" "+suggestionDataPair.getName());
+					if (!orderedList.contains(suggestionDataPair.getName()) && count < 3) {
+						finalSuggestionsSet.add(orderedList.stream().collect(Collectors.joining(" ")) + " " + suggestionDataPair.getName());
 						count++;
+					} else if (!suggestionText.contains(" ")) {
+						finalSuggestionsSet.add(orderedList.stream().collect(Collectors.joining()));
 					}
 				}
 			}
+
 
 			//limit results to 10
 			return finalSuggestionsSet.stream().filter(scentence -> !scentence.contains("http") && !scentence.contains("ftp") && !scentence.contains("href") && scentence.length() <= 40).limit(10).collect(Collectors.toList());
