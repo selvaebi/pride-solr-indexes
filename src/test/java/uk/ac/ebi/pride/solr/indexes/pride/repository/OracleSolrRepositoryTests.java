@@ -1,51 +1,29 @@
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.solr.core.query.result.FacetAndHighlightPage;
-import org.springframework.data.solr.core.query.result.FacetPage;
-import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.ac.ebi.pride.archive.dataprovider.param.CvParam;
-import uk.ac.ebi.pride.archive.dataprovider.param.CvParamProvider;
-import uk.ac.ebi.pride.archive.dataprovider.user.Contact;
-import uk.ac.ebi.pride.archive.dataprovider.user.ContactProvider;
-import uk.ac.ebi.pride.archive.dataprovider.utils.TitleConstants;
-
-import uk.ac.ebi.pride.archive.repo.repos.project.ProjectRepository;
-import uk.ac.ebi.pride.archive.repo.repos.project.ProjectSoftwareCvParam;
-import uk.ac.ebi.pride.archive.repo.repos.project.ProjectTag;
-import uk.ac.ebi.pride.archive.repo.repos.project.Reference;
 import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
 import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
-import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
-
-import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author ypriverol
  */
+@Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SolrLocalhostTestConfiguration.class, ArchiveOracleConfig.class})
 public class OracleSolrRepositoryTests {
 
+/*
     @Autowired
     SolrProjectService projectService;
 
 
-    @Autowired
+    */
+/*@Autowired
     ProjectRepository oracleRepository;
+*//*
 
     @PostConstruct
     public void setTest() throws IOException {
@@ -56,7 +34,8 @@ public class OracleSolrRepositoryTests {
         }
     }
 
-    public void insertDatasetsFromOracle(){
+ */
+/*   public void insertDatasetsFromOracle(){
         List<PrideSolrProject> projects = new ArrayList<>();
         oracleRepository.findAll().forEach(x -> {
             PrideSolrProject solrProject = new PrideSolrProject();
@@ -115,11 +94,14 @@ public class OracleSolrRepositoryTests {
             projects.add(solrProject);
         });
         projectService.saveAll(projects);
-    }
+    }*//*
 
-    /**
-     *  This Test contains all the test in a big test method.
+
      */
+/**
+ *  This Test contains all the test in a big test method.
+ *//*
+
     @Test
     public void findAll() {
 
@@ -136,7 +118,9 @@ public class OracleSolrRepositoryTests {
         System.out.println("Accession: " + project.getAccession() + " -- Title: " + project.getTitle());
 
 
-        /*** Find by keyword **/
+        */
+/*** Find by keyword **//*
+
         HighlightPage<PrideSolrProject> page = projectService
                 .findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
 
@@ -181,5 +165,6 @@ public class OracleSolrRepositoryTests {
     }
 
 
+*/
 
 }

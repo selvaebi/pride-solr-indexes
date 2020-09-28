@@ -5,12 +5,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.solr.repository.Query;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.commons.PrideProjectField;
+import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 
 
 /**
- * Solr Crud Repository is helping the implementation to handle the {@link PrideSolrProject} with the basics functions suchs as
+ * Solr Crud Repository is helping the implementation to handle the {@link uk.ac.ebi.pride.solr.commons.PrideSolrProject} with the basics functions suchs as
  * insert/update/delete.
  *
  * @author Yasset Perez-Riverol
@@ -20,7 +20,8 @@ import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
 public interface SolrProjectRepository extends SolrProjectRepositoryCustom, CrudRepository<PrideSolrProject, String> {
 
     /**
-     * Return a {@link PrideSolrProject} for a given Accession
+     * Return a {@link uk.ac.ebi.pride.solr.commons.PrideSolrProject} for a given Accession
+     *
      * @param accession PRoject accession
      * @return PrideSolrProject
      */
