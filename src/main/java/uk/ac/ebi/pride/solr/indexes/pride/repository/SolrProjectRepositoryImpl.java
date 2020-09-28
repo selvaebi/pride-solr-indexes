@@ -30,22 +30,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.*;
+import org.springframework.data.solr.core.query.FacetOptions;
+import org.springframework.data.solr.core.query.FacetQuery;
+import org.springframework.data.solr.core.query.HighlightOptions;
+import org.springframework.data.solr.core.query.HighlightQuery;
+import org.springframework.data.solr.core.query.SimpleFacetQuery;
+import org.springframework.data.solr.core.query.SimpleHighlightQuery;
+import org.springframework.data.solr.core.query.SimpleQuery;
+import org.springframework.data.solr.core.query.SimpleStringCriteria;
 import org.springframework.data.solr.core.query.result.Cursor;
 import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.solr.indexes.pride.model.DataPair;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideSolrConstants;
+import uk.ac.ebi.pride.solr.api.commons.DataPair;
+import uk.ac.ebi.pride.solr.api.commons.PrideProjectField;
+import uk.ac.ebi.pride.solr.api.commons.PrideProjectFieldEnum;
+import uk.ac.ebi.pride.solr.api.commons.PrideSolrProject;
+import uk.ac.ebi.pride.solr.api.commons.Utils.PrideSolrConstants;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -109,7 +127,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 					.stream()
 					.filter(PrideProjectFieldEnum::getFacet)
 					.forEach(facetField -> {
-						if(facetField.getType() == PrideSolrConstants.ConstantsSolrTypes.DATE){
+						if (facetField.getType() == uk.ac.ebi.pride.solr.api.commons.Utils.PrideSolrConstants.ConstantsSolrTypes.DATE) {
 							try {
 								Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse("2004-01-01");
 								FacetOptions.FieldWithDateRangeParameters dateRange = new FacetOptions.FieldWithDateRangeParameters(facetField.getValue(), startDate, new Date(), gapConstants.value);
@@ -118,7 +136,7 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 							} catch (ParseException e) {
 								e.printStackTrace();
 							}
-						}else{
+						} else {
 							facetOptions.addFacetOnField(facetField.getValue());
 						}
 

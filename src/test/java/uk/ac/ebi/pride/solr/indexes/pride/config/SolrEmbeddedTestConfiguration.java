@@ -12,7 +12,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.data.solr.server.support.EmbeddedSolrServerFactory;
 import org.springframework.test.context.TestPropertySource;
 import org.xml.sax.SAXException;
-import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.pride.services.ProjectService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -37,7 +37,7 @@ public class SolrEmbeddedTestConfiguration extends AbstractSolrConfiguration {
     @Value("${solr.Home}")
     private String solrConfDir;
 
-    SolrProjectService repo;
+    ProjectService repo;
 
     @Bean
     public EmbeddedSolrServer solrServerEmbedded() throws IOException, SAXException, ParserConfigurationException, URISyntaxException {

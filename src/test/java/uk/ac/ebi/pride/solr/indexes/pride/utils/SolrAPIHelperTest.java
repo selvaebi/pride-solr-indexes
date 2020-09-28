@@ -3,7 +3,7 @@ package uk.ac.ebi.pride.solr.indexes.pride.utils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectField;
+import uk.ac.ebi.pride.solr.api.commons.PrideProjectField;
 
 /**
  This class will test simple functions to interact with the Solr API.

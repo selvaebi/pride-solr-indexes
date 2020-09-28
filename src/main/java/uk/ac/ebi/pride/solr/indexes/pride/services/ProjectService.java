@@ -10,12 +10,16 @@ import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.api.commons.PrideSolrProject;
+import uk.ac.ebi.pride.solr.api.commons.Utils.StringUtils;
 import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.StringUtils;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -23,12 +27,12 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class SolrProjectService {
+public class ProjectService {
 
     final SolrProjectRepository repository;
 
     @Autowired
-    public SolrProjectService(SolrProjectRepository repository) {
+    public ProjectService(SolrProjectRepository repository) {
         this.repository = repository;
     }
 
@@ -138,7 +142,7 @@ public class SolrProjectService {
         return repository.findByKeyword(keywords, filters, pageRequest, dateGap);
     }
 
-    public Page<PrideSolrProject> findAllIgnoreCase(PageRequest pageRequest) {
+    public Page<PrideSolrProject> findAllIgnoreCase(Pageable pageRequest) {
         return repository.findAllIgnoreCase(pageRequest);
 
     }

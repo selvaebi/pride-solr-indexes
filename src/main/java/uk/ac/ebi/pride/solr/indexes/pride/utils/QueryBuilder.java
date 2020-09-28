@@ -8,7 +8,8 @@ import org.springframework.data.solr.core.query.SimpleFacetAndHighlightQuery;
 import org.springframework.data.solr.core.query.SimpleFilterQuery;
 import org.springframework.data.solr.core.query.SimpleStringCriteria;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
+import uk.ac.ebi.pride.solr.api.commons.PrideProjectFieldEnum;
+import uk.ac.ebi.pride.solr.api.commons.Utils.PrideSolrConstants;
 import uk.ac.ebi.pride.utilities.util.DateUtils;
 
 import java.text.ParseException;

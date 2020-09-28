@@ -1,3 +1,4 @@
+/*
 package uk.ac.ebi.pride.solr.indexes.pride.repository;
 
 import org.junit.Assert;
@@ -33,9 +34,11 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+*/
 /**
  * @author ypriverol
- */
+ *//*
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SolrLocalhostTestConfiguration.class, ArchiveOracleConfig.class})
 public class OracleSolrRepositoryTests {
@@ -117,9 +120,11 @@ public class OracleSolrRepositoryTests {
         projectService.saveAll(projects);
     }
 
-    /**
+    */
+/**
      *  This Test contains all the test in a big test method.
-     */
+     *//*
+
     @Test
     public void findAll() {
 
@@ -136,7 +141,9 @@ public class OracleSolrRepositoryTests {
         System.out.println("Accession: " + project.getAccession() + " -- Title: " + project.getTitle());
 
 
-        /*** Find by keyword **/
+        */
+/*** Find by keyword **//*
+
         HighlightPage<PrideSolrProject> page = projectService
                 .findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
 
@@ -183,3 +190,4 @@ public class OracleSolrRepositoryTests {
 
 
 }
+*/

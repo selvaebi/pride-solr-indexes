@@ -1,3 +1,4 @@
+/*
 package uk.ac.ebi.pride.solr.indexes.pride.config;
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+*/
 /**
  * This code is licensed under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
@@ -30,7 +32,8 @@ import java.util.stream.Collectors;
  * <p>
  *
  * @author ypriverol
- */
+ *//*
+
 @Configuration
 @EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
 @ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.services")
@@ -49,3 +52,4 @@ public class HttpSolrCloudConfiguration {
         return new SolrTemplate(solrClient);
     }
 }
+*/

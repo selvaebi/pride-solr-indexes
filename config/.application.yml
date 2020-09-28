@@ -1,0 +1,25 @@
+spring.application.name: $app_name
+
+# server settings
+server:
+  port: $port
+  servlet.context-path: $contextPath
+
+#log output file
+
+logging:
+  file.path: $logspath/logs_${HOSTNAME}/
+
+security:
+  header-name: $api_key_header
+  api-key: $api_key
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: '/api-docs'
+  swagger-ui:
+    tagsSorter: alpha
+    disable-swagger-default-url: true
+
+solr.url: $solrUrl

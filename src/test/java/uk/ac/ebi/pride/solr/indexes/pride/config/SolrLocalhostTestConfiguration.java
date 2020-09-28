@@ -26,7 +26,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.pride.services.ProjectService;
 import uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper;
 
 import java.io.File;
@@ -43,7 +43,7 @@ import java.util.Objects;
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired
-	SolrProjectService projectService;
+    ProjectService projectService;
 
 	@Bean
 	public SolrTemplate solrTemplate() {
