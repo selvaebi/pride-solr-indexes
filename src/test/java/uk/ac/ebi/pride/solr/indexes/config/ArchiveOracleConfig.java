@@ -1,4 +1,5 @@
-package uk.ac.ebi.pride.solr.indexes.pride.config;
+/*
+package uk.ac.ebi.pride.solr.indexes.config;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -18,9 +19,11 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+*/
 /**
  * Class Configuration to
- */
+ *//*
+
 @Configuration
 @EnableTransactionManagement
 @EnableAutoConfiguration
@@ -56,3 +59,4 @@ public class ArchiveOracleConfig {
         return new HibernateExceptionTranslator();
     }
 }
+*/

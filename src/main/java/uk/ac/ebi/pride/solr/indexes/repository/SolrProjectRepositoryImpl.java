@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.ebi.pride.solr.indexes.pride.repository;
+package uk.ac.ebi.pride.solr.indexes.repository;
 
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
@@ -47,7 +47,7 @@ import uk.ac.ebi.pride.solr.commons.PrideProjectField;
 import uk.ac.ebi.pride.solr.commons.PrideProjectFieldEnum;
 import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 import uk.ac.ebi.pride.solr.commons.Utils.PrideSolrConstants;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.QueryBuilder;
+import uk.ac.ebi.pride.solr.indexes.utils.QueryBuilder;
 
 import java.io.IOException;
 import java.text.ParseException;

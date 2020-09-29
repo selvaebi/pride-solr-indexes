@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.config;
+package uk.ac.ebi.pride.solr.indexes.config;
 
 
 import org.apache.commons.io.FileUtils;
@@ -12,7 +12,7 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.data.solr.server.support.EmbeddedSolrServerFactory;
 import org.springframework.test.context.TestPropertySource;
 import org.xml.sax.SAXException;
-import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.services.SolrProjectService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -30,7 +30,7 @@ import java.util.Objects;
  * @version $Id$
  */
 @SpringBootApplication
-@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.repository")
 @TestPropertySource(locations = "classpath:application.properties")
 public class SolrEmbeddedTestConfiguration extends AbstractSolrConfiguration {
 

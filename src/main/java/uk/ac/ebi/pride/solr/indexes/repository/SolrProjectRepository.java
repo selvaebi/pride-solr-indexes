@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.repository;
+package uk.ac.ebi.pride.solr.indexes.repository;
 
 
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.utils;
+package uk.ac.ebi.pride.solr.indexes.utils;
 
 
 import lombok.extern.slf4j.Slf4j;

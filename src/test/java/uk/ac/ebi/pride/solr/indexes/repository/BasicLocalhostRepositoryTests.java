@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.repository;
+package uk.ac.ebi.pride.solr.indexes.repository;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,8 +13,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import uk.ac.ebi.pride.solr.commons.PrideProjectField;
 import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 import uk.ac.ebi.pride.solr.commons.Utils.PrideSolrConstants;
-import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.RequiresSolrServer;
+import uk.ac.ebi.pride.solr.indexes.config.SolrLocalhostTestConfiguration;
+import uk.ac.ebi.pride.solr.indexes.utils.RequiresSolrServer;
 
 import java.util.Collections;
 
@@ -28,7 +28,7 @@ public class BasicLocalhostRepositoryTests {
 	public static RequiresSolrServer requiresRunningServer = RequiresSolrServer.onLocalhost();
 
 	@Autowired
-	SolrProjectRepository repository;
+    SolrProjectRepository repository;
 
 	/** Finds all entries using a single request. */
 	@Test

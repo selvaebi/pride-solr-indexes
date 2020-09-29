@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.utils;
+package uk.ac.ebi.pride.solr.indexes.utils;
 
 import org.junit.After;
 import org.junit.Before;

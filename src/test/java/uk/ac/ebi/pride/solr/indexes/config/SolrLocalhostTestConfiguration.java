@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.ebi.pride.solr.indexes.pride.config;
+package uk.ac.ebi.pride.solr.indexes.config;
 
-
-import javax.annotation.PostConstruct;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -26,9 +24,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.SolrAPIHelper;
+import uk.ac.ebi.pride.solr.indexes.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.utils.SolrAPIHelper;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Objects;
@@ -38,8 +37,8 @@ import java.util.Objects;
  */
 @Configuration
 @Slf4j
-@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository", schemaCreationSupport = false)
-@ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.services")
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.repository", schemaCreationSupport = false)
+@ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.services")
 public class SolrLocalhostTestConfiguration extends AbstractSolrConfiguration {
 
 	@Autowired

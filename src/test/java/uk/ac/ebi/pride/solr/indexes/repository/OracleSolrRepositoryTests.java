@@ -1,29 +1,37 @@
-package uk.ac.ebi.pride.solr.indexes.pride.repository;
+/*
+package uk.ac.ebi.pride.solr.indexes.repository;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.ac.ebi.pride.solr.indexes.pride.config.ArchiveOracleConfig;
-import uk.ac.ebi.pride.solr.indexes.pride.config.SolrLocalhostTestConfiguration;
+import uk.ac.ebi.pride.solr.indexes.config.ArchiveOracleConfig;
+import uk.ac.ebi.pride.solr.indexes.config.SolrLocalhostTestConfiguration;
 
+*/
 /**
  * @author ypriverol
- */
+ *//*
+
 @Ignore
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SolrLocalhostTestConfiguration.class, ArchiveOracleConfig.class})
 public class OracleSolrRepositoryTests {
 
+*/
 /*
     @Autowired
     SolrProjectService projectService;
 
 
-    */
+    *//*
+
+*/
 /*@Autowired
     ProjectRepository oracleRepository;
 *//*
+*/
+/*
 
     @PostConstruct
     public void setTest() throws IOException {
@@ -34,7 +42,9 @@ public class OracleSolrRepositoryTests {
         }
     }
 
- */
+ *//*
+
+*/
 /*   public void insertDatasetsFromOracle(){
         List<PrideSolrProject> projects = new ArrayList<>();
         oracleRepository.findAll().forEach(x -> {
@@ -95,12 +105,18 @@ public class OracleSolrRepositoryTests {
         });
         projectService.saveAll(projects);
     }*//*
+*/
+/*
 
 
-     */
+     *//*
+
+*/
 /**
  *  This Test contains all the test in a big test method.
  *//*
+*/
+/*
 
     @Test
     public void findAll() {
@@ -118,8 +134,12 @@ public class OracleSolrRepositoryTests {
         System.out.println("Accession: " + project.getAccession() + " -- Title: " + project.getTitle());
 
 
-        */
+        *//*
+
+*/
 /*** Find by keyword **//*
+*/
+/*
 
         HighlightPage<PrideSolrProject> page = projectService
                 .findByKeyword(Arrays.asList("PRD", "PXD"), "", PageRequest.of(0, 10), PrideSolrConstants.AllowedDateGapConstants.UNKONWN.value);
@@ -165,6 +185,8 @@ public class OracleSolrRepositoryTests {
     }
 
 
-*/
+*//*
+
 
 }
+*/

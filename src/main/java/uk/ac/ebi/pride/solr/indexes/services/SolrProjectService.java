@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.services;
+package uk.ac.ebi.pride.solr.indexes.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 import uk.ac.ebi.pride.solr.commons.Utils.StringUtils;
-import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
+import uk.ac.ebi.pride.solr.indexes.repository.SolrProjectRepository;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,6 +63,7 @@ public class SolrProjectService {
      * @param project
      * @return
      */
+
     public PrideSolrProject update(PrideSolrProject project) {
         project = repository.save(project);
         return project;
@@ -74,6 +75,7 @@ public class SolrProjectService {
      * @param project {@link PrideSolrProject}
      * @return PrideSolrProject
      */
+
     public PrideSolrProject upsert(PrideSolrProject project) {
         PrideSolrProject solrProject = repository.findByAccession(project.getAccession());
         if (solrProject == null) {
@@ -99,6 +101,7 @@ public class SolrProjectService {
     /*
      * Delete a particular project from solr
      * */
+
     public void deleteProjectById(String id) {
         repository.deleteById(id);
     }
@@ -106,6 +109,7 @@ public class SolrProjectService {
     /**
      * Delete all the Projects in the Repository.
      */
+
     public void deleteAll() {
         repository.deleteAll();
     }
@@ -115,6 +119,7 @@ public class SolrProjectService {
      *
      * @param projects
      */
+
     public void saveAll(List<PrideSolrProject> projects) {
         projects.forEach(this::save);
     }

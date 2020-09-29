@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.config;
+package uk.ac.ebi.pride.solr.indexes.config;
 
 
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -11,11 +11,11 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 
 
 @Configuration
-@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.repository")
-@ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.pride.services")
+@EnableSolrRepositories(basePackages = "uk.ac.ebi.pride.solr.indexes.repository")
+@ComponentScan(basePackages = "uk.ac.ebi.pride.solr.indexes.services")
 public class HttpSolrConfiguration {
 
-    @Value("${solr.url}")
+    @Value("${spring.data.solr.host}")
     private String solrURL;
 
     @Bean

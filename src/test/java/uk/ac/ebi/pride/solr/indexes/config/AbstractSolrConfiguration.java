@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.config;
+package uk.ac.ebi.pride.solr.indexes.config;
 
 
 import org.apache.solr.client.solrj.SolrClient;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.solr.core.SolrTemplate;
-import uk.ac.ebi.pride.solr.indexes.pride.services.SolrProjectService;
-import uk.ac.ebi.pride.solr.indexes.pride.utils.PrideProjectReader;
+import uk.ac.ebi.pride.solr.indexes.services.SolrProjectService;
+import uk.ac.ebi.pride.solr.indexes.utils.PrideProjectReader;
 
 import java.io.File;
 import java.io.IOException;

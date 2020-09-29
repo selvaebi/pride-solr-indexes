@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.model;
+package uk.ac.ebi.pride.solr.indexes.model;
 
 import org.junit.Test;
 import org.mockito.Mockito;
