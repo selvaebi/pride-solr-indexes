@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package uk.ac.ebi.pride.solr.indexes.pride.repository;
+package uk.ac.ebi.pride.solr.indexes.repository;
 
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import org.springframework.data.solr.core.query.result.FacetPage;
 import org.springframework.data.solr.core.query.result.HighlightPage;
 import org.springframework.data.solr.repository.Highlight;
 import org.springframework.util.MultiValueMap;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 
 import java.io.IOException;
 import java.util.List;

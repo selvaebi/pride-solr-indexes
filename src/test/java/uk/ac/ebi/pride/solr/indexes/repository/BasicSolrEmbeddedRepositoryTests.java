@@ -1,12 +1,11 @@
-package uk.ac.ebi.pride.solr.indexes.pride.repository;
+package uk.ac.ebi.pride.solr.indexes.repository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.ac.ebi.pride.solr.indexes.pride.config.SolrEmbeddedTestConfiguration;
-import uk.ac.ebi.pride.solr.indexes.pride.repository.SolrProjectRepository;
+import uk.ac.ebi.pride.solr.indexes.config.SolrEmbeddedTestConfiguration;
 
 /**
  * This code is licensed under the Apache License, Version 2.0 (the

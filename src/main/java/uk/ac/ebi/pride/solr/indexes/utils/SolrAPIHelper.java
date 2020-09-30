@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.utils;
+package uk.ac.ebi.pride.solr.indexes.utils;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -9,8 +9,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
-
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideProjectFieldEnum;
+import uk.ac.ebi.pride.solr.commons.PrideProjectFieldEnum;
+import uk.ac.ebi.pride.solr.commons.Utils.PrideSolrConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;

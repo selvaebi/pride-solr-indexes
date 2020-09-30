@@ -1,4 +1,4 @@
-package uk.ac.ebi.pride.solr.indexes.pride.utils;
+package uk.ac.ebi.pride.solr.indexes.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import uk.ac.ebi.pride.archive.dataprovider.param.CvParam;
@@ -7,14 +7,19 @@ import uk.ac.ebi.pride.archive.dataprovider.user.Contact;
 import uk.ac.ebi.pride.data.exception.SubmissionFileException;
 import uk.ac.ebi.pride.data.io.SubmissionFileParser;
 import uk.ac.ebi.pride.data.model.Submission;
-import uk.ac.ebi.pride.solr.indexes.pride.model.PrideSolrProject;
+import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 import uk.ac.ebi.pride.utilities.term.CvTermReference;
 import uk.ac.ebi.pride.utilities.util.Tuple;
 
-import java.io.*;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 

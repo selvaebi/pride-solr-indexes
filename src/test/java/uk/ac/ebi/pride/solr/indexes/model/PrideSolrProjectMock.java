@@ -1,7 +1,8 @@
-package uk.ac.ebi.pride.solr.indexes.pride.model;
+package uk.ac.ebi.pride.solr.indexes.model;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import uk.ac.ebi.pride.solr.commons.PrideSolrProject;
 
 /**
  * Mock a PRIDE Solr Project Object.
