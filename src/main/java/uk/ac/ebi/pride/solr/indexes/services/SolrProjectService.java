@@ -200,4 +200,12 @@ public class SolrProjectService {
     public Set<String> findProjectAccessionsWithEmptyFileNames() throws IOException, SolrServerException {
         return repository.findProjectAccessionsWithEmptyFileNames();
     }
+
+    public Set<String> findAllAccessions() throws IOException, SolrServerException {
+        return repository.findAllAccessions();
+    }
+
+    public Set<String> findAllIds() throws IOException, SolrServerException {
+        return repository.findAllIds();
+    }
 }

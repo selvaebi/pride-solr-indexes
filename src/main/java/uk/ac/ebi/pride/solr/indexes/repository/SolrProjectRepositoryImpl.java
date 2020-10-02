@@ -25,6 +25,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.SuggesterResponse;
 import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.FacetParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -332,52 +333,52 @@ class SolrProjectRepositoryImpl implements SolrProjectRepositoryCustom {
 
 	@Override
 	public Set<String> findProjectAccessionsWithEmptyPeptideSequencesOrProteinIdentifications() throws IOException, SolrServerException {
-		SolrQuery solrQuery = new SolrQuery();
-		Set<String> prjs = new HashSet<>();
-		int start = 0;
-		int cnt = 1000;
-
-		solrQuery.setRows(cnt);
-		solrQuery.setQuery("-" + PrideProjectField.PROTEIN_IDENTIFICATIONS + ":[\"\" TO *]");
-		solrQuery.setQuery("-" + PrideProjectField.PEPTIDE_SEQUENCES + ":[\"\" TO *]");
-
-		while (true) {
-			solrQuery.setStart(start);
-			QueryResponse re = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery);
-			List<PrideSolrProject> beans = re.getBeans(PrideSolrProject.class);
-			if(beans.size() == 0) {
-				break;
-			}
-			for (PrideSolrProject b : beans){
-				prjs.add(b.getAccession());
-			}
-			start += cnt;
-		}
-		return prjs;
+		return getAccessionsOrIdsFromSolr(PrideProjectField.ACCESSION,
+				"-" + PrideProjectField.PROTEIN_IDENTIFICATIONS + ":[\"\" TO *]",
+				"-" + PrideProjectField.PEPTIDE_SEQUENCES + ":[\"\" TO *]");
 	}
 
+	@Override
 	public Set<String> findProjectAccessionsWithEmptyFileNames() throws IOException, SolrServerException {
+		return getAccessionsOrIdsFromSolr(PrideProjectField.ACCESSION, "-" + PrideProjectField.PROJECT_FILE_NAMES + ":[\"\" TO *]");
+	}
+
+	@Override
+	public Set<String> findAllAccessions() throws IOException, SolrServerException {
+		return getAccessionsOrIdsFromSolr(PrideProjectField.ACCESSION, "*:*");
+	}
+
+	@Override
+	public Set<String> findAllIds() throws IOException, SolrServerException {
+		return getAccessionsOrIdsFromSolr(PrideProjectField.ID, "*:*");
+	}
+
+	private Set<String> getAccessionsOrIdsFromSolr(String field, String... queries) throws IOException, SolrServerException {
+		Set<String> prjAccessionsOrIds = new HashSet<>();
 		SolrQuery solrQuery = new SolrQuery();
-		Set<String> prjs = new HashSet<>();
+		for (String query : queries) {
+			solrQuery.setQuery(query);
+		}
+
 		int start = 0;
 		int cnt = 1000;
 
 		solrQuery.setRows(cnt);
-		solrQuery.setQuery("-" + PrideProjectField.PROJECT_FILE_NAMES + ":[\"\" TO *]");
-
+		solrQuery.setFields(field);
 		while (true) {
 			solrQuery.setStart(start);
-			QueryResponse re = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery);
-			List<PrideSolrProject> beans = re.getBeans(PrideSolrProject.class);
-			if(beans.size() == 0) {
+			SolrDocumentList solrDocuments = solrTemplate.getSolrClient().query(PrideProjectField.PRIDE_PROJECTS_COLLECTION_NAME, solrQuery).getResults();
+			if (solrDocuments.size() == 0) {
 				break;
 			}
-			for (PrideSolrProject b : beans){
-				prjs.add(b.getAccession());
-			}
+			solrDocuments.stream().forEach(solrDocument -> {
+				prjAccessionsOrIds.add((String) solrDocument.getFieldValue(field));
+
+			});
 			start += cnt;
 		}
-		return prjs;
+		return prjAccessionsOrIds;
 	}
+
 
 }

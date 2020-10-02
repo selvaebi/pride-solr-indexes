@@ -62,11 +62,15 @@ interface SolrProjectRepositoryCustom {
 	 * @param accession Project Accession
 	 * @return List of {@link PrideSolrProject}
 	 */
-	Map<String, Double> findMoreLikeThisIds(String accession, Integer pageSize, Integer page );
+	Map<String, Double> findMoreLikeThisIds(String accession, Integer pageSize, Integer page);
 
 	List<String> findAutoComplete(String keyword);
 
 	Set<String> findProjectAccessionsWithEmptyPeptideSequencesOrProteinIdentifications() throws IOException, SolrServerException;
 
 	Set<String> findProjectAccessionsWithEmptyFileNames() throws IOException, SolrServerException;
+
+	Set<String> findAllAccessions() throws IOException, SolrServerException;
+
+	Set<String> findAllIds() throws IOException, SolrServerException;
 }
